@@ -1,0 +1,2 @@
+# Cryptonite
+A trading bot
