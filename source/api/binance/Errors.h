@@ -104,4 +104,4 @@ namespace Api::Binance
         MAXIMUM_SUBSCRIPTION_IDS = 2042,
     };
 
-} // namespace Binance::Api::Enums
+} // namespace Binance::Api
