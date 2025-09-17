@@ -4,7 +4,7 @@
 
 #include "Filters.h"
 
-namespace Api::Binance
+namespace Binance
 {
     class FilterConverter
     {
@@ -13,4 +13,4 @@ namespace Api::Binance
         inline static QString filterTypeToString(FilterType type);
         inline static FilterType stringToFilterType(const QString& typeStr);
     };
-} // namespace Api::Binance
+} // namespace Binance

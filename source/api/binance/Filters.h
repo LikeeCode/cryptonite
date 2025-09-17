@@ -3,7 +3,7 @@
 #include <QString>
 #include <QMap>
 
-namespace Api::Binance
+namespace Binance
 {
     // See: https://github.com/binance/binance-spot-api-docs/blob/master/testnet/filters.md
 
@@ -150,4 +150,4 @@ namespace Api::Binance
     {
         int maxNumOrderLists{};
     };
-}
+} // namespace Binance

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Api::Binance
+namespace Binance
 {
 
     // See: https://github.com/binance/binance-spot-api-docs/blob/master/testnet/enums.md
@@ -113,4 +113,4 @@ namespace Api::Binance
         DECREMENT
     };
 
-} // namespace Binance::Api
+} // namespace Binance

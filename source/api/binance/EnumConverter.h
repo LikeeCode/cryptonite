@@ -4,7 +4,7 @@
 
 #include "Enums.h"
 
-namespace Api::Binance
+namespace Binance
 {
     class EnumConverter
     {
@@ -69,4 +69,4 @@ namespace Api::Binance
         inline static QString selfTradePreventionModeToString(SelfTradePreventionMode mode);
         inline static SelfTradePreventionMode stringToSelfTradePreventionMode(const QString& modeStr);
     };
-} //namespace Api::Binance
+} //namespace Binance

@@ -4,7 +4,7 @@
 
 #include "ErrorConverter.h"
 
-namespace Api::Binance
+namespace Binance
 {
     QString errorCodeToString(ErrorCode code){
         static const QHash<ErrorCode, QString> map = {

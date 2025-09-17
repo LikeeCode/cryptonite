@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Api::Binance
+namespace Binance
 {
 
     // See: https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md
@@ -104,4 +104,4 @@ namespace Api::Binance
         MAXIMUM_SUBSCRIPTION_IDS = 2042,
     };
 
-} // namespace Binance::Api
+} // namespace Binance

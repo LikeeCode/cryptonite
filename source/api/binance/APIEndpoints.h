@@ -4,7 +4,7 @@
 
 #include "Enums.h"
 
-namespace Api::Binance::Endpoints
+namespace Binance::API
 {
     // General endpoints
     const QString PING = "/api/v3/ping";
@@ -58,4 +58,4 @@ namespace Api::Binance::Endpoints
     const QString USER_DATA_STREAM = "/api/v3/userDataStream"; // POST
     const QString KEEP_ALIVE_USER_DATA_STREAM = "/api/v3/userDataStream"; // PUT
     const QString CLOSE_USER_DATA_STREAM = "/api/v3/userDataStream"; // DELETE
-} // namespace Api::Binance
+} // namespace Binance::API

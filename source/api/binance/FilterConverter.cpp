@@ -5,7 +5,7 @@
 
 #include "FilterConverter.h"
 
-namespace Api::Binance
+namespace Binance
 {
     QString FilterConverter::filterTypeToString(FilterType type)
     {
@@ -33,7 +33,7 @@ namespace Api::Binance
 
         return filterTypeMap.value(type, "UNKNOWN");
     }
-    
+
     FilterType FilterConverter::stringToFilterType(const QString& type)
     {
         static const QMap<QString, FilterType> filterTypeMap = {
@@ -59,4 +59,4 @@ namespace Api::Binance
 
         return filterTypeMap.value(type, FilterType::UNKNOWN);
     }
-}
+} // namespace Binance

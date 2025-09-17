@@ -5,7 +5,7 @@
 
 #include "EnumConverter.h"
 
-namespace Api::Binance
+namespace Binance
 {
     QString EnumConverter::symbolStatusToString(SymbolStatus status)
     {
@@ -287,4 +287,4 @@ namespace Api::Binance
         return map.value(modeStr, SelfTradePreventionMode::NONE); // Default to NONE if not found
     }
 
-} // namespace Api::Binance
+} // namespace Binance

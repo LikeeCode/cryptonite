@@ -4,7 +4,7 @@
 
 #include "Errors.h"
 
-namespace Api::Binance
+namespace Binance
 {
     class ErrorConverter
     {
@@ -13,4 +13,4 @@ namespace Api::Binance
         inline static QString errorCodeToString(ErrorCode code);
         inline static ErrorCode stringToErrorCode(const QString &code);
     };
-} // namespace Binance::Api
+} // namespace Binance
