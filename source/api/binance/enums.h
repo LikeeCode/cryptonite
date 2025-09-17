@@ -113,4 +113,4 @@ namespace Api::Binance
         DECREMENT
     };
 
-} // namespace Binance::Api::Enums
+} // namespace Binance::Api
