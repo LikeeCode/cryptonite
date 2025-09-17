@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QString>
 #include <QHash>
+#include <QString>
 
 #include "EnumConverter.h"
 
