@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include "api/binance/BinanceAPI.h"
+
 int main(int argc, char *argv[])
 {
     // Create the core application object

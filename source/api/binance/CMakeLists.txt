@@ -9,4 +9,4 @@ add_library(BinanceAPI STATIC ${BINANCE_API_SOURCES})
 # Find Qt6 modules
 find_package(Qt6 COMPONENTS Core REQUIRED)
 
-target_link_libraries(BinanceAPI PRIVATE Qt6::Core)
+target_link_libraries(BinanceAPI PRIVATE Qt6::Core Qt6::Network)
