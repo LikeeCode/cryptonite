@@ -18,6 +18,9 @@ int main(int argc, char *argv[])
     // Load the QML file at the specified URL
     engine.load(url);
 
+    // Load Binance API
+    Binance::BinanceAPI* binanceApi = new Binance::BinanceAPI(&app, true); // true for test network
+
     // Start the Qt event loop and return the exit code when the app closes
     return app.exec();
 }
