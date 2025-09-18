@@ -34,6 +34,8 @@ target_link_libraries(Cryptonite PRIVATE
     Qt6::Network
 )
 
+add_subdirectory(api)
+
 # windeployqt is a tool provided by Qt to help deploy applications on Windows.
 # It copies the necessary Qt DLLs and plugins to the output directory.
 if(WIN32 AND WINDEPLOYQT_EXECUTABLE)
