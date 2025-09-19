@@ -3,19 +3,30 @@ This is Qt/QML trading bot project.
 
 ## Prerequisites
 Qt 6.8.3 LTS
+
 CMake 4.1 or higher
+
 VSCode or Visual Studio
 
 ## Helpful VSCode Extensions
 C/C++
+
 C/C++ Extension Pack
+
 C/C++ Themes
+
 Qt Core
+
 Qt Extension Pack
+
 Qt Qml
+
 Qt UI
+
 CMake Tools
+
 YAML
+
 Markdown Preview Enhanced
 
 ## Debugging in VSCode
