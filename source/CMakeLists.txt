@@ -1,7 +1,6 @@
-# Set the minimum required version of CMake
 cmake_minimum_required(VERSION 4.1)
 
-# Define the project name and language
+# Define the project name and languages
 project(Cryptonite LANGUAGES CXX RC)
 
 # Set the C++ standard to C++17
@@ -14,20 +13,23 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-# Find the Qt6 package. We need the "Quick" module for QML.
+# Find the Qt6 and its components
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network)
 
-# Define the executable target.
-# It's built from main.cpp and includes the resources from main.qrc.
+# Include all subdirectories
+add_subdirectory(api)
+
 # Set a common output directory for all executables
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/$<CONFIG>")
+
+# Define the main executable
 add_executable(Cryptonite
   main.cpp
   main.qrc
   icon.rc
 )
 
-# Link the executable against the Qt6::Quick library
+# Link the main executable
 target_link_libraries(Cryptonite PRIVATE
     Qt6::Core
     Qt6::Gui
@@ -38,29 +40,27 @@ target_link_libraries(Cryptonite PRIVATE
     BinanceAPI
 )
 
-add_subdirectory(api)
+# Define post-build function for the deployment
+function(deploy_qt_target TARGET_NAME)
+    if(WIN32 AND WINDEPLOYQT_EXECUTABLE)
+        add_custom_command(
+            TARGET ${TARGET_NAME}
+            POST_BUILD
+            COMMAND ${WINDEPLOYQT_EXECUTABLE}
+                --qmldir "${CMAKE_CURRENT_SOURCE_DIR}"
+                --pdb
+                "$<TARGET_FILE:${TARGET_NAME}>"
+            COMMENT "Running windeployqt to deploy Qt DLLs for ${TARGET_NAME}..."
+        )
+    endif()
+endfunction()
+
+# Use post-build function for the deployment
+deploy_qt_target(Cryptonite)
 
 # Testing
 option(CRYPTONITE_BUILD_TESTS "Build the test suite" ON)
 if(CRYPTONITE_BUILD_TESTS)
     include(CTest)
     add_subdirectory(tests)
-endif()
-
-# Deployment for Windows
-if(WIN32 AND WINDEPLOYQT_EXECUTABLE)
-    # Add a custom command that runs AFTER the Cryptonite target is built.
-    add_custom_command(
-        TARGET Cryptonite
-        POST_BUILD
-        # The command and its arguments
-        COMMAND ${WINDEPLOYQT_EXECUTABLE}
-            --qmldir "${CMAKE_CURRENT_SOURCE_DIR}"
-            --pdb
-            "$<TARGET_FILE:Cryptonite>"
-        # A message to print during the build
-        COMMENT "Running windeployqt to deploy Qt DLLs..."
-        # This is the crucial addition!
-        VERBATIM
-    )
 endif()

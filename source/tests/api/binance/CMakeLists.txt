@@ -12,3 +12,5 @@ target_link_libraries(BinanceAPITest PRIVATE
 )
 
 add_test(NAME BinanceAPITest COMMAND BinanceAPITest)
+
+deploy_qt_target(BinanceAPITest)
