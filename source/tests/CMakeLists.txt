@@ -10,3 +10,5 @@ target_link_libraries(TestBinanceAPI PRIVATE
 
     BinanceAPI
 )
+
+add_test(NAME "BinanceAPI" COMMAND TestBinanceAPI)
