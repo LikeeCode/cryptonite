@@ -68,10 +68,9 @@ configure_file(
 )
 
 # Testing
+include(CTest)
+enable_testing()
 add_subdirectory(3rdParty/googletest)
-
-option(CRYPTONITE_BUILD_TESTS "Build the test suite" ON)
-if(CRYPTONITE_BUILD_TESTS)
-    include(CTest)
-    add_subdirectory(tests)
-endif()
+add_subdirectory(tests)
+set_target_properties(gtest gtest_main gmock gmock_main
+    PROPERTIES FOLDER 3rdParty/googletest)
