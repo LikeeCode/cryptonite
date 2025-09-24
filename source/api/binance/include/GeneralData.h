@@ -9,6 +9,13 @@
 
 namespace Binance::GeneralData
 {
+    // Test connectivity
+    // GET /api/v3/ping
+    // Response
+    struct Ping
+    {
+    };
+
     // Check server time
     // GET /api/v3/time
     // Response
