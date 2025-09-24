@@ -10,8 +10,17 @@ target_include_directories(BinanceAPITest PRIVATE
 target_link_libraries(BinanceAPITest PRIVATE
     Qt6::Core
     Qt6::Network
+    
+    GTest::gtest_main
+    
+    BinanceAPI
+)
 
-    GTest::gtest
+target_link_libraries(GeneralDataParserTest PRIVATE
+    Qt6::Core
+    Qt6::Network
+
+    GTest::gtest_main
 
     BinanceAPI
 )
