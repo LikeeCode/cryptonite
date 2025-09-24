@@ -8,11 +8,13 @@ add_library(BinanceAPI
     include/FilterConverter.h
     include/Filters.h
     include/GeneralData.h
+    include/GeneralDataParser.h
 
     src/BinanceAPI.cpp
     src/EnumConverter.cpp
     src/ErrorConverter.cpp
     src/FilterConverter.cpp
+    src/GeneralDataParser.cpp
 )
 
 target_include_directories(BinanceAPI PUBLIC include/)
