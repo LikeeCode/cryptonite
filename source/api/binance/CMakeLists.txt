@@ -1,12 +1,22 @@
-# Collect all header and source files in this directory
-file(GLOB BINANCE_API_SOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+add_library(BinanceAPI
+    include/APIEndpoints.h
+    include/BinanceAPI.h
+    include/EnumConverter.h
+    include/Enums.h
+    include/ErrorConverter.h
+    include/Errors.h
+    include/FilterConverter.h
+    include/Filters.h
+
+    src/BinanceAPI.cpp
+    src/EnumConverter.cpp
+    src/ErrorConverter.cpp
+    src/FilterConverter.cpp
 )
 
-add_library(BinanceAPI STATIC ${BINANCE_API_SOURCES})
+target_include_directories(BinanceAPI PUBLIC include/)
 
 # Find Qt6 modules
 find_package(Qt6 COMPONENTS Core REQUIRED)
 
-target_link_libraries(BinanceAPI PRIVATE Qt6::Core)
+target_link_libraries(BinanceAPI PRIVATE Qt6::Core Qt6::Network)

@@ -1,5 +1,5 @@
 # Set the minimum required version of CMake
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 4.1)
 
 # Define the project name and language
 project(Cryptonite LANGUAGES CXX RC)
@@ -32,6 +32,8 @@ target_link_libraries(Cryptonite PRIVATE
     Qt6::Qml
     Qt6::Quick
     Qt6::Network
+
+    BinanceAPI
 )
 
 add_subdirectory(api)
