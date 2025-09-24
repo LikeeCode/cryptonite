@@ -10,7 +10,7 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build/Debug",
             "environment": [],
-            // "console": "externalTerminal", // add for debugging if needed
+            "console": "externalTerminal", // add for debugging if needed
             "visualizerFile": "${workspaceFolder}/qt6.natvis"
         }
     ]
