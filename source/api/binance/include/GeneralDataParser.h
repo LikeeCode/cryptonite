@@ -12,9 +12,12 @@ namespace Binance
     {
     public:
         // Test connectivity
-        static std::optional<GeneralData::Ping> parsePing(const QJsonDocument &doc);
+        static std::optional<GeneralData::Ping> parsePing(const QJsonDocument& doc);
 
         // Check server time
-        static std::optional<GeneralData::ServerTime> parseServerTime(const QJsonDocument &doc);
+        static std::optional<GeneralData::ServerTime> parseServerTime(const QJsonDocument& doc);
+
+        // Exchange information
+        static std::optional<GeneralData::ExchangeInfo> parseExchangeInfo(const QJsonDocument& doc);
     };
 } // namespace Binance
