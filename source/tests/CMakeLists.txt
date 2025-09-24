@@ -6,7 +6,6 @@ target_include_directories(TestBinanceAPI PUBLIC ${CMAKE_SOURCE_DIR}/api/binance
 
 target_link_libraries(TestBinanceAPI PRIVATE
     Qt6::Core
-    Qt6::Gui
     Qt6::Network
 
     BinanceAPI
