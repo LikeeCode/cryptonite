@@ -37,6 +37,8 @@ target_link_libraries(Cryptonite PRIVATE
     Qt6::Quick
     Qt6::Network
 
+    GTest::gtest
+
     BinanceAPI
 )
 
@@ -59,6 +61,14 @@ endfunction()
 deploy_qt_target(Cryptonite)
 
 # Testing
+include(FetchContent)
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG        v1.14.0
+)
+FetchContent_MakeAvailable(googletest)
+
 option(CRYPTONITE_BUILD_TESTS "Build the test suite" ON)
 if(CRYPTONITE_BUILD_TESTS)
     include(CTest)
