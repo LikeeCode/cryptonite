@@ -43,10 +43,6 @@ option(CRYPTONITE_BUILD_TESTS "Build the test suite" ON)
 if(CRYPTONITE_BUILD_TESTS)
     include(CTest)
     add_subdirectory(tests)
-    add_executable(tests
-        tests/main.cpp
-        tests/api/binance/TestBinanceAPI.cpp
-    )
 endif()
 
 # Deployment for Windows
