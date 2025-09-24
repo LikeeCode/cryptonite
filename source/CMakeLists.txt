@@ -19,6 +19,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network)
 
 # Define the executable target.
 # It's built from main.cpp and includes the resources from main.qrc.
+# Set a common output directory for all executables
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/$<CONFIG>")
 add_executable(Cryptonite
   main.cpp
   main.qrc
