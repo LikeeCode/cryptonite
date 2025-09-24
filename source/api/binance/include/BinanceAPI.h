@@ -23,16 +23,6 @@ namespace Binance
         void time();
         void exchangeInfo();
 
-    signals:
-        void pingResponse(const QJsonDocument& data);
-        void timeResponse(const QJsonDocument& data);
-        void exchangeInfoResponse(const QJsonDocument& data);
-        void apiKeysFileError();
-        void apiError(const QString& error);
-
-    private slots:
-        void onReplyFinished(QNetworkReply* reply);
-
     private:
         void getApiKeys();
         void sendPublicRequest(const QString& endpoint);
@@ -43,5 +33,15 @@ namespace Binance
         QString m_apiKey;
         QString m_apiSecret;
         QNetworkAccessManager* m_networkManager;
+
+    private slots:
+        void onReplyFinished(QNetworkReply *reply);
+
+    signals:
+        void apiKeysFileError();
+        void apiError(const QString &error);
+        void pingResponse(const QJsonDocument& data);
+        void timeResponse(const QJsonDocument& data);
+        void exchangeInfoResponse(const QJsonDocument& data);
     };
 } // namespace Binance
