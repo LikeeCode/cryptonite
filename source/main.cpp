@@ -1,7 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include "api/binance/BinanceAPI.h"
+#include "api/binance/include/BinanceAPI.h"
 
 int main(int argc, char *argv[])
 {
