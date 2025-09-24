@@ -1,6 +1,5 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QObject>
 
 #include "api/binance/include/BinanceAPI.h"
 
