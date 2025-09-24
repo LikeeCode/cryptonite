@@ -3,8 +3,8 @@ add_executable(BinanceAPITest
 )
 
 target_include_directories(BinanceAPITest PRIVATE
+    3rdprty/googletest/include
     ${CMAKE_SOURCE_DIR}/api/binance/include/
-    ${googletest_SOURCE_DIR}/googletest/include
 )
 
 target_link_libraries(BinanceAPITest PRIVATE

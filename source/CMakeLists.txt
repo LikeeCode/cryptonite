@@ -68,13 +68,7 @@ configure_file(
 )
 
 # Testing
-include(FetchContent)
-FetchContent_Declare(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG        v1.14.0
-)
-FetchContent_MakeAvailable(googletest)
+add_subdirectory(3rdParty/googletest)
 
 option(CRYPTONITE_BUILD_TESTS "Build the test suite" ON)
 if(CRYPTONITE_BUILD_TESTS)
