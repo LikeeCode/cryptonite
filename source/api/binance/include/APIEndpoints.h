@@ -7,7 +7,7 @@
 namespace Binance::API
 {
     const QString BASE_URL = "https://api.binance.com";
-    const QString BASE_URL_TESTNET = "https://testnet.binance.vision/api";
+    const QString BASE_URL_TESTNET = "https://testnet.binance.vision";
 
     // General endpoints
     const QString PING = "/api/v3/ping";
