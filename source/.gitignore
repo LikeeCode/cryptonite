@@ -69,3 +69,9 @@ CMakeFiles/
 
 # vcpkg directory (if installed locally in the project)
 /vcpkg/
+
+# Testing
+/Testing/
+
+# User's API keys
+/apiKeys/
