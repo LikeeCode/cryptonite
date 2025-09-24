@@ -7,6 +7,7 @@ add_library(BinanceAPI
     include/Errors.h
     include/FilterConverter.h
     include/Filters.h
+    include/GeneralData.h
 
     src/BinanceAPI.cpp
     src/EnumConverter.cpp
