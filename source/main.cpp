@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QObject>
 
 #include "api/binance/include/BinanceAPI.h"
 
@@ -20,6 +21,21 @@ int main(int argc, char *argv[])
 
     // Load Binance API
     Binance::BinanceAPI* binanceApi = new Binance::BinanceAPI(&app, true); // true for test network
+    QObject::connect(binanceApi, &Binance::BinanceAPI::apiKeysFileError, []()
+                     { qDebug() << "API Keys file error!\n"; });
+    QObject::connect(binanceApi, &Binance::BinanceAPI::apiError, [](const QString &error)
+                     { qDebug() << "API error:\n" << error; });
+    QObject::connect(binanceApi, &Binance::BinanceAPI::pingResponse, [](const QJsonDocument& data)
+                     { qDebug() << "Ping response:\n" << data.toJson(QJsonDocument::Compact);});
+    QObject::connect(binanceApi, &Binance::BinanceAPI::timeResponse, [](const QJsonDocument& data)
+                     { qDebug() << "Time response:\n" << data.toJson(QJsonDocument::Compact); });
+    QObject::connect(binanceApi, &Binance::BinanceAPI::exchangeInfoResponse, [](const QJsonDocument& data)
+                     { qDebug() << "Exchange Info response:\n" << data.toJson(QJsonDocument::Compact); });
+
+    // Example usage: Call some API methods
+    binanceApi->ping();
+    binanceApi->time();
+    binanceApi->exchangeInfo();
 
     // Start the Qt event loop and return the exit code when the app closes
     return app.exec();
