@@ -38,8 +38,18 @@ target_link_libraries(Cryptonite PRIVATE
 
 add_subdirectory(api)
 
-# windeployqt is a tool provided by Qt to help deploy applications on Windows.
-# It copies the necessary Qt DLLs and plugins to the output directory.
+# Testing
+option(CRYPTONITE_BUILD_TESTS "Build the test suite" ON)
+if(CRYPTONITE_BUILD_TESTS)
+    include(CTest)
+    add_subdirectory(tests)
+    add_executable(tests
+        tests/main.cpp
+        tests/api/binance/TestBinanceAPI.cpp
+    )
+endif()
+
+# Deployment for Windows
 if(WIN32 AND WINDEPLOYQT_EXECUTABLE)
     # Add a custom command that runs AFTER the Cryptonite target is built.
     add_custom_command(
