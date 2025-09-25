@@ -57,7 +57,7 @@ namespace Binance::GeneralData
         bool pegInstructionsAllowed{};
         bool isSpotTradingAllowed{};
         bool isMarginTradingAllowed{};
-        QList<Binance::Filter::Type> filters; // This uses the Filter variant from your Filters.h
+        QList<std::shared_ptr<Filter::BinanceFilter>> filters;
         QList<AccountAndSymbolPermissions> permissions;
         QList<AccountAndSymbolPermissions> permissionSets;
         QString defaultSelfTradePreventionMode;
