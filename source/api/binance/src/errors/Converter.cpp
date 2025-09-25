@@ -2,7 +2,7 @@
 #include <QString>
 #include <QHash>
 
-#include "errors/ErrorConverter.h"
+#include "errors/Converter.h"
 
 namespace Binance::Error
 {
