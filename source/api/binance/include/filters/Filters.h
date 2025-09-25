@@ -1,7 +1,8 @@
 #pragma once
 
-#include <QString>
 #include <QMap>
+#include <QString>
+#include <QVariant>
 
 namespace Binance::Filter
 {
@@ -32,22 +33,27 @@ namespace Binance::Filter
         EXCHANGE_MAX_NUM_ORDER_LISTS
     };
 
+    struct BinanceFilter
+    {
+        Type filterType{};
+    };
+
     // Symbol Filters
-    struct PriceFilter
+    struct PriceFilter : BinanceFilter
     {
         double minPrice{};
         double maxPrice{};
         double tickSize{};
     };
 
-    struct PercentPriceFilter
+    struct PercentPriceFilter : BinanceFilter
     {
         double multiplierUp{};
         double multiplierDown{};
         int avgPriceMins{};
     };
 
-    struct PercentPriceBySideFilter
+    struct PercentPriceBySideFilter : BinanceFilter
     {
         double bidMultiplierUp{};
         double bidMultiplierDown{};
@@ -56,62 +62,64 @@ namespace Binance::Filter
         int avgPriceMins{};
     };
 
-    struct LotSize
+    struct LotSize : BinanceFilter
     {
         double minQty{};
         double maxQty{};
         double stepSize{};
     };
 
-    struct MinNotional
+    struct MinNotional : BinanceFilter
     {
         double minNotional{};
-        int applyToMarket{};
+        bool applyToMarket{};
         int avgPriceMins{};
     };
 
-    struct Notional
+    struct Notional : BinanceFilter
     {
         double minNotional{};
-        double applyMinToMarket{};
+        bool applyMinToMarket{};
         double maxNotional{};
-        double applyMaxToMarket{};
+        bool applyMaxToMarket{};
         int avgPriceMins{};
     };
 
-    struct IcebergParts
+    struct IcebergParts : BinanceFilter
     {
         int limit{};
     };
 
-    struct MarketLotSize
+    struct MarketLotSize : BinanceFilter
     {
         double minQty{};
         double maxQty{};
         double stepSize{};
     };
 
-    struct MaxNumOrders
+    // Exchange Filters
+
+    struct MaxNumOrders : BinanceFilter
     {
         int maxNumOrders{};
     };
 
-    struct MaxNumAlgoOrders
+    struct MaxNumAlgoOrders : BinanceFilter
     {
         int maxNumAlgoOrders{};
     };
 
-    struct MaxNumIcebergOrders
+    struct MaxNumIcebergOrders : BinanceFilter
     {
         int maxNumIcebergOrders{};
     };
 
-    struct MaxPosition
+    struct MaxPosition : BinanceFilter
     {
         double maxPosition{};
     };
 
-    struct TrailingDelta
+    struct TrailingDelta : BinanceFilter
     {
         int minTrailingAboveDelta{};
         int maxTrailingAboveDelta{};
@@ -119,33 +127,32 @@ namespace Binance::Filter
         int maxTrailingBelowDelta{};
     };
 
-    struct MaxNumOrderAmends
+    struct MaxNumOrderAmends : BinanceFilter
     {
         int maxNumOrderAmends{};
     };
 
-    struct MaxNumOrderLists
+    struct MaxNumOrderLists : BinanceFilter
     {
         int maxNumOrderLists{};
     };
 
-    // Exchange Filters
-    struct ExchangeMaxNumOrders
+    struct ExchangeMaxNumOrders : BinanceFilter
     {
         int maxNumOrders{};
     };
 
-    struct ExchangeMaxNumAlgoOrders
+    struct ExchangeMaxNumAlgoOrders : BinanceFilter
     {
         int maxNumAlgoOrders{};
     };
 
-    struct ExchangeMaxNumIcebergOrders
+    struct ExchangeMaxNumIcebergOrders : BinanceFilter
     {
         int maxNumIcebergOrders{};
     };
 
-    struct ExchangeMaxNumOrderLists
+    struct ExchangeMaxNumOrderLists : BinanceFilter
     {
         int maxNumOrderLists{};
     };
