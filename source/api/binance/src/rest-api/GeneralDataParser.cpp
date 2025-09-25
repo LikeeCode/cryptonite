@@ -5,7 +5,7 @@
 
 #include "enums/Converter.h"
 #include "filters/Converter.h"
-#include "GeneralDataParser.h"
+#include "rest-api/GeneralDataParser.h"
 
 namespace Binance
 {

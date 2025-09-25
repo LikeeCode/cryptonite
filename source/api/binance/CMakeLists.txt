@@ -1,20 +1,20 @@
 add_library(BinanceAPI
-    include/rest-api/APIEndpoints.h
-    include/BinanceAPI.h
     include/enums/Converter.h
     include/enums/Enums.h
     include/errors/Converter.h
     include/errors/Errors.h
     include/filters/Converter.h
     include/filters/Filters.h
-    include/GeneralData.h
-    include/GeneralDataParser.h
-
-    src/BinanceAPI.cpp
+    include/rest-api/APIEndpoints.h
+    include/rest-api/BinanceAPI.h
+    include/rest-api/GeneralData.h
+    include/rest-api/GeneralDataParser.h
+    
     src/enums/Converter.cpp
     src/errors/Converter.cpp
     src/filters/Converter.cpp
-    src/GeneralDataParser.cpp
+    src/rest-api/BinanceAPI.cpp
+    src/rest-api/GeneralDataParser.cpp
 )
 
 target_include_directories(BinanceAPI PUBLIC include/)
