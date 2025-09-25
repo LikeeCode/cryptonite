@@ -69,11 +69,19 @@ namespace Binance::GeneralData
         QString baseAsset;
         QList<QString> symbols;
     };
+
+    struct RateLimit
+    {
+        RateLimitType rateLimitType{};
+        QString interval;
+        int intervalNum{};
+        int limit{};
+    };
     struct ExchangeInfo
     {
         QString timezone;
         qint64 serverTime{};
-        QList<RateLimitType> rateLimits;
+        QList<RateLimit> rateLimits;
         QList<Binance::Filter::Type> exchangeFilters;
         QList<Symbol> symbols;
         QList<Symbol> sors;

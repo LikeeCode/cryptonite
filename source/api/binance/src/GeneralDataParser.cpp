@@ -3,8 +3,10 @@
 #include <QJsonValue>
 #include <QVariant>
 
-#include "GeneralDataParser.h"
+
+#include "enums/Converter.h"
 #include "filters/TypeConverter.h"
+#include "GeneralDataParser.h"
 
 namespace Binance
 {
@@ -69,29 +71,57 @@ namespace Binance
         exchangeInfo.serverTime = json["serverTime"].toDouble();
 
         // rateLimits
-        // const QJsonValue rateLimits = json.value("rateLimits");
-        // if (rateLimits.isUndefined() || !rateLimits.isArray())
-        // {
-        //     return {}; // rateLimits are required
-        // }
-        // QJsonArray rateLimits = json["rateLimits"].toArray();
+        if (json.contains("rateLimits") && json["rateLimits"].isArray())
+        {
+            QJsonArray rateLimits = json["rateLimits"].toArray();
+            for (int i = 0; i < rateLimits.size(); i++)
+            {
+                if (!rateLimits[i].isObject())
+                {
+                    return {}; // Invalid format
+                }
+                const QJsonObject rateLimit = rateLimits[i].toObject();
+
+                // rateLimitType
+                if (!rateLimit.contains("rateLimitType") || !rateLimit["rateLimitType"].isString())
+                {
+                    return {}; // rateLimitType is required
+                }
+                GeneralData::RateLimit limit{};
+                limit.rateLimitType = Enum::toRateLimitType(rateLimit["rateLimitType"].toString()).value();
+
+                // interval
+                if (!rateLimit.contains("interval") || !rateLimit["interval"].isString())
+                {
+                    return {}; // interval is required
+                }
+                limit.interval = rateLimit["interval"].toString();
+
+                // intervalNum
+                if (!rateLimit.contains("intervalNum") || !rateLimit["intervalNum"].isDouble())
+                {
+                    return {}; // intervalNum is required
+                }
+                limit.intervalNum = rateLimit["intervalNum"].toDouble();
+
+                // limit
+                if (!rateLimit.contains("limit") || !rateLimit["limit"].isDouble())
+                {
+                    return {}; // limit is required
+                }
+                limit.limit = rateLimit["limit"].toDouble();
+
+                exchangeInfo.rateLimits.append(limit);
+            }
+        }
+        else{
+            return {}; // rateLimits are required
+        }
 
         // exchangeFilters
-        if (json.contains("exchangeFilters") && json["exchangeFilters"].isArray())
+        if (!json.contains("exchangeFilters") || !json["exchangeFilters"].isArray())
         {
-            QJsonArray exchangeFilters = json["exchangeFilters"].toArray();
-            for (int i = 0; i < exchangeFilters.size(); i++)
-            {
-                if (exchangeFilters[i].isString())
-                {
-                    auto exchangeFilter = exchangeFilters[i].toString();
-                    auto exchangeFilterType = Filter::toFilterType(exchangeFilter);
-                    if(exchangeFilterType.has_value())
-                    {
-                        exchangeInfo.exchangeFilters.append(exchangeFilterType.value());
-                    }
-                }
-            }
+            return {}; // exchangeFilters are required
         }
 
         return exchangeInfo;

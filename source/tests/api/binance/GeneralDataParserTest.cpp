@@ -110,4 +110,5 @@ TEST_F(GeneralDataParserTest, ExchangeInfo)
     ASSERT_TRUE(exchangeInfo.has_value());
     ASSERT_FALSE(exchangeInfo.value().timezone.toStdString().empty());
     ASSERT_TRUE(exchangeInfo.value().serverTime > 0);
+    ASSERT_TRUE(exchangeInfo.value().rateLimits.size() > 0);
 }
