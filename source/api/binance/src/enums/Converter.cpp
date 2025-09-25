@@ -3,7 +3,7 @@
 #include <QHash>
 #include <QString>
 
-#include "enums/EnumConverter.h"
+#include "enums/Converter.h"
 
 namespace Binance::Enum
 {

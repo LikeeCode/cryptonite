@@ -1,7 +1,7 @@
 add_library(BinanceAPI
     include/APIEndpoints.h
     include/BinanceAPI.h
-    include/enums/EnumConverter.h
+    include/enums/Converter.h
     include/enums/Enums.h
     include/errors/ErrorConverter.h
     include/errors/Errors.h
@@ -11,7 +11,7 @@ add_library(BinanceAPI
     include/GeneralDataParser.h
 
     src/BinanceAPI.cpp
-    src/enums/EnumConverter.cpp
+    src/enums/Converter.cpp
     src/errors/ErrorConverter.cpp
     src/filters/TypeConverter.cpp
     src/GeneralDataParser.cpp
