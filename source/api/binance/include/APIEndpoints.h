@@ -2,7 +2,7 @@
 
 #include <QString>
 
-#include "Enums.h"
+#include "enums/Enums.h"
 
 namespace Binance::API
 {

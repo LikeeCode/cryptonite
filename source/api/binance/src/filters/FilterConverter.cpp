@@ -3,7 +3,7 @@
 #include <QString>
 #include <QHash>
 
-#include "FilterConverter.h"
+#include "filters/FilterConverter.h"
 
 namespace Binance
 {

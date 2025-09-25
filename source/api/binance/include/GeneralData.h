@@ -4,8 +4,8 @@
 #include <QString>
 #include <QVariant>
 
-#include "Enums.h"
-#include "Filters.h"
+#include "enums/Enums.h"
+#include "filters/Filters.h"
 
 namespace Binance::GeneralData
 {
