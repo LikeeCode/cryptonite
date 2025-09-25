@@ -7,7 +7,7 @@
 
 namespace Binance
 {
-    QString EnumConverter::symbolStatusToString(SymbolStatus status)
+    QString EnumConverter::toString(SymbolStatus status)
     {
         static const QHash<SymbolStatus, QString> map = {
             {SymbolStatus::TRADING, "TRADING"},
@@ -17,29 +17,33 @@ namespace Binance
         return map.value(status);
     }
 
-    SymbolStatus EnumConverter::stringToSymbolStatus(const QString& statusStr)
+    std::optional<SymbolStatus> EnumConverter::toSymbolStatus(const QString &status)
     {
         static const QHash<QString, SymbolStatus> map = {
             {"TRADING", SymbolStatus::TRADING},
             {"END_OF_DAY", SymbolStatus::END_OF_DAY},
             {"HALT", SymbolStatus::HALT},
             {"BREAK", SymbolStatus::BREAK}};
-        return map.value(statusStr, SymbolStatus::BREAK); // Default to BREAK if not found
+        return map.value(status, {});
     }
 
-    QString EnumConverter::accountAndSymbolPermissionsToString(AccountAndSymbolPermissions permission)
+    QString EnumConverter::toString(AccountAndSymbolPermissions permission)
     {
-        if (permission == AccountAndSymbolPermissions::SPOT) return "SPOT";
-        return QString();
+        static const QHash<AccountAndSymbolPermissions, QString> map = {
+            {AccountAndSymbolPermissions::SPOT, "SPOT"},
+            {AccountAndSymbolPermissions::MARGIN, "MARGIN"}};
+        return map.value(permission, {});
     }
 
-    AccountAndSymbolPermissions EnumConverter::stringToAccountAndSymbolPermissions(const QString& permissionStr)
+    std::optional<AccountAndSymbolPermissions> EnumConverter::toAccountAndSymbolPermissions(const QString &permission)
     {
-        if (permissionStr == "SPOT") return AccountAndSymbolPermissions::SPOT;
-        return AccountAndSymbolPermissions::SPOT; // Only one value
+        static const QHash<QString, AccountAndSymbolPermissions> map = {
+            {"SPOT", AccountAndSymbolPermissions::SPOT},
+            {"MARGIN", AccountAndSymbolPermissions::MARGIN}};
+        return map.value(permission);
     }
 
-    QString EnumConverter::orderStatusToString(OrderStatus status)
+    QString EnumConverter::toString(OrderStatus status)
     {
         static const QHash<OrderStatus, QString> map = {
             {OrderStatus::NEW, "NEW"},
@@ -54,7 +58,7 @@ namespace Binance
         return map.value(status);
     }
 
-    OrderStatus EnumConverter::stringToOrderStatus(const QString& statusStr)
+    std::optional<OrderStatus> EnumConverter::toOrderStatus(const QString &status)
     {
         static const QHash<QString, OrderStatus> map = {
             {"NEW", OrderStatus::NEW},
@@ -66,10 +70,10 @@ namespace Binance
             {"REJECTED", OrderStatus::REJECTED},
             {"EXPIRED", OrderStatus::EXPIRED},
             {"EXPIRED_IN_MATCH", OrderStatus::EXPIRED_IN_MATCH}};
-        return map.value(statusStr, OrderStatus::REJECTED); // Default to REJECTED if not found
+        return map.value(status, {});
     }
 
-    QString EnumConverter::orderListStatusToString(OrderListStatus status)
+    QString EnumConverter::toString(OrderListStatus status)
     {
         static const QHash<OrderListStatus, QString> map = {
             {OrderListStatus::RESPONSE, "RESPONSE"},
@@ -79,17 +83,17 @@ namespace Binance
         return map.value(status);
     }
 
-    OrderListStatus EnumConverter::stringToOrderListStatus(const QString& statusStr)
+    std::optional<OrderListStatus> EnumConverter::toOrderListStatus(const QString &status)
     {
         static const QHash<QString, OrderListStatus> map = {
             {"RESPONSE", OrderListStatus::RESPONSE},
             {"EXEC_STARTED", OrderListStatus::EXEC_STARTED},
             {"UPDATED", OrderListStatus::UPDATED},
             {"ALL_DONE", OrderListStatus::ALL_DONE}};
-        return map.value(statusStr, OrderListStatus::RESPONSE); // Default to RESPONSE if not found
+        return map.value(status, {});
     }
 
-    QString EnumConverter::orderListOrderStatusToString(OrderListOrderStatus status)
+    QString EnumConverter::toString(OrderListOrderStatus status)
     {
         static const QHash<OrderListOrderStatus, QString> map = {
             {OrderListOrderStatus::EXECUTING, "EXECUTING"},
@@ -98,16 +102,16 @@ namespace Binance
         return map.value(status);
     }
 
-    OrderListOrderStatus EnumConverter::stringToOrderListOrderStatus(const QString& statusStr)
+    std::optional<OrderListOrderStatus> EnumConverter::toOrderListOrderStatus(const QString &status)
     {
         static const QHash<QString, OrderListOrderStatus> map = {
             {"EXECUTING", OrderListOrderStatus::EXECUTING},
             {"ALL_DONE", OrderListOrderStatus::ALL_DONE},
             {"REJECT", OrderListOrderStatus::REJECT}};
-        return map.value(statusStr, OrderListOrderStatus::REJECT); // Default to REJECT if not found
+        return map.value(status, {});
     }
 
-    QString EnumConverter::contingencyTypeToString(ContingencyType type)
+    QString EnumConverter::toString(ContingencyType type)
     {
         static const QHash<ContingencyType, QString> map = {
             {ContingencyType::OCO, "OCO"},
@@ -115,27 +119,28 @@ namespace Binance
         return map.value(type);
     }
 
-    ContingencyType EnumConverter::stringToContingencyType(const QString& typeStr)
+    std::optional<ContingencyType> EnumConverter::toContingencyType(const QString &type)
     {
         static const QHash<QString, ContingencyType> map = {
             {"OCO", ContingencyType::OCO},
             {"OTO", ContingencyType::OTO}};
-        return map.value(typeStr, ContingencyType::OCO); // Default to OCO if not found
+        return map.value(type, {});
     }
 
-    QString EnumConverter::allocationTypeToString(AllocationType type)
+    QString EnumConverter::toString(AllocationType type)
     {
         if (type == AllocationType::SOR) return "SOR";
         return QString();
     }
 
-    AllocationType EnumConverter::stringToAllocationType(const QString& typeStr)
+    std::optional<AllocationType> EnumConverter::toAllocationType(const QString &type)
     {
-        if (typeStr == "SOR") return AllocationType::SOR;
-        return AllocationType::SOR; // Only one value
+        static const QHash<QString, AllocationType> map = {
+            {"SOR", AllocationType::SOR}};
+        return map.value(type, {});
     }
 
-    QString EnumConverter::orderTypeToString(OrderType type)
+    QString EnumConverter::toString(OrderType type)
     {
         static const QHash<OrderType, QString> map = {
             {OrderType::LIMIT, "LIMIT"},
@@ -148,7 +153,7 @@ namespace Binance
         return map.value(type);
     }
 
-    OrderType EnumConverter::stringToOrderType(const QString& typeStr)
+    std::optional<OrderType> EnumConverter::toOrderType(const QString &type)
     {
         static const QHash<QString, OrderType> map = {
             {"LIMIT", OrderType::LIMIT},
@@ -158,10 +163,10 @@ namespace Binance
             {"TAKE_PROFIT", OrderType::TAKE_PROFIT},
             {"TAKE_PROFIT_LIMIT", OrderType::TAKE_PROFIT_LIMIT},
             {"LIMIT_MAKER", OrderType::LIMIT_MAKER}};
-        return map.value(typeStr, OrderType::LIMIT); // Default to LIMIT if not found
+        return map.value(type, {});
     }
 
-    QString EnumConverter::orderResponseTypeToString(OrderResponseType type)
+    QString EnumConverter::toString(OrderResponseType type)
     {
         static const QHash<OrderResponseType, QString> map = {
             {OrderResponseType::ACK, "ACK"},
@@ -170,16 +175,16 @@ namespace Binance
         return map.value(type);
     }
 
-    OrderResponseType EnumConverter::stringToOrderResponseType(const QString& typeStr)
+    std::optional<OrderResponseType> EnumConverter::toOrderResponseType(const QString &type)
     {
         static const QHash<QString, OrderResponseType> map = {
             {"ACK", OrderResponseType::ACK},
             {"RESULT", OrderResponseType::RESULT},
             {"FULL", OrderResponseType::FULL}};
-        return map.value(typeStr, OrderResponseType::FULL); // Default to FULL if not found
+        return map.value(type, {});
     }
 
-    QString EnumConverter::workingFloorToString(WorkingFloor floor)
+    QString EnumConverter::toString(WorkingFloor floor)
     {
         static const QHash<WorkingFloor, QString> map = {
             {WorkingFloor::EXCHANGE, "EXCHANGE"},
@@ -187,15 +192,15 @@ namespace Binance
         return map.value(floor);
     }
 
-    WorkingFloor EnumConverter::stringToWorkingFloor(const QString& floorStr)
+    std::optional<WorkingFloor> EnumConverter::toWorkingFloor(const QString &floor)
     {
         static const QHash<QString, WorkingFloor> map = {
             {"EXCHANGE", WorkingFloor::EXCHANGE},
             {"SOR", WorkingFloor::SOR}};
-        return map.value(floorStr, WorkingFloor::EXCHANGE); // Default to EXCHANGE if not found
+        return map.value(floor, {});
     }
 
-    QString EnumConverter::orderSideToString(OrderSide side)
+    QString EnumConverter::toString(OrderSide side)
     {
         static const QHash<OrderSide, QString> map = {
             {OrderSide::BUY, "BUY"},
@@ -203,15 +208,15 @@ namespace Binance
         return map.value(side);
     }
 
-    OrderSide EnumConverter::stringToOrderSide(const QString& sideStr)
+    std::optional<OrderSide> EnumConverter::toOrderSide(const QString &side)
     {
         static const QHash<QString, OrderSide> map = {
             {"BUY", OrderSide::BUY},
             {"SELL", OrderSide::SELL}};
-        return map.value(sideStr, OrderSide::BUY); // Default to BUY if not found
+        return map.value(side, {});
     }
 
-    QString EnumConverter::timeInForceToString(TimeInForce tif)
+    QString EnumConverter::toString(TimeInForce tif)
     {
         static const QHash<TimeInForce, QString> map = {
             {TimeInForce::GTC, "GTC"},
@@ -220,16 +225,16 @@ namespace Binance
         return map.value(tif);
     }
 
-    TimeInForce EnumConverter::stringToTimeInForce(const QString& tifStr)
+    std::optional<TimeInForce> EnumConverter::toTimeInForce(const QString &tif)
     {
         static const QHash<QString, TimeInForce> map = {
             {"GTC", TimeInForce::GTC},
             {"IOC", TimeInForce::IOC},
             {"FOK", TimeInForce::FOK}};
-        return map.value(tifStr, TimeInForce::GTC); // Default to GTC if not found
+        return map.value(tif, {});
     }
 
-    QString EnumConverter::rateLimitIntervalToString(RateLimitInterval interval)
+    QString EnumConverter::toString(RateLimitInterval interval)
     {
         static const QHash<RateLimitInterval, QString> map = {
             {RateLimitInterval::SECOND, "SECOND"},
@@ -238,16 +243,16 @@ namespace Binance
         return map.value(interval);
     }
 
-    RateLimitInterval EnumConverter::stringToRateLimitInterval(const QString& intervalStr)
+    std::optional<RateLimitInterval> EnumConverter::toRateLimitInterval(const QString &interval)
     {
         static const QHash<QString, RateLimitInterval> map = {
             {"SECOND", RateLimitInterval::SECOND},
             {"MINUTE", RateLimitInterval::MINUTE},
             {"DAY", RateLimitInterval::DAY}};
-        return map.value(intervalStr, RateLimitInterval::SECOND); // Default to SECOND if not found
+        return map.value(interval, {});
     }
 
-    QString EnumConverter::rateLimitTypeToString(RateLimitType type)
+    QString EnumConverter::toString(RateLimitType type)
     {
         static const QHash<RateLimitType, QString> map = {
             {RateLimitType::REQUEST_WEIGHT, "REQUEST_WEIGHT"},
@@ -256,16 +261,16 @@ namespace Binance
         return map.value(type);
     }
 
-    RateLimitType EnumConverter::stringToRateLimitType(const QString& typeStr)
+    std::optional<RateLimitType> EnumConverter::toRateLimitType(const QString &type)
     {
         static const QHash<QString, RateLimitType> map = {
             {"REQUEST_WEIGHT", RateLimitType::REQUEST_WEIGHT},
             {"ORDERS", RateLimitType::ORDERS},
             {"RAW_REQUESTS", RateLimitType::RAW_REQUESTS}};
-        return map.value(typeStr, RateLimitType::REQUEST_WEIGHT); // Default to REQUEST_WEIGHT if not found
+        return map.value(type, {});
     }
 
-    QString EnumConverter::selfTradePreventionModeToString(SelfTradePreventionMode mode)
+    QString EnumConverter::toString(SelfTradePreventionMode mode)
     {
         static const QHash<SelfTradePreventionMode, QString> map = {
             {SelfTradePreventionMode::NONE, "NONE"},
@@ -276,7 +281,7 @@ namespace Binance
         return map.value(mode);
     }
 
-    SelfTradePreventionMode EnumConverter::stringToSelfTradePreventionMode(const QString& modeStr)
+    std::optional<SelfTradePreventionMode> EnumConverter::toSelfTradePreventionMode(const QString &mode)
     {
         static const QHash<QString, SelfTradePreventionMode> map = {
             {"NONE", SelfTradePreventionMode::NONE},
@@ -284,7 +289,7 @@ namespace Binance
             {"EXPIRE_TAKER", SelfTradePreventionMode::EXPIRE_TAKER},
             {"EXPIRE_BOTH", SelfTradePreventionMode::EXPIRE_BOTH},
             {"DECREMENT", SelfTradePreventionMode::DECREMENT}};
-        return map.value(modeStr, SelfTradePreventionMode::NONE); // Default to NONE if not found
+        return map.value(mode, {});
     }
 
 } // namespace Binance
