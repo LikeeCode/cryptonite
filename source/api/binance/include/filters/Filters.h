@@ -35,12 +35,14 @@ namespace Binance::Filter
 
     struct BinanceFilter
     {
-        Type filterType{};
+        explicit BinanceFilter(const QString &type) : filterType(type) {}
+        QString filterType;
     };
 
     // Symbol Filters
     struct PriceFilter : BinanceFilter
     {
+        PriceFilter() : BinanceFilter("PRICE_FILTER") {};
         double minPrice{};
         double maxPrice{};
         double tickSize{};
@@ -48,6 +50,7 @@ namespace Binance::Filter
 
     struct PercentPriceFilter : BinanceFilter
     {
+        PercentPriceFilter() : BinanceFilter("PERCENT_PRICE") {};
         double multiplierUp{};
         double multiplierDown{};
         int avgPriceMins{};
@@ -55,6 +58,7 @@ namespace Binance::Filter
 
     struct PercentPriceBySideFilter : BinanceFilter
     {
+        PercentPriceBySideFilter() : BinanceFilter("PERCENT_PRICE_BY_SIDE") {};
         double bidMultiplierUp{};
         double bidMultiplierDown{};
         int askMultiplierUp{};
@@ -64,6 +68,7 @@ namespace Binance::Filter
 
     struct LotSize : BinanceFilter
     {
+        LotSize() : BinanceFilter("LOT_SIZE") {};
         double minQty{};
         double maxQty{};
         double stepSize{};
@@ -71,6 +76,7 @@ namespace Binance::Filter
 
     struct MinNotional : BinanceFilter
     {
+        MinNotional() : BinanceFilter("MIN_NOTIONAL") {};
         double minNotional{};
         bool applyToMarket{};
         int avgPriceMins{};
@@ -78,6 +84,7 @@ namespace Binance::Filter
 
     struct Notional : BinanceFilter
     {
+        Notional() : BinanceFilter("NOTIONAL") {};
         double minNotional{};
         bool applyMinToMarket{};
         double maxNotional{};
@@ -87,11 +94,13 @@ namespace Binance::Filter
 
     struct IcebergParts : BinanceFilter
     {
+        IcebergParts() : BinanceFilter("ICEBERG_PARTS") {};
         int limit{};
     };
 
     struct MarketLotSize : BinanceFilter
     {
+        MarketLotSize() : BinanceFilter("MARKET_LOT_SIZE") {};
         double minQty{};
         double maxQty{};
         double stepSize{};
@@ -101,26 +110,31 @@ namespace Binance::Filter
 
     struct MaxNumOrders : BinanceFilter
     {
+        MaxNumOrders() : BinanceFilter("MAX_NUM_ORDERS") {};
         int maxNumOrders{};
     };
 
     struct MaxNumAlgoOrders : BinanceFilter
     {
+        MaxNumAlgoOrders() : BinanceFilter("MAX_NUM_ALGO_ORDERS") {};
         int maxNumAlgoOrders{};
     };
 
     struct MaxNumIcebergOrders : BinanceFilter
     {
+        MaxNumIcebergOrders() : BinanceFilter("MAX_NUM_ICEBERG_ORDERS") {};
         int maxNumIcebergOrders{};
     };
 
     struct MaxPosition : BinanceFilter
     {
+        MaxPosition() : BinanceFilter("MAX_POSITION") {};
         double maxPosition{};
     };
 
     struct TrailingDelta : BinanceFilter
     {
+        TrailingDelta() : BinanceFilter("TRAILING_DELTA") {};
         int minTrailingAboveDelta{};
         int maxTrailingAboveDelta{};
         int minTrailingBelowDelta{};
@@ -129,31 +143,37 @@ namespace Binance::Filter
 
     struct MaxNumOrderAmends : BinanceFilter
     {
+        MaxNumOrderAmends() : BinanceFilter("MAX_NUM_ORDER_AMENDS") {};
         int maxNumOrderAmends{};
     };
 
     struct MaxNumOrderLists : BinanceFilter
     {
+        MaxNumOrderLists() : BinanceFilter("MAX_NUM_ORDER_LISTS") {};
         int maxNumOrderLists{};
     };
 
     struct ExchangeMaxNumOrders : BinanceFilter
     {
+        ExchangeMaxNumOrders() : BinanceFilter("EXCHANGE_MAX_NUM_ORDERS") {};
         int maxNumOrders{};
     };
 
     struct ExchangeMaxNumAlgoOrders : BinanceFilter
     {
+        ExchangeMaxNumAlgoOrders() : BinanceFilter("EXCHANGE_MAX_NUM_ALGO_ORDERS") {};
         int maxNumAlgoOrders{};
     };
 
     struct ExchangeMaxNumIcebergOrders : BinanceFilter
     {
+        ExchangeMaxNumIcebergOrders() : BinanceFilter("EXCHANGE_MAX_NUM_ICEBERG_ORDERS") {};
         int maxNumIcebergOrders{};
     };
 
     struct ExchangeMaxNumOrderLists : BinanceFilter
     {
+        ExchangeMaxNumOrderLists() : BinanceFilter("EXCHANGE_MAX_NUM_ORDER_LISTS") {};
         int maxNumOrderLists{};
     };
 } // namespace Binance::Filter

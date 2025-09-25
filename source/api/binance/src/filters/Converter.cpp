@@ -37,6 +37,7 @@ namespace Binance::Filter
     std::optional<Type> toFilterType(const QString &type)
     {
         static const QMap<QString, Type> filterTypeMap = {
+            // Symbol filters
             {"PRICE_FILTER", Type::PRICE_FILTER},
             {"PERCENT_PRICE", Type::PERCENT_PRICE},
             {"PERCENT_PRICE_BY_SIDE", Type::PERCENT_PRICE_BY_SIDE},
@@ -45,6 +46,7 @@ namespace Binance::Filter
             {"NOTIONAL", Type::NOTIONAL},
             {"ICEBERG_PARTS", Type::ICEBERG_PARTS},
             {"MARKET_LOT_SIZE", Type::MARKET_LOT_SIZE},
+            // Exchange filters
             {"MAX_NUM_ORDERS", Type::MAX_NUM_ORDERS},
             {"MAX_NUM_ALGO_ORDERS", Type::MAX_NUM_ALGO_ORDERS},
             {"MAX_NUM_ICEBERG_ORDERS", Type::MAX_NUM_ICEBERG_ORDERS},
@@ -66,17 +68,10 @@ namespace Binance::Filter
         {
             return {}; // filterType is required
         }
+        auto filterType = jsonObj["filterType"].toString();
 
-        auto filterType = Filter::toFilterType(jsonObj["filterType"].toString());
-        if (!filterType.has_value())
-        {
-            return {}; // Invalid filterType
-        }
-
-        switch (filterType.value())
-        {
         // Symbol filters
-        case Type::PRICE_FILTER:
+        if(filterType == "PRICE_FILTER")
         {
             auto filter = std::make_shared<PriceFilter>();
             if (!jsonObj.contains("minPrice") || !jsonObj["minPrice"].isString())
@@ -96,7 +91,7 @@ namespace Binance::Filter
             filter->tickSize = jsonObj["tickSize"].toString().toDouble();
             return filter;
         }
-        case Type::PERCENT_PRICE:
+        else if (filterType == "PERCENT_PRICE")
         {
             auto filter = std::make_shared<PercentPriceFilter>();
             if (!jsonObj.contains("multiplierUp") || !jsonObj["multiplierUp"].isString())
@@ -116,7 +111,7 @@ namespace Binance::Filter
             filter->avgPriceMins = jsonObj["avgPriceMins"].toInt();
             return filter;
         }
-        case Type::PERCENT_PRICE_BY_SIDE:
+        else if (filterType == "PERCENT_PRICE_BY_SIDE")
         {
             auto filter = std::make_shared<PercentPriceBySideFilter>();
             if (!jsonObj.contains("bidMultiplierUp") || !jsonObj["bidMultiplierUp"].isString())
@@ -146,7 +141,7 @@ namespace Binance::Filter
             filter->avgPriceMins = jsonObj["avgPriceMins"].toInt();
             return filter;
         }
-        case Type::LOT_SIZE:
+        else if (filterType == "LOT_SIZE")
         {
             auto filter = std::make_shared<LotSize>();
             if (!jsonObj.contains("minQty") || !jsonObj["minQty"].isString())
@@ -166,7 +161,7 @@ namespace Binance::Filter
             filter->stepSize = jsonObj["stepSize"].toString().toDouble();
             return filter;
         }
-        case Type::MIN_NOTIONAL:
+        else if (filterType == "MIN_NOTIONAL")
         {
             auto filter = std::make_shared<MinNotional>();
             if (!jsonObj.contains("minNotional") || !jsonObj["minNotional"].isString())
@@ -186,7 +181,7 @@ namespace Binance::Filter
             filter->avgPriceMins = jsonObj["avgPriceMins"].toInt();
             return filter;
         }
-        case Type::NOTIONAL:
+        else if (filterType == "NOTIONAL")
         {
             auto filter = std::make_shared<Notional>();
             if (!jsonObj.contains("minNotional") || !jsonObj["minNotional"].isString())
@@ -216,7 +211,7 @@ namespace Binance::Filter
             filter->avgPriceMins = jsonObj["avgPriceMins"].toInt();
             return filter;
         }
-        case Type::ICEBERG_PARTS:
+        else if (filterType == "ICEBERG_PARTS")
         {
             auto filter = std::make_shared<IcebergParts>();
             if (!jsonObj.contains("limit") || !jsonObj["limit"].isDouble())
@@ -226,7 +221,7 @@ namespace Binance::Filter
             filter->limit = jsonObj["limit"].toInt();
             return filter;
         }
-        case Type::MARKET_LOT_SIZE:
+        else if (filterType == "MARKET_LOT_SIZE")
         {
             auto filter = std::make_shared<MarketLotSize>();
             if (!jsonObj.contains("minQty") || !jsonObj["minQty"].isString())
@@ -247,7 +242,7 @@ namespace Binance::Filter
             return filter;
         }
         // Exchange filters
-        case Type::MAX_NUM_ORDERS:
+        else if (filterType == "MAX_NUM_ORDERS")
         {
             auto filter = std::make_shared<MaxNumOrders>();
             if (!jsonObj.contains("maxNumOrders") || !jsonObj["maxNumOrders"].isDouble())
@@ -257,7 +252,7 @@ namespace Binance::Filter
             filter->maxNumOrders = jsonObj["maxNumOrders"].toInt();
             return filter;
         }
-        case Type::MAX_NUM_ALGO_ORDERS:
+        else if (filterType == "MAX_NUM_ALGO_ORDERS")
         {
             auto filter = std::make_shared<MaxNumAlgoOrders>();
             if (!jsonObj.contains("maxNumAlgoOrders") || !jsonObj["maxNumAlgoOrders"].isDouble())
@@ -267,7 +262,7 @@ namespace Binance::Filter
             filter->maxNumAlgoOrders = jsonObj["maxNumAlgoOrders"].toInt();
             return filter;
         }
-        case Type::MAX_NUM_ICEBERG_ORDERS:
+        else if (filterType == "MAX_NUM_ICEBERG_ORDERS")
         {
             auto filter = std::make_shared<MaxNumIcebergOrders>();
             if (!jsonObj.contains("maxNumIcebergOrders") || !jsonObj["maxNumIcebergOrders"].isDouble())
@@ -277,7 +272,7 @@ namespace Binance::Filter
             filter->maxNumIcebergOrders = jsonObj["maxNumIcebergOrders"].toInt();
             return filter;
         }
-        case Type::MAX_POSITION:
+        else if (filterType == "MAX_POSITION")
         {
             auto filter = std::make_shared<MaxPosition>();
             if (!jsonObj.contains("maxPosition") || !jsonObj["maxPosition"].isString())
@@ -287,7 +282,7 @@ namespace Binance::Filter
             filter->maxPosition = jsonObj["maxPosition"].toString().toDouble();
             return filter;
         }
-        case Type::TRAILING_DELTA:
+        else if (filterType == "TRAILING_DELTA")
         {
             auto filter = std::make_shared<TrailingDelta>();
             if (!jsonObj.contains("minTrailingAboveDelta") || !jsonObj["minTrailingAboveDelta"].isDouble())
@@ -312,7 +307,7 @@ namespace Binance::Filter
             filter->maxTrailingBelowDelta = jsonObj["maxTrailingBelowDelta"].toInt();
             return filter;
         }
-        case Type::MAX_NUM_ORDER_AMENDS:
+        else if (filterType == "MAX_NUM_ORDER_AMENDS")
         {
             auto filter = std::make_shared<MaxNumOrderAmends>();
             if (!jsonObj.contains("maxNumOrderAmends") || !jsonObj["maxNumOrderAmends"].isDouble())
@@ -322,7 +317,7 @@ namespace Binance::Filter
             filter->maxNumOrderAmends = jsonObj["maxNumOrderAmends"].toInt();
             return filter;
         }
-        case Type::MAX_NUM_ORDER_LISTS:
+        else if (filterType == "MAX_NUM_ORDER_LISTS")
         {
             auto filter = std::make_shared<MaxNumOrderLists>();
             if (!jsonObj.contains("maxNumOrderLists") || !jsonObj["maxNumOrderLists"].isDouble())
@@ -332,7 +327,7 @@ namespace Binance::Filter
             filter->maxNumOrderLists = jsonObj["maxNumOrderLists"].toInt();
             return filter;
         }
-        case Type::EXCHANGE_MAX_NUM_ORDERS:
+        else if (filterType == "EXCHANGE_MAX_NUM_ORDERS")
         {
             auto filter = std::make_shared<ExchangeMaxNumOrders>();
             if (!jsonObj.contains("maxNumOrders") || !jsonObj["maxNumOrders"].isDouble())
@@ -342,7 +337,7 @@ namespace Binance::Filter
             filter->maxNumOrders = jsonObj["maxNumOrders"].toInt();
             return filter;
         }
-        case Type::EXCHANGE_MAX_NUM_ALGO_ORDERS:
+        else if (filterType == "EXCHANGE_MAX_NUM_ALGO_ORDERS")
         {
             auto filter = std::make_shared<ExchangeMaxNumAlgoOrders>();
             if (!jsonObj.contains("maxNumAlgoOrders") || !jsonObj["maxNumAlgoOrders"].isDouble())
@@ -352,7 +347,7 @@ namespace Binance::Filter
             filter->maxNumAlgoOrders = jsonObj["maxNumAlgoOrders"].toInt();
             return filter;
         }
-        case Type::EXCHANGE_MAX_NUM_ICEBERG_ORDERS:
+        else if (filterType == "EXCHANGE_MAX_NUM_ICEBERG_ORDERS")
         {
             auto filter = std::make_shared<ExchangeMaxNumIcebergOrders>();
             if (!jsonObj.contains("maxNumIcebergOrders") || !jsonObj["maxNumIcebergOrders"].isDouble())
@@ -362,7 +357,7 @@ namespace Binance::Filter
             filter->maxNumIcebergOrders = jsonObj["maxNumIcebergOrders"].toInt();
             return filter;
         }
-        case Type::EXCHANGE_MAX_NUM_ORDER_LISTS:
+        else if (filterType == "EXCHANGE_MAX_NUM_ORDER_LISTS")
         {
             auto filter = std::make_shared<ExchangeMaxNumOrderLists>();
             if (!jsonObj.contains("maxNumOrderLists") || !jsonObj["maxNumOrderLists"].isDouble())
@@ -372,8 +367,9 @@ namespace Binance::Filter
             filter->maxNumOrderLists = jsonObj["maxNumOrderLists"].toInt();
             return filter;
         }
-        default:
-            return {}; // Unsupported filter type for SymbolFilter
+        else
+        {
+            return {}; // Unsupported filterType
         }
     }
 } // namespace Binance::Filter
