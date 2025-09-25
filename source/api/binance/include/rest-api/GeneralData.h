@@ -9,33 +9,23 @@
 
 namespace Binance::GeneralData
 {
-    // Test connectivity
-    // GET /api/v3/ping
-    // Response
     struct Ping
     {
     };
-
-    // Check server time
-    // GET /api/v3/time
-    // Response
+    
     struct ServerTime
     {
         qint64 serverTime{};
     };
 
-    // Exchange information
-    // GET /api/v3/exchangeInfo
-    // Request
-    struct ExchangeInfoRequest{
-        QString symbol;                             // Optional
-        QList<QString> symbols;                     // Optional
-        AccountAndSymbolPermissions permissions{};  // Optional
-        bool showPermissionSets{};                  // Optional
-        SymbolStatus status{};                      // Optional
+    struct RateLimit
+    {
+        RateLimitType rateLimitType{};
+        QString interval;
+        int intervalNum{};
+        int limit{};
     };
 
-    // Response
     struct Symbol{
         QString symbol;
         SymbolStatus status{};
@@ -63,20 +53,7 @@ namespace Binance::GeneralData
         QString defaultSelfTradePreventionMode;
         QList<SelfTradePreventionMode> allowedSelfTradePreventionModes;
     };
-
-    struct SOR
-    {
-        QString baseAsset;
-        QList<QString> symbols;
-    };
-
-    struct RateLimit
-    {
-        RateLimitType rateLimitType{};
-        QString interval;
-        int intervalNum{};
-        int limit{};
-    };
+    
     struct ExchangeInfo
     {
         QString timezone;
