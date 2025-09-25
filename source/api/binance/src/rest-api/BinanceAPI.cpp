@@ -93,14 +93,30 @@ namespace Binance
         }
     }
 
-    void BinanceAPI::sendPublicRequest(const QString &endpoint)
+    void BinanceAPI::sendPublicRequest(const QString &endpoint, RequestType type)
     {
         QUrl url(m_baseUrl + endpoint);
         QNetworkRequest request(url);
+
+        switch(type)
+        {
+            case RequestType::Get:
+                m_networkManager->get(request);
+                break;
+            case RequestType::Post:
+                m_networkManager->post(request, QByteArray());
+                break;
+            case RequestType::Put:
+                m_networkManager->put(request, QByteArray());
+                break;
+            case RequestType::Delete:
+                m_networkManager->deleteResource(request);
+                break;
+        }
         m_networkManager->get(request);
     }
 
-    void BinanceAPI::sendSignedRequest(const QString &endpoint, const QString &params)
+    void BinanceAPI::sendSignedRequest(const QString &endpoint, const QString &params, RequestType type)
     {
         // 1. Create the signature
         QMessageAuthenticationCode code(QCryptographicHash::Sha256);
@@ -118,6 +134,23 @@ namespace Binance
         // 3. Create the request and add the API key to the header
         QNetworkRequest request(url);
         request.setRawHeader("X-MBX-APIKEY", m_apiKey.toUtf8());
+
+        // 4. Send the request based on the specified type
+        switch(type)
+        {
+            case RequestType::Get:
+                m_networkManager->get(request);
+                break;
+            case RequestType::Post:
+                m_networkManager->post(request, QByteArray());
+                break;
+            case RequestType::Put:
+                m_networkManager->put(request, QByteArray());
+                break;
+            case RequestType::Delete:
+                m_networkManager->deleteResource(request);
+                break;
+        }
         m_networkManager->get(request);
     }
 } // namespace Binance

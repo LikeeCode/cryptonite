@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "rest-api/APIEndpoints.h"
+#include "../../../RequestType.h"
 
 namespace Binance
 {
@@ -16,7 +17,7 @@ namespace Binance
         explicit BinanceAPI(QObject *parent = nullptr, bool useTestNetwork = true);
         ~BinanceAPI();
 
-        void setApiKeys(const QString& key, const QString& secret);
+        void setApiKeys(const QString &key, const QString &secret);
 
         // General endpoints
         void ping();
@@ -25,8 +26,8 @@ namespace Binance
 
     private:
         void getApiKeys();
-        void sendPublicRequest(const QString& endpoint);
-        void sendSignedRequest(const QString& endpoint, const QString& params);
+        void sendPublicRequest(const QString &endpoint, RequestType type = RequestType::Get);
+        void sendSignedRequest(const QString &endpoint, const QString &params, RequestType type = RequestType::Get);
 
         bool m_useTestNetwork;
         QString m_baseUrl;
@@ -40,8 +41,8 @@ namespace Binance
     signals:
         void apiKeysFileError();
         void apiError(const QString &error);
-        void pingResponse(const QJsonDocument& data);
-        void timeResponse(const QJsonDocument& data);
-        void exchangeInfoResponse(const QJsonDocument& data);
+        void pingResponse(const QJsonDocument &data);
+        void timeResponse(const QJsonDocument &data);
+        void exchangeInfoResponse(const QJsonDocument &data);
     };
 } // namespace Binance
