@@ -4,7 +4,7 @@
 #include <QJsonObject>
 #include <QString>
 
-#include "filters/TypeConverter.h"
+#include "filters/Converter.h"
 
 namespace Binance::Filter
 {

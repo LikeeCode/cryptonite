@@ -3,9 +3,8 @@
 #include <QJsonValue>
 #include <QVariant>
 
-
 #include "enums/Converter.h"
-#include "filters/TypeConverter.h"
+#include "filters/Converter.h"
 #include "GeneralDataParser.h"
 
 namespace Binance
