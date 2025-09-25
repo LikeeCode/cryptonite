@@ -5,9 +5,9 @@
 
 #include "enums/EnumConverter.h"
 
-namespace Binance
+namespace Binance::Enum
 {
-    QString EnumConverter::toString(SymbolStatus status)
+    QString toString(SymbolStatus status)
     {
         static const QHash<SymbolStatus, QString> map = {
             {SymbolStatus::TRADING, "TRADING"},
@@ -17,7 +17,7 @@ namespace Binance
         return map.value(status);
     }
 
-    std::optional<SymbolStatus> EnumConverter::toSymbolStatus(const QString &status)
+    std::optional<SymbolStatus> toSymbolStatus(const QString &status)
     {
         static const QHash<QString, SymbolStatus> map = {
             {"TRADING", SymbolStatus::TRADING},
@@ -27,7 +27,7 @@ namespace Binance
         return map.value(status, {});
     }
 
-    QString EnumConverter::toString(AccountAndSymbolPermissions permission)
+    QString toString(AccountAndSymbolPermissions permission)
     {
         static const QHash<AccountAndSymbolPermissions, QString> map = {
             {AccountAndSymbolPermissions::SPOT, "SPOT"},
@@ -35,7 +35,7 @@ namespace Binance
         return map.value(permission, {});
     }
 
-    std::optional<AccountAndSymbolPermissions> EnumConverter::toAccountAndSymbolPermissions(const QString &permission)
+    std::optional<AccountAndSymbolPermissions> toAccountAndSymbolPermissions(const QString &permission)
     {
         static const QHash<QString, AccountAndSymbolPermissions> map = {
             {"SPOT", AccountAndSymbolPermissions::SPOT},
@@ -43,7 +43,7 @@ namespace Binance
         return map.value(permission);
     }
 
-    QString EnumConverter::toString(OrderStatus status)
+    QString toString(OrderStatus status)
     {
         static const QHash<OrderStatus, QString> map = {
             {OrderStatus::NEW, "NEW"},
@@ -58,7 +58,7 @@ namespace Binance
         return map.value(status);
     }
 
-    std::optional<OrderStatus> EnumConverter::toOrderStatus(const QString &status)
+    std::optional<OrderStatus> toOrderStatus(const QString &status)
     {
         static const QHash<QString, OrderStatus> map = {
             {"NEW", OrderStatus::NEW},
@@ -73,7 +73,7 @@ namespace Binance
         return map.value(status, {});
     }
 
-    QString EnumConverter::toString(OrderListStatus status)
+    QString toString(OrderListStatus status)
     {
         static const QHash<OrderListStatus, QString> map = {
             {OrderListStatus::RESPONSE, "RESPONSE"},
@@ -83,7 +83,7 @@ namespace Binance
         return map.value(status);
     }
 
-    std::optional<OrderListStatus> EnumConverter::toOrderListStatus(const QString &status)
+    std::optional<OrderListStatus> toOrderListStatus(const QString &status)
     {
         static const QHash<QString, OrderListStatus> map = {
             {"RESPONSE", OrderListStatus::RESPONSE},
@@ -93,7 +93,7 @@ namespace Binance
         return map.value(status, {});
     }
 
-    QString EnumConverter::toString(OrderListOrderStatus status)
+    QString toString(OrderListOrderStatus status)
     {
         static const QHash<OrderListOrderStatus, QString> map = {
             {OrderListOrderStatus::EXECUTING, "EXECUTING"},
@@ -102,7 +102,7 @@ namespace Binance
         return map.value(status);
     }
 
-    std::optional<OrderListOrderStatus> EnumConverter::toOrderListOrderStatus(const QString &status)
+    std::optional<OrderListOrderStatus> toOrderListOrderStatus(const QString &status)
     {
         static const QHash<QString, OrderListOrderStatus> map = {
             {"EXECUTING", OrderListOrderStatus::EXECUTING},
@@ -111,7 +111,7 @@ namespace Binance
         return map.value(status, {});
     }
 
-    QString EnumConverter::toString(ContingencyType type)
+    QString toString(ContingencyType type)
     {
         static const QHash<ContingencyType, QString> map = {
             {ContingencyType::OCO, "OCO"},
@@ -119,7 +119,7 @@ namespace Binance
         return map.value(type);
     }
 
-    std::optional<ContingencyType> EnumConverter::toContingencyType(const QString &type)
+    std::optional<ContingencyType> toContingencyType(const QString &type)
     {
         static const QHash<QString, ContingencyType> map = {
             {"OCO", ContingencyType::OCO},
@@ -127,20 +127,20 @@ namespace Binance
         return map.value(type, {});
     }
 
-    QString EnumConverter::toString(AllocationType type)
+    QString toString(AllocationType type)
     {
         if (type == AllocationType::SOR) return "SOR";
         return QString();
     }
 
-    std::optional<AllocationType> EnumConverter::toAllocationType(const QString &type)
+    std::optional<AllocationType> toAllocationType(const QString &type)
     {
         static const QHash<QString, AllocationType> map = {
             {"SOR", AllocationType::SOR}};
         return map.value(type, {});
     }
 
-    QString EnumConverter::toString(OrderType type)
+    QString toString(OrderType type)
     {
         static const QHash<OrderType, QString> map = {
             {OrderType::LIMIT, "LIMIT"},
@@ -153,7 +153,7 @@ namespace Binance
         return map.value(type);
     }
 
-    std::optional<OrderType> EnumConverter::toOrderType(const QString &type)
+    std::optional<OrderType> toOrderType(const QString &type)
     {
         static const QHash<QString, OrderType> map = {
             {"LIMIT", OrderType::LIMIT},
@@ -166,7 +166,7 @@ namespace Binance
         return map.value(type, {});
     }
 
-    QString EnumConverter::toString(OrderResponseType type)
+    QString toString(OrderResponseType type)
     {
         static const QHash<OrderResponseType, QString> map = {
             {OrderResponseType::ACK, "ACK"},
@@ -175,7 +175,7 @@ namespace Binance
         return map.value(type);
     }
 
-    std::optional<OrderResponseType> EnumConverter::toOrderResponseType(const QString &type)
+    std::optional<OrderResponseType> toOrderResponseType(const QString &type)
     {
         static const QHash<QString, OrderResponseType> map = {
             {"ACK", OrderResponseType::ACK},
@@ -184,7 +184,7 @@ namespace Binance
         return map.value(type, {});
     }
 
-    QString EnumConverter::toString(WorkingFloor floor)
+    QString toString(WorkingFloor floor)
     {
         static const QHash<WorkingFloor, QString> map = {
             {WorkingFloor::EXCHANGE, "EXCHANGE"},
@@ -192,7 +192,7 @@ namespace Binance
         return map.value(floor);
     }
 
-    std::optional<WorkingFloor> EnumConverter::toWorkingFloor(const QString &floor)
+    std::optional<WorkingFloor> toWorkingFloor(const QString &floor)
     {
         static const QHash<QString, WorkingFloor> map = {
             {"EXCHANGE", WorkingFloor::EXCHANGE},
@@ -200,7 +200,7 @@ namespace Binance
         return map.value(floor, {});
     }
 
-    QString EnumConverter::toString(OrderSide side)
+    QString toString(OrderSide side)
     {
         static const QHash<OrderSide, QString> map = {
             {OrderSide::BUY, "BUY"},
@@ -208,7 +208,7 @@ namespace Binance
         return map.value(side);
     }
 
-    std::optional<OrderSide> EnumConverter::toOrderSide(const QString &side)
+    std::optional<OrderSide> toOrderSide(const QString &side)
     {
         static const QHash<QString, OrderSide> map = {
             {"BUY", OrderSide::BUY},
@@ -216,7 +216,7 @@ namespace Binance
         return map.value(side, {});
     }
 
-    QString EnumConverter::toString(TimeInForce tif)
+    QString toString(TimeInForce tif)
     {
         static const QHash<TimeInForce, QString> map = {
             {TimeInForce::GTC, "GTC"},
@@ -225,7 +225,7 @@ namespace Binance
         return map.value(tif);
     }
 
-    std::optional<TimeInForce> EnumConverter::toTimeInForce(const QString &tif)
+    std::optional<TimeInForce> toTimeInForce(const QString &tif)
     {
         static const QHash<QString, TimeInForce> map = {
             {"GTC", TimeInForce::GTC},
@@ -234,7 +234,7 @@ namespace Binance
         return map.value(tif, {});
     }
 
-    QString EnumConverter::toString(RateLimitInterval interval)
+    QString toString(RateLimitInterval interval)
     {
         static const QHash<RateLimitInterval, QString> map = {
             {RateLimitInterval::SECOND, "SECOND"},
@@ -243,7 +243,7 @@ namespace Binance
         return map.value(interval);
     }
 
-    std::optional<RateLimitInterval> EnumConverter::toRateLimitInterval(const QString &interval)
+    std::optional<RateLimitInterval> toRateLimitInterval(const QString &interval)
     {
         static const QHash<QString, RateLimitInterval> map = {
             {"SECOND", RateLimitInterval::SECOND},
@@ -252,7 +252,7 @@ namespace Binance
         return map.value(interval, {});
     }
 
-    QString EnumConverter::toString(RateLimitType type)
+    QString toString(RateLimitType type)
     {
         static const QHash<RateLimitType, QString> map = {
             {RateLimitType::REQUEST_WEIGHT, "REQUEST_WEIGHT"},
@@ -261,7 +261,7 @@ namespace Binance
         return map.value(type);
     }
 
-    std::optional<RateLimitType> EnumConverter::toRateLimitType(const QString &type)
+    std::optional<RateLimitType> toRateLimitType(const QString &type)
     {
         static const QHash<QString, RateLimitType> map = {
             {"REQUEST_WEIGHT", RateLimitType::REQUEST_WEIGHT},
@@ -270,7 +270,7 @@ namespace Binance
         return map.value(type, {});
     }
 
-    QString EnumConverter::toString(SelfTradePreventionMode mode)
+    QString toString(SelfTradePreventionMode mode)
     {
         static const QHash<SelfTradePreventionMode, QString> map = {
             {SelfTradePreventionMode::NONE, "NONE"},
@@ -281,7 +281,7 @@ namespace Binance
         return map.value(mode);
     }
 
-    std::optional<SelfTradePreventionMode> EnumConverter::toSelfTradePreventionMode(const QString &mode)
+    std::optional<SelfTradePreventionMode> toSelfTradePreventionMode(const QString &mode)
     {
         static const QHash<QString, SelfTradePreventionMode> map = {
             {"NONE", SelfTradePreventionMode::NONE},
@@ -292,4 +292,4 @@ namespace Binance
         return map.value(mode, {});
     }
 
-} // namespace Binance
+} // namespace Binance::Enum
