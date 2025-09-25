@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include <QString>
 
 #include "Errors.h"
@@ -9,8 +11,7 @@ namespace Binance
     class ErrorConverter
     {
     public:
-        // ErrorCode
-        inline static QString errorCodeToString(ErrorCode code);
-        inline static ErrorCode stringToErrorCode(const QString &code);
+        inline static QString toString(ErrorCode code);
+        inline static std::optional<ErrorCode> toErrorCode(const QString &code);
     };
 } // namespace Binance

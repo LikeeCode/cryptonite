@@ -6,7 +6,7 @@
 
 namespace Binance
 {
-    QString errorCodeToString(ErrorCode code){
+    QString toString(ErrorCode code){
         static const QHash<ErrorCode, QString> map = {
             {ErrorCode::NONE, "NONE"},
             {ErrorCode::UNKNOWN, "UNKNOWN"},
@@ -104,10 +104,10 @@ namespace Binance
             {ErrorCode::CLIENT_ORDER_ID_INVALID, "CLIENT_ORDER_ID_INVALID"},
             {ErrorCode::MAXIMUM_SUBSCRIPTION_IDS, "MAXIMUM_SUBSCRIPTION_IDS"}};
 
-        return map.value(code, "UNKNOWN");
+        return map.value(code);
     }
 
-    ErrorCode stringToErrorCode(const QString& code){
+    std::optional<ErrorCode> toErrorCode(const QString &code){
         static const QHash<QString, ErrorCode> map = {
             {"NONE", ErrorCode::NONE},
             {"UNKNOWN", ErrorCode::UNKNOWN},
@@ -205,6 +205,6 @@ namespace Binance
             {"CLIENT_ORDER_ID_INVALID", ErrorCode::CLIENT_ORDER_ID_INVALID},
             {"MAXIMUM_SUBSCRIPTION_IDS", ErrorCode::MAXIMUM_SUBSCRIPTION_IDS}};
 
-        return map.value(code, ErrorCode::UNKNOWN); // Default to UNKNOWN if not found
+        return map.value(code, {});
     }
 } // namespace Binance::Api
