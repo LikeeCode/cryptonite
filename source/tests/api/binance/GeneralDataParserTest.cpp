@@ -5,8 +5,8 @@
 #include <QJsonObject>
 #include <QTimer>
 
-#include "BinanceAPI.h"
 #include "GeneralDataParser.h"
+#include "rest-api/BinanceAPI.h"
 
 int main(int argc, char *argv[])
 {

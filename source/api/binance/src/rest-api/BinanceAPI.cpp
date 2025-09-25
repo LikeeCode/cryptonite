@@ -5,7 +5,7 @@
 #include <QUrlQuery>
 
 #include "rest-api/APIEndpoints.h"
-#include "BinanceAPI.h"
+#include "rest-api/BinanceAPI.h"
 
 namespace Binance
 {
