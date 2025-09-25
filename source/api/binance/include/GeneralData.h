@@ -28,11 +28,11 @@ namespace Binance::GeneralData
     // GET /api/v3/exchangeInfo
     // Request
     struct ExchangeInfoRequest{
-        QString symbol; // Optional
-        QList<QString> symbols; // Optional
-        AccountAndSymbolPermissions permissions{}; // Optional
-        bool showPermissionSets{}; // Optional
-        SymbolStatus status{}; // Optional
+        QString symbol;                             // Optional
+        QList<QString> symbols;                     // Optional
+        AccountAndSymbolPermissions permissions{};  // Optional
+        bool showPermissionSets{};                  // Optional
+        SymbolStatus status{};                      // Optional
     };
 
     // Response
@@ -57,7 +57,7 @@ namespace Binance::GeneralData
         bool pegInstructionsAllowed{};
         bool isSpotTradingAllowed{};
         bool isMarginTradingAllowed{};
-        QList<FilterType> filters; // This uses the Filter variant from your Filters.h
+        QList<Binance::Filter::Type> filters; // This uses the Filter variant from your Filters.h
         QList<AccountAndSymbolPermissions> permissions;
         QList<AccountAndSymbolPermissions> permissionSets;
         QString defaultSelfTradePreventionMode;
@@ -74,7 +74,7 @@ namespace Binance::GeneralData
         QString timezone;
         qint64 serverTime{};
         QList<RateLimitType> rateLimits;
-        QList<FilterType> exchangeFilters;
+        QList<Binance::Filter::Type> exchangeFilters;
         QList<Symbol> symbols;
         QList<Symbol> sors;
     };
