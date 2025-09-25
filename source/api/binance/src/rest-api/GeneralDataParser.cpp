@@ -313,7 +313,7 @@ namespace Binance
                     }
                     const QJsonObject filterObj = filtersArray[i].toObject();
                     auto symbolFilter = Filter::fromJsonObject(filterObj);
-                    if (!symbolFilter)
+                    if (symbolFilter->filterType.isEmpty())
                     {
                         return {}; // Invalid filter
                     }
