@@ -1,15 +1,17 @@
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QVariant>
 
 #include "GeneralDataParser.h"
+#include "filters/TypeConverter.h"
 
 namespace Binance
 {
-    std::optional<GeneralData::Ping> GeneralDataParser::parsePing(const QJsonDocument& doc)
+    std::optional<GeneralData::Ping> GeneralDataParser::parsePing(const QJsonDocument &jsonDoc)
     {
         // 1. Check if the document is a valid JSON object
-        if (!doc.isObject())
+        if (!jsonDoc.isObject())
         {
             return {}; // Invalid format
         }
@@ -17,15 +19,15 @@ namespace Binance
         return GeneralData::Ping{};
     }
 
-    std::optional<GeneralData::ServerTime> GeneralDataParser::parseServerTime(const QJsonDocument& doc)
+    std::optional<GeneralData::ServerTime> GeneralDataParser::parseServerTime(const QJsonDocument &jsonDoc)
     {
         // 1. Check if the document is a valid JSON object
-        if (!doc.isObject())
+        if (!jsonDoc.isObject())
         {
             return {}; // Invalid format
         }
 
-        QJsonObject jsonObj = doc.object();
+        QJsonObject jsonObj = jsonDoc.object();
         const QJsonValue serverTimeValue = jsonObj.value("serverTime");
 
         // 2. Check if the required key exists and is the correct type (a number)
@@ -41,33 +43,80 @@ namespace Binance
         return serverTimeData;
     }
 
-    std::optional<GeneralData::ExchangeInfo> GeneralDataParser::parseExchangeInfo(const QJsonDocument &doc)
+    std::optional<GeneralData::ExchangeInfo> GeneralDataParser::parseExchangeInfo(const QJsonDocument &jsonDoc)
     {
-        // 1. Check if the document is a valid JSON object
-        if (!doc.isObject())
+        std::optional<GeneralData::ExchangeInfo> exchangeInfo{};
+
+        // json object
+        if (!jsonDoc.isObject())
         {
             return {}; // Invalid format
         }
+        const QJsonObject json = jsonDoc.object();
 
-        QJsonObject jsonObj = doc.object();
-        const QJsonValue timezoneValue = jsonObj.value("timezone");
-        const QJsonValue serverTimeValue = jsonObj.value("serverTime");
-        const QJsonValue rateLimitsValue = jsonObj.value("rateLimits");
-        const QJsonValue exchangeFiltersValue = jsonObj.value("exchangeFilters");
-        const QJsonValue symbolsValue = jsonObj.value("symbols");
-
-        // 2. Check if the required keys exist and are the correct types
-        if (timezoneValue.isUndefined() || !timezoneValue.isString() ||
-            serverTimeValue.isUndefined() || !serverTimeValue.isDouble() ||
-            rateLimitsValue.isUndefined() || !rateLimitsValue.isArray() ||
-            exchangeFiltersValue.isUndefined() || !exchangeFiltersValue.isArray() ||
-            symbolsValue.isUndefined() || !symbolsValue.isArray())
+        // timezone
+        if (json.contains("timezone") && json["timezone"].isString())
         {
-            return {}; // One or more keys are missing or have the wrong type
+            exchangeInfo.value().timezone = json["timezone"].toString();
+        }
+        else{
+            return {}; // timezone is required
         }
 
-        // Parse rate limits
-        // QJsonArray rateLimitsArray = rateLimitsValue.toArray();
+        // serverTime
+        if (json.contains("serverTime") && json["serverTime"].isDouble())
+        {
+            exchangeInfo.value().serverTime = json["serverTime"].toDouble();
+        }
+        else{
+            return {}; // serverTime is required
+        }
+
+        // rateLimits
+        if (json.contains("rateLimits") && json["rateLimits"].isArray())
+        {
+            QJsonArray rateLimits = json["rateLimits"].toArray();
+
+            for (int i = 0; i < rateLimits.size(); i++){
+                QJsonObject rateLimitJson = rateLimits[i].toObject();
+                // auto rateLimitType = Binance::toRateLimitType(rateLimitJson.value("rateLimitType").toString()).value();
+                // exchangeInfo.value().rateLimits.append(rateLimitType);
+            }
+        }
+
+        // filters
+        if (json.contains("exchangeFilters") && json["exchangeFilters"].isArray())
+        {
+            QJsonArray exchangeFilters = json["exchangeFilters"].toArray();
+
+            for (int i = 0; i < exchangeFilters.size(); i++)
+            {
+                QJsonObject exchangeFilterJson = exchangeFilters[i].toObject();
+                auto filterType = Binance::Filter::toFilterType(exchangeFilterJson.value("filterType").toString()).value();
+                exchangeInfo.value().exchangeFilters.append(filterType);
+            }
+        }
+
+        // rateLimits
+        // if (json.contains("rateLimits") && json["rateLimits"].isArray())
+        // {
+        //     QJsonArray rateLimits = json["rateLimits"].toArray();
+        //     for (int i = 0; i < rateLimits.size(); i++)
+        //     {
+        //         QJsonObject rateLimit = rateLimits[i].toObject();
+
+        //         RateLimitType rateLimit;
+        //         rateLimit.read(rateLimitJson);
+
+        //         rateLimits.append(rateLimit);
+        //     }
+        // }
+
+        // // Parse rate limits
+        // if (json.contains("rateLimits") && json["rateLimits"].isArray()){
+
+        // }
+        //     QJsonArray rateLimitsArray = rateLimitsValue.toArray();
         // for (const QJsonValue &rateLimitVal : rateLimitsArray)
         // {
         //     if (!rateLimitVal.isObject()) continue;
@@ -82,22 +131,8 @@ namespace Binance
         //     exchangeInfoData.rateLimits.push_back(rateLimit);
         // }
 
-        // // Parse exchange filters
-        // QJsonArray exchangeFiltersArray = exchangeFiltersValue.toArray();
-        // for (const QJsonValue &filterVal : exchangeFiltersArray)
-        // {
-        //     if (!filterVal.isObject()) continue;
-        //     QJsonObject filterObj = filterVal.toObject();
+        
 
-        //     GeneralData::Filter filter{};
-        //     filter.filterType = filterObj.value("filterType").toString();
-        // }
-
-        // 3. If all checks pass, construct and return the object
-        GeneralData::ExchangeInfo exchangeInfoData{};
-        exchangeInfoData.timezone = timezoneValue.toString();
-        exchangeInfoData.serverTime = serverTimeValue.toVariant().toLongLong();
-
-        return exchangeInfoData;
+        return exchangeInfo;
     }
 } // namespace Binance
