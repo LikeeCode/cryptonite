@@ -6,12 +6,8 @@
 
 #include "Errors.h"
 
-namespace Binance
+namespace Binance::Error
 {
-    class ErrorConverter
-    {
-    public:
-        inline static QString toString(ErrorCode code);
-        inline static std::optional<ErrorCode> toErrorCode(const QString &code);
-    };
-} // namespace Binance
+    QString toString(Code code);
+    std::optional<Code> toErrorCode(const QString &code);
+} // namespace Binance::Error

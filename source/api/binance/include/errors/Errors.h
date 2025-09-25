@@ -1,11 +1,11 @@
 #pragma once
 
-namespace Binance
+namespace Binance::Error
 {
 
     // See: https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md
 
-    enum class ErrorCode
+    enum class Code
     {
         NONE = 0,
         UNKNOWN = 1000,
@@ -104,4 +104,4 @@ namespace Binance
         MAXIMUM_SUBSCRIPTION_IDS = 2042,
     };
 
-} // namespace Binance
+} // namespace Binance::Error
