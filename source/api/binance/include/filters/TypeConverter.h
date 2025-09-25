@@ -6,8 +6,8 @@
 
 #include "filters/Filters.h"
 
-namespace Binance::Filters
+namespace Binance::Filter
 {
-    QString toString(FilterType type);
-    std::optional<FilterType> toFilterType(const QString &type);
-} // namespace Binance
+    QString toString(Type type);
+    std::optional<Type> toFilterType(const QString &type);
+} // namespace Binance::Filter

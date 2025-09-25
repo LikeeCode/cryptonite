@@ -3,11 +3,11 @@
 #include <QString>
 #include <QMap>
 
-namespace Binance
+namespace Binance::Filter
 {
     // See: https://github.com/binance/binance-spot-api-docs/blob/master/testnet/filters.md
 
-    enum class FilterType
+    enum class Type
     {
         // Symbol filters
         PRICE_FILTER,
@@ -149,4 +149,4 @@ namespace Binance
     {
         int maxNumOrderLists{};
     };
-} // namespace Binance
+} // namespace Binance::Filter
