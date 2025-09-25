@@ -1,5 +1,5 @@
 add_library(BinanceAPI
-    include/APIEndpoints.h
+    include/rest-api/APIEndpoints.h
     include/BinanceAPI.h
     include/enums/Converter.h
     include/enums/Enums.h

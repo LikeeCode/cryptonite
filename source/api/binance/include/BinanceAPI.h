@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QString>
 
-#include "APIEndpoints.h"
+#include "rest-api/APIEndpoints.h"
 
 namespace Binance
 {

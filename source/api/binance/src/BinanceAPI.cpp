@@ -4,7 +4,7 @@
 #include <QNetworkReply>
 #include <QUrlQuery>
 
-#include "APIEndpoints.h"
+#include "rest-api/APIEndpoints.h"
 #include "BinanceAPI.h"
 
 namespace Binance
