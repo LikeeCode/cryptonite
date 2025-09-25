@@ -3,11 +3,11 @@
 #include <QString>
 #include <QHash>
 
-#include "filters/FilterConverter.h"
+#include "filters/TypeConverter.h"
 
-namespace Binance
+namespace Binance::Filters
 {
-    QString FilterConverter::toString(FilterType type)
+    QString toString(FilterType type)
     {
         static const QMap<FilterType, QString> filterTypeMap = {
             {FilterType::PRICE_FILTER, "PRICE_FILTER"},
@@ -33,7 +33,7 @@ namespace Binance
         return filterTypeMap.value(type);
     }
 
-    std::optional<FilterType> FilterConverter::toFilterType(const QString& type)
+    std::optional<FilterType> toFilterType(const QString& type)
     {
         static const QMap<QString, FilterType> filterTypeMap = {
             {"PRICE_FILTER", FilterType::PRICE_FILTER},
