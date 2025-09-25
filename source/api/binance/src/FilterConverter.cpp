@@ -7,7 +7,7 @@
 
 namespace Binance
 {
-    QString FilterConverter::filterTypeToString(FilterType type)
+    QString FilterConverter::toString(FilterType type)
     {
         static const QMap<FilterType, QString> filterTypeMap = {
             {FilterType::PRICE_FILTER, "PRICE_FILTER"},
@@ -28,13 +28,12 @@ namespace Binance
             {FilterType::EXCHANGE_MAX_NUM_ORDERS, "EXCHANGE_MAX_NUM_ORDERS"},
             {FilterType::EXCHANGE_MAX_NUM_ALGO_ORDERS, "EXCHANGE_MAX_NUM_ALGO_ORDERS"},
             {FilterType::EXCHANGE_MAX_NUM_ICEBERG_ORDERS, "EXCHANGE_MAX_NUM_ICEBERG_ORDERS"},
-            {FilterType::EXCHANGE_MAX_NUM_ORDER_LISTS, "EXCHANGE_MAX_NUM_ORDER_LISTS"},
-            {FilterType::UNKNOWN, "UNKNOWN"}};
+            {FilterType::EXCHANGE_MAX_NUM_ORDER_LISTS, "EXCHANGE_MAX_NUM_ORDER_LISTS"}};
 
-        return filterTypeMap.value(type, "UNKNOWN");
+        return filterTypeMap.value(type);
     }
 
-    FilterType FilterConverter::stringToFilterType(const QString& type)
+    std::optional<FilterType> FilterConverter::toFilterType(const QString& type)
     {
         static const QMap<QString, FilterType> filterTypeMap = {
             {"PRICE_FILTER", FilterType::PRICE_FILTER},
@@ -57,6 +56,6 @@ namespace Binance
             {"EXCHANGE_MAX_NUM_ICEBERG_ORDERS", FilterType::EXCHANGE_MAX_NUM_ICEBERG_ORDERS},
             {"EXCHANGE_MAX_NUM_ORDER_LISTS", FilterType::EXCHANGE_MAX_NUM_ORDER_LISTS}};
 
-        return filterTypeMap.value(type, FilterType::UNKNOWN);
+        return filterTypeMap.value(type, {});
     }
 } // namespace Binance

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include <QString>
 
 #include "Filters.h"
@@ -9,8 +11,7 @@ namespace Binance
     class FilterConverter
     {
     public:
-        // FilterType
-        inline static QString filterTypeToString(FilterType type);
-        inline static FilterType stringToFilterType(const QString& typeStr);
+        inline static QString toString(FilterType type);
+        inline static std::optional<FilterType> toFilterType(const QString &type);
     };
 } // namespace Binance
