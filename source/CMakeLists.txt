@@ -63,7 +63,7 @@ deploy_qt_target(Cryptonite)
 # Copy API keysn to the build directory so the test executable can find it at runtime
 configure_file(
     "${CMAKE_SOURCE_DIR}/apiKeys/binanceAPI.txt"
-    "${CMAKE_CURRENT_BINARY_DIR}/apiKeys/binanceAPI.txt"
+    "${CMAKE_CURRENT_BINARY_DIR}/bin/Debug/apiKeys/binanceAPI.txt"
     COPYONLY
 )
 
