@@ -6,6 +6,11 @@
 
 namespace Binance::API
 {
+    // Request headers
+    const QString API_HEADER = "X-MBX-APIKEY";
+    const QString REQUEST_HEADER = "application/json";
+
+    // Base URLs
     const QString BASE_URL = "https://api.binance.com";
     const QString BASE_URL_TESTNET = "https://testnet.binance.vision";
 
