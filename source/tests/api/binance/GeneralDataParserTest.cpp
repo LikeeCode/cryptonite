@@ -114,7 +114,7 @@ TEST_F(GeneralDataParserTest, ExchangeInfo)
     ASSERT_TRUE(exchangeInfo.value().symbols.size() > 0);
 }
 
-TEST_F(GeneralDataParserTest, ExchangeInfoWithParams)
+TEST_F(GeneralDataParserTest, ExchangeInfoSymbol)
 {
     QEventLoop loop;
     QJsonDocument response;
@@ -144,4 +144,38 @@ TEST_F(GeneralDataParserTest, ExchangeInfoWithParams)
     // Verify that the server correctly filtered the results
     ASSERT_EQ(exchangeInfo.value().symbols.size(), 1);
     ASSERT_EQ(exchangeInfo.value().symbols.first().symbol.toStdString(), "BTCUSDT");
+}
+
+TEST_F(GeneralDataParserTest, ExchangeInfoSymbols)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::GeneralData::ExchangeInfo> exchangeInfo{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::exchangeInfoResponse, [&](const QJsonDocument &data)
+                     {
+        response = data;
+        exchangeInfo = Binance::GeneralDataParser::parseExchangeInfo(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "GeneralDataParserTest ExchangeInfoWithParams API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    // Create parameters to request info for a single symbol
+    QVariantMap params;
+    params.insert("symbols", "[\"BTCUSDT\",\"BNBBTC\"]");
+
+    binanceAPI->exchangeInfo(params);
+    QTimer::singleShot(15000, &loop, &QEventLoop::quit); // 15-second timeout
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(exchangeInfo.has_value());
+    // Verify that the server correctly filtered the results
+    ASSERT_EQ(exchangeInfo.value().symbols.size(), 2);
+    ASSERT_EQ(exchangeInfo.value().symbols.first().symbol.toStdString(), "BNBBTC");
 }
