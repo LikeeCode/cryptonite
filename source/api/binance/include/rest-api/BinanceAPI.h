@@ -4,6 +4,7 @@
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QString>
+#include <QVariantMap>
 
 #include "rest-api/APIEndpoints.h"
 #include "../../../RequestType.h"
@@ -23,11 +24,12 @@ namespace Binance
         void ping();
         void time();
         void exchangeInfo();
+        void exchangeInfo(const QVariantMap &params);
 
     private:
         void getApiKeys();
-        void sendPublicRequest(const QString &endpoint, RequestType type = RequestType::Get);
-        void sendSignedRequest(const QString &endpoint, const QString &params, RequestType type = RequestType::Get);
+        void sendPublicRequest(const QString &endpoint, const QVariantMap &params = {}, RequestType type = RequestType::Get);
+        void sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type);
 
         bool m_useTestNetwork;
         QString m_baseUrl;

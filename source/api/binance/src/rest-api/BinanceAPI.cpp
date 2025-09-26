@@ -45,6 +45,11 @@ namespace Binance
     {
         sendPublicRequest(API::EXCHANGE_INFO);
     }
+    
+    void BinanceAPI::exchangeInfo(const QVariantMap &params)
+    {
+        sendPublicRequest(API::EXCHANGE_INFO, params);
+    }
 
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
     {
@@ -93,64 +98,85 @@ namespace Binance
         }
     }
 
-    void BinanceAPI::sendPublicRequest(const QString &endpoint, RequestType type)
+    void BinanceAPI::sendPublicRequest(const QString &endpoint, const QVariantMap &params, RequestType type)
     {
         QUrl url(m_baseUrl + endpoint);
+
+        // If there are parameters, add them to the URL as a query string
+        if (!params.isEmpty())
+        {
+            QUrlQuery query;
+            for (auto it = params.constBegin(); it != params.constEnd(); ++it)
+            {
+                query.addQueryItem(it.key(), it.value().toString());
+            }
+            url.setQuery(query);
+        }
+
         QNetworkRequest request(url);
 
-        switch(type)
+        switch (type)
         {
-            case RequestType::Get:
-                m_networkManager->get(request);
-                break;
-            case RequestType::Post:
-                m_networkManager->post(request, QByteArray());
-                break;
-            case RequestType::Put:
-                m_networkManager->put(request, QByteArray());
-                break;
-            case RequestType::Delete:
-                m_networkManager->deleteResource(request);
-                break;
+        case RequestType::Get:
+            m_networkManager->get(request);
+            break;
+        case RequestType::Post:
+            m_networkManager->post(request, QByteArray());
+            break;
+        case RequestType::Put:
+            m_networkManager->put(request, QByteArray());
+            break;
+        case RequestType::Delete:
+            m_networkManager->deleteResource(request);
+            break;
         }
-        m_networkManager->get(request);
     }
 
-    void BinanceAPI::sendSignedRequest(const QString &endpoint, const QString &params, RequestType type)
+    void BinanceAPI::sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type)
     {
+        // Create a query string from the parameters. This is what gets signed.
+        QUrlQuery query;
+        for (auto it = params.constBegin(); it != params.constEnd(); ++it)
+        {
+            query.addQueryItem(it.key(), it.value().toString());
+        }
+        // The signature is based on the query string (e.g., "symbol=BTCUSDT&timestamp=12345")
+        QString paramsString = query.toString(QUrl::FullyEncoded);
+
         // 1. Create the signature
         QMessageAuthenticationCode code(QCryptographicHash::Sha256);
         code.setKey(m_apiSecret.toUtf8());
-        code.addData(params.toUtf8());
+        code.addData(paramsString.toUtf8());
         QString signature = code.result().toHex();
 
-        // 2. Build the final URL with parameters and signature
-        QUrl url(m_baseUrl + endpoint);
-        QUrlQuery query;
-        query.addQueryItem("timestamp", params.split("=").last()); // Extract timestamp from params
+        // 2. Add the signature to our query
         query.addQueryItem("signature", signature);
+
+        // 3. Build the final URL
+        QUrl url(m_baseUrl + endpoint);
         url.setQuery(query);
 
-        // 3. Create the request and add the API key to the header
+        // 4. Create the request and add the API key to the header
         QNetworkRequest request(url);
         request.setRawHeader("X-MBX-APIKEY", m_apiKey.toUtf8());
 
-        // 4. Send the request based on the specified type
-        switch(type)
+        // 5. Send the request
+        switch (type)
         {
-            case RequestType::Get:
-                m_networkManager->get(request);
-                break;
-            case RequestType::Post:
-                m_networkManager->post(request, QByteArray());
-                break;
-            case RequestType::Put:
-                m_networkManager->put(request, QByteArray());
-                break;
-            case RequestType::Delete:
-                m_networkManager->deleteResource(request);
-                break;
+        case RequestType::Get:
+            m_networkManager->get(request);
+            break;
+        case RequestType::Post:
+            // Note: For POST, params would typically be in the body, not the URL.
+            // This implementation assumes params are always in the query string.
+            m_networkManager->post(request, QByteArray());
+            break;
+        case RequestType::Put:
+            m_networkManager->put(request, QByteArray());
+            break;
+        case RequestType::Delete:
+            m_networkManager->deleteResource(request);
+            break;
         }
-        m_networkManager->get(request);
     }
 } // namespace Binance
