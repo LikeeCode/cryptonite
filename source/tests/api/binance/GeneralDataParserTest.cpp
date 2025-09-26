@@ -113,3 +113,35 @@ TEST_F(GeneralDataParserTest, ExchangeInfo)
     ASSERT_TRUE(exchangeInfo.value().rateLimits.size() > 0);
     ASSERT_TRUE(exchangeInfo.value().symbols.size() > 0);
 }
+
+TEST_F(GeneralDataParserTest, ExchangeInfoWithParams)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::GeneralData::ExchangeInfo> exchangeInfo{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::exchangeInfoResponse, [&](const QJsonDocument &data) {
+        response = data;
+        exchangeInfo = Binance::GeneralDataParser::parseExchangeInfo(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error) {
+        FAIL() << "GeneralDataParserTest ExchangeInfoWithParams API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    // Create parameters to request info for a single symbol
+    QVariantMap params;
+    params.insert("symbol", "BTCUSDT");
+
+    binanceAPI->exchangeInfo(params);
+    QTimer::singleShot(15000, &loop, &QEventLoop::quit); // 15-second timeout
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(exchangeInfo.has_value());
+    // Verify that the server correctly filtered the results
+    ASSERT_EQ(exchangeInfo.value().symbols.size(), 1);
+    ASSERT_EQ(exchangeInfo.value().symbols.first().symbol.toStdString(), "BTCUSDT");
+}
