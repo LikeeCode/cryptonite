@@ -114,8 +114,6 @@ namespace Binance
         }
 
         QNetworkRequest request(url);
-        request.setHeader(QNetworkRequest::ContentTypeHeader, API::REQUEST_HEADER);
-        request.setRawHeader(QByteArray(API::API_HEADER.toUtf8()), QByteArray(m_apiKey.toUtf8()));
 
         switch (type)
         {
