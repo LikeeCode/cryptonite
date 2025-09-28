@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.1)
+cmake_minimum_required(VERSION 3.14)
 
 # Define the project name and languages
 project(Cryptonite LANGUAGES CXX RC)
