@@ -37,8 +37,6 @@ target_link_libraries(Cryptonite PRIVATE
     Qt6::Quick
     Qt6::Network
 
-    GTest::gtest_main
-
     BinanceAPI
 )
 
