@@ -158,7 +158,7 @@ namespace Binance
 
         // 4. Create the request and add the API key to the header
         QNetworkRequest request(url);
-        request.setRawHeader("X-MBX-APIKEY", m_apiKey.toUtf8());
+        request.setRawHeader(QByteArray(API::API_HEADER.toUtf8()), QByteArray(m_apiKey.toUtf8()));
 
         // 5. Send the request
         switch (type)
