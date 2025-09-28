@@ -1,21 +1,24 @@
-add_executable(BinanceAPITest
-    BinanceAPITest.cpp
+add_executable(GeneralDataParserTest
+    GeneralDataParserTest.cpp
 )
 
-target_include_directories(BinanceAPITest PRIVATE
-    3rdprty/googletest/include
+# Set the output directory specifically for this test target
+set_target_properties(GeneralDataParserTest PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/$<CONFIG>"
+)
+
+target_include_directories(GeneralDataParserTest PRIVATE
     ${CMAKE_SOURCE_DIR}/api/binance/include/
 )
 
-target_link_libraries(BinanceAPITest PRIVATE
+target_link_libraries(GeneralDataParserTest PRIVATE
     Qt6::Core
     Qt6::Network
 
-    GTest::gtest
+    GTest::gtest_main
 
     BinanceAPI
 )
 
-add_test(NAME BinanceAPITest COMMAND BinanceAPITest)
-
-deploy_qt_target(BinanceAPITest)
+include(GoogleTest)
+gtest_discover_tests(GeneralDataParserTest)

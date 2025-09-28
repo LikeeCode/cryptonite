@@ -2,16 +2,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Cryptonite Debug",
+            "name": "Target (Debug)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/Cryptonite.exe",
+            "program": "${command:cmake.launchTargetPath}",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/build/Debug",
-            "environment": [],
-            "console": "externalTerminal", // add for debugging if needed
-            "visualizerFile": "${workspaceFolder}/qt6.natvis"
+            "cwd": "${command:cmake.launchTargetDirectory}",
+            "console": "internalConsole",
+            "visualizerFile": "${workspaceFolder}/.vscode/qt.natvis"
         }
     ]
 }

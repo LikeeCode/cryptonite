@@ -4,8 +4,10 @@
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QString>
+#include <QVariantMap>
 
-#include "APIEndpoints.h"
+#include "rest-api/APIEndpoints.h"
+#include "../../../RequestType.h"
 
 namespace Binance
 {
@@ -16,17 +18,18 @@ namespace Binance
         explicit BinanceAPI(QObject *parent = nullptr, bool useTestNetwork = true);
         ~BinanceAPI();
 
-        void setApiKeys(const QString& key, const QString& secret);
+        void setApiKeys(const QString &key, const QString &secret);
 
         // General endpoints
         void ping();
         void time();
         void exchangeInfo();
+        void exchangeInfo(const QVariantMap &params);
 
     private:
         void getApiKeys();
-        void sendPublicRequest(const QString& endpoint);
-        void sendSignedRequest(const QString& endpoint, const QString& params);
+        void sendPublicRequest(const QString &endpoint, const QVariantMap &params = {}, RequestType type = RequestType::Get);
+        void sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type);
 
         bool m_useTestNetwork;
         QString m_baseUrl;
@@ -40,8 +43,8 @@ namespace Binance
     signals:
         void apiKeysFileError();
         void apiError(const QString &error);
-        void pingResponse(const QJsonDocument& data);
-        void timeResponse(const QJsonDocument& data);
-        void exchangeInfoResponse(const QJsonDocument& data);
+        void pingResponse(const QJsonDocument &data);
+        void timeResponse(const QJsonDocument &data);
+        void exchangeInfoResponse(const QJsonDocument &data);
     };
 } // namespace Binance

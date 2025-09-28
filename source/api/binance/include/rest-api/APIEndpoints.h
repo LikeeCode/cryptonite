@@ -2,10 +2,14 @@
 
 #include <QString>
 
-#include "Enums.h"
+#include "enums/Enums.h"
 
 namespace Binance::API
 {
+    // Request header
+    const QString API_HEADER = "X-MBX-APIKEY";
+
+    // Base URLs
     const QString BASE_URL = "https://api.binance.com";
     const QString BASE_URL_TESTNET = "https://testnet.binance.vision";
 

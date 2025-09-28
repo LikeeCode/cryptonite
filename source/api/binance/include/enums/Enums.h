@@ -14,7 +14,8 @@ namespace Binance
 
     enum class AccountAndSymbolPermissions
     {
-        SPOT
+        SPOT,
+        MARGIN
     };
 
     enum class OrderStatus

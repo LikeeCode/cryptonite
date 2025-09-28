@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.1)
+cmake_minimum_required(VERSION 3.14)
 
 # Define the project name and languages
 project(Cryptonite LANGUAGES CXX RC)
@@ -37,8 +37,6 @@ target_link_libraries(Cryptonite PRIVATE
     Qt6::Quick
     Qt6::Network
 
-    GTest::gtest
-
     BinanceAPI
 )
 
@@ -60,18 +58,22 @@ endfunction()
 # Use post-build function for the deployment
 deploy_qt_target(Cryptonite)
 
-# Copy API keysn to the build directory so the test executable can find it at runtime
-configure_file(
-    "${CMAKE_SOURCE_DIR}/apiKeys/binanceAPI.txt"
-    "${CMAKE_CURRENT_BINARY_DIR}/apiKeys/binanceAPI.txt"
-    COPYONLY
+# This command runs after Cryptonite is built and copies the API key file
+# to the same directory as the executable.
+add_custom_command(
+    TARGET Cryptonite POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_SOURCE_DIR}/apiKeys/binanceAPI.txt"
+        # This generator expression correctly resolves to the output directory at build time
+        "$<TARGET_FILE_DIR:Cryptonite>/apiKeys/binanceAPI.txt"
+    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:Cryptonite>/apiKeys" # Create dir if not exists
+    COMMENT "Copying API key file for Cryptonite executable..."
 )
 
 # Testing
+include(CTest)
+enable_testing()
 add_subdirectory(3rdParty/googletest)
-
-option(CRYPTONITE_BUILD_TESTS "Build the test suite" ON)
-if(CRYPTONITE_BUILD_TESTS)
-    include(CTest)
-    add_subdirectory(tests)
-endif()
+add_subdirectory(tests)
+set_target_properties(gtest gtest_main gmock gmock_main
+    PROPERTIES FOLDER 3rdParty/googletest)
