@@ -62,6 +62,7 @@ CMakeFiles/
 !.vscode/tasks.json
 !.vscode/extensions.json
 !.vscode/c_cpp_properties.json
+!.vscode/qt.natvis
 
 # ===================================================================
 # Dependency Management
