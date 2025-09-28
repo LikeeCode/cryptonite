@@ -84,7 +84,7 @@ namespace Binance
 
     void BinanceAPI::getApiKeys()
     {
-        QFile file("binanceAPI.txt");
+        QFile file("apiKeys/binanceAPI.txt");
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             emit apiKeysFileError();
