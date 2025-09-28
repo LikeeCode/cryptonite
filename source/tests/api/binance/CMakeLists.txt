@@ -2,6 +2,11 @@ add_executable(GeneralDataParserTest
     GeneralDataParserTest.cpp
 )
 
+# Set the output directory specifically for this test target
+set_target_properties(GeneralDataParserTest PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/$<CONFIG>"
+)
+
 target_include_directories(GeneralDataParserTest PRIVATE
     ${CMAKE_SOURCE_DIR}/api/binance/include/
 )
