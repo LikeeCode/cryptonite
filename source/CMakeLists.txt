@@ -14,7 +14,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 # Find the Qt6 and its components
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network)
+find_package(Qt6 6.8.3 REQUIRED COMPONENTS Core Gui Qml Quick Network)
 
 # Include all subdirectories
 add_subdirectory(api)
