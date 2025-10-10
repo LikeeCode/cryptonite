@@ -1,0 +1,3 @@
+# The primary build directory
+# The leading slash ensures it only matches the root /build folder
+/build/
