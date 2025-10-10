@@ -73,6 +73,7 @@ add_custom_command(
 # Testing
 include(CTest)
 enable_testing()
+set(gtest_force_shared_crt ON)
 add_subdirectory(3rdParty/googletest)
 add_subdirectory(tests)
 set_target_properties(gtest gtest_main gmock gmock_main
