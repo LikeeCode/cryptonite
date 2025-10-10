@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     engine.load(url);
 
     // Load Binance API
-    // Binance::BinanceAPI *binanceApi = new Binance::BinanceAPI(&app, true); // true for test network
+    Binance::BinanceAPI *binanceApi = new Binance::BinanceAPI(&app, true); // true for test network
     // QObject::connect(binanceApi, &Binance::BinanceAPI::apiKeysFileError, []()
     //                  { qDebug() << "API Keys file error!\n"; });
     // QObject::connect(binanceApi, &Binance::BinanceAPI::apiError, [](const QString &error)
