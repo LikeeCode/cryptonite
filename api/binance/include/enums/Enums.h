@@ -133,4 +133,9 @@ namespace Binance
         ONE_MONTH
     };
 
+    enum class ResponseType{
+        FULL,
+        MINI
+    };
+
 } // namespace Binance
