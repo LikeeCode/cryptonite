@@ -27,7 +27,7 @@ namespace Binance
         // json object
         if (!jsonDoc.isObject())
         {
-            return {}; // Invalid format
+            return {}; // invalid format
         }
         const QJsonObject json = jsonDoc.object();
 
@@ -48,7 +48,7 @@ namespace Binance
         // json object
         if (!jsonDoc.isObject())
         {
-            return {}; // Invalid format
+            return {}; // invalid format
         }
         const QJsonObject json = jsonDoc.object();
 
@@ -74,7 +74,7 @@ namespace Binance
             {
                 if (!rateLimits[i].isObject())
                 {
-                    return {}; // Invalid format
+                    return {}; // invalid format
                 }
                 const QJsonObject rateLimitObj = rateLimits[i].toObject();
                 GeneralData::RateLimit rateLimit{};
@@ -86,7 +86,7 @@ namespace Binance
                 }
                 if(!Enum::toRateLimitType(rateLimitObj["rateLimitType"].toString()).has_value())
                 {
-                    return {}; // Invalid rateLimitType
+                    return {}; // invalid rateLimitType
                 }
                 rateLimit.rateLimitType = Enum::toRateLimitType(rateLimitObj["rateLimitType"].toString()).value();
 
@@ -132,7 +132,7 @@ namespace Binance
             {
                 if (!symbols[i].isObject())
                 {
-                    return {}; // Invalid format
+                    return {}; // invalid format
                 }
                 const QJsonObject symbolObj = symbols[i].toObject();
                 GeneralData::Symbol symbol{};
@@ -151,7 +151,7 @@ namespace Binance
                 }
                 if(!Enum::toSymbolStatus(symbolObj["status"].toString()).has_value())
                 {
-                    return {}; // Invalid status
+                    return {}; // invalid status
                 }
                 symbol.status = Enum::toSymbolStatus(symbolObj["status"].toString()).value();
 
@@ -216,11 +216,11 @@ namespace Binance
                 {
                     if (!orderTypesArray[i].isString())
                     {
-                        return {}; // Invalid format
+                        return {}; // invalid format
                     }
                     if(!Enum::toOrderType(orderTypesArray[i].toString()).has_value())
                     {
-                        return {}; // Invalid orderType
+                        return {}; // invalid orderType
                     }
                     symbol.orderTypes.append(Enum::toOrderType(orderTypesArray[i].toString()).value());
                 }
@@ -306,13 +306,13 @@ namespace Binance
                 {
                     if (!filtersArray[i].isObject())
                     {
-                        return {}; // Invalid format
+                        return {}; // invalid format
                     }
                     const QJsonObject filterObj = filtersArray[i].toObject();
                     auto symbolFilter = Filter::fromJsonObject(filterObj);
                     if (symbolFilter->filterType.isEmpty())
                     {
-                        return {}; // Invalid filter
+                        return {}; // invalid filter
                     }
                     symbol.filters.append(symbolFilter);
                 }
@@ -329,11 +329,11 @@ namespace Binance
                 {
                     if (!permissionsArray[i].isString())
                     {
-                        return {}; // Invalid format
+                        return {}; // invalid format
                     }
                     if (!Enum::toAccountAndSymbolPermissions(permissionsArray[i].toString()).has_value())
                     {
-                        return {}; // Invalid orderType
+                        return {}; // invalid orderType
                     }
                     symbol.permissions.append(Enum::toAccountAndSymbolPermissions(permissionsArray[i].toString()).value());
                 }
@@ -349,7 +349,7 @@ namespace Binance
                 {
                     if (!permissionSets[i].isArray())
                     {
-                        return {}; // Invalid format
+                        return {}; // invalid format
                     }
 
                     QJsonArray permissionSetsArray = permissionSets[i].toArray();
@@ -357,11 +357,11 @@ namespace Binance
                     {
                         if (!permissionSetsArray[j].isString())
                         {
-                            return {}; // Invalid format
+                            return {}; // invalid format
                         }
                         if (!Enum::toAccountAndSymbolPermissions(permissionSetsArray[j].toString()).has_value())
                         {
-                            return {}; // Invalid orderType
+                            return {}; // invalid orderType
                         }
                         symbol.permissionSets.append(Enum::toAccountAndSymbolPermissions(permissionSetsArray[j].toString()).value());
                     }
@@ -387,11 +387,11 @@ namespace Binance
                 {
                     if (!allowedSelfTradePreventionModesArray[i].isString())
                     {
-                        return {}; // Invalid format
+                        return {}; // invalid format
                     }
                     if (!Enum::toAccountAndSymbolPermissions(allowedSelfTradePreventionModesArray[i].toString()).has_value())
                     {
-                        return {}; // Invalid orderType
+                        return {}; // invalid orderType
                     }
                     symbol.allowedSelfTradePreventionModes.append(Enum::toSelfTradePreventionMode(allowedSelfTradePreventionModesArray[i].toString()).value());
                 }
