@@ -291,5 +291,34 @@ namespace Binance::Enum
             {"DECREMENT", SelfTradePreventionMode::DECREMENT}};
         return map.value(mode, {});
     }
+    
+    QString toString(PegPriceType type)
+    {
+        static const QHash<PegPriceType, QString> map = {
+            {PegPriceType::PRIMARY_PEG, "PRIMARY_PEG"},
+            {PegPriceType::MARKET_PEG, "MARKET_PEG"}};
+        return map.value(type);
+    }
 
+    std::optional<PegPriceType> toPegPriceType(const QString &type)
+    {
+        static const QHash<QString, PegPriceType> map = {
+            {"PRIMARY_PEG", PegPriceType::PRIMARY_PEG},
+            {"MARKET_PEG", PegPriceType::MARKET_PEG}};
+        return map.value(type, {});
+    }
+    
+    QString toString(PegOffsetType type)
+    {
+        static const QHash<PegOffsetType, QString> map = {
+            {PegOffsetType::PRICE_LEVEL, "PRICE_LEVEL"}};
+        return map.value(type);
+    }
+
+    std::optional<PegOffsetType> toPegOffsetType(const QString &type)
+    {
+        static const QHash<QString, PegOffsetType> map = {
+            {"PRICE_LEVEL", PegOffsetType::PRICE_LEVEL}};
+        return map.value(type, {});
+    }
 } // namespace Binance::Enum

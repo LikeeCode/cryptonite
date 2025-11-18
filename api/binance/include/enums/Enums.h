@@ -138,4 +138,13 @@ namespace Binance
         MINI
     };
 
+    enum class PegPriceType{
+        PRIMARY_PEG,
+        MARKET_PEG
+    };
+
+    enum class PegOffsetType{
+        PRICE_LEVEL
+    };
+
 } // namespace Binance

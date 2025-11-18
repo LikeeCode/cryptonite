@@ -67,4 +67,13 @@ namespace Binance::Enum
     // SelfTradePreventionMode
     QString toString(SelfTradePreventionMode mode);
     std::optional<SelfTradePreventionMode> toSelfTradePreventionMode(const QString &mode);
+
+    // PegPriceType
+    QString toString(PegPriceType type);
+    std::optional<PegPriceType> toPegPriceType(const QString &type);
+
+    // PegOffsetType
+    QString toString(PegOffsetType type);
+    std::optional<PegOffsetType> toPegOffsetType(const QString &type);
+    
 } // namespace Binance::Enum
