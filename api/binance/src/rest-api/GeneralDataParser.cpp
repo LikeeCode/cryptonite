@@ -22,24 +22,21 @@ namespace Binance
 
     std::optional<GeneralData::ServerTime> GeneralDataParser::parseServerTime(const QJsonDocument &jsonDoc)
     {
-        // 1. Check if the document is a valid JSON object
+        GeneralData::ServerTime serverTimeData{};
+
+        // json object
         if (!jsonDoc.isObject())
         {
             return {}; // Invalid format
         }
+        const QJsonObject json = jsonDoc.object();
 
-        QJsonObject json = jsonDoc.object();
-        const QJsonValue serverTimeValue = json.value("serverTime");
-
-        // 2. Check if the required key exists and is the correct type (a number)
-        if (serverTimeValue.isUndefined() || !serverTimeValue.isDouble())
+        // serverTime
+        if (!json.contains("serverTime") || !json["serverTime"].isDouble())
         {
-            return {}; // Key is missing or has the wrong type
+            return {}; // serverTime is required
         }
-
-        // 3. If all checks pass, construct and return the object
-        GeneralData::ServerTime serverTimeData{};
-        serverTimeData.serverTime = serverTimeValue.toVariant().toLongLong();
+        serverTimeData.serverTime = json["serverTime"].toDouble();
         
         return serverTimeData;
     }
