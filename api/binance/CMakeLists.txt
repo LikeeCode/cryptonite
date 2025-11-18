@@ -10,6 +10,7 @@ add_library(BinanceAPI
     include/rest-api/GeneralData.h
     include/rest-api/GeneralDataParser.h
     include/rest-api/MarketData.h
+    include/rest-api/TradingData.h
     
     src/enums/Converter.cpp
     src/errors/Converter.cpp
