@@ -1,3 +1,78 @@
+# ===================================================================
+# General
+# ===================================================================
+
+# Log and temporary files
+*.log
+*.tmp
+*.bak
+
+# ===================================================================
+# C++ / CMake Build Artifacts
+# ===================================================================
+
 # The primary build directory
 # The leading slash ensures it only matches the root /build folder
 /build/
+
+# Other common build folder names
+/bin/
+/lib/
+/install/
+
+# CMake user files
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/
+
+# Qt user files (in case you open the project in Qt Creator)
+*.pro.user*
+
+# ===================================================================
+# Compiled binaries and libraries (OS-agnostic)
+# ===================================================================
+
+# Windows
+*.exe
+*.dll
+*.lib
+*.pdb
+*.obj
+
+# Linux / macOS
+*.o
+*.a
+*.so
+*.out
+*.dylib
+
+# macOS
+*.app/
+*.ds_store
+
+# ===================================================================
+# IDE & Editor specific
+# ===================================================================
+
+# Visual Studio Code
+# Ignore user-specific settings and temp files, but keep project settings
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+!.vscode/c_cpp_properties.json
+!.vscode/qt.natvis
+
+# ===================================================================
+# Dependency Management
+# ===================================================================
+
+# vcpkg directory (if installed locally in the project)
+/vcpkg/
+
+# Testing
+/Testing/
+
+# User's API keys
+/apiKeys/
