@@ -33,8 +33,8 @@ namespace Binance::API
     const QString ROLLING_WINDOW_TICKER = "/api/v3/ticker";
 
     // Trading endpoints
-    const QString NEW_ORDER = "/api/v3/order";
-    const QString TEST_NEW_ORDER = "/api/v3/order/test";
+    const QString NEW_ORDER = "/api/v3/order"; // POST
+    const QString TEST_NEW_ORDER = "/api/v3/order/test"; // POST
     const QString QUERY_ORDER = "/api/v3/order";
     const QString CANCEL_ORDER = "/api/v3/order"; // DELETE
     const QString CANCEL_ALL_OPEN_ORDERS = "/api/v3/openOrders"; // DELETE
@@ -48,18 +48,18 @@ namespace Binance::API
     const QString TEST_NEW_ORDER_SOR = "/api/v3/sor/order/test";
 
     // Account endpoints
-    const QString ACCOUNT = "/api/v3/account"; // GET
-    const QString OPEN_ORDERS = "/api/v3/openOrders"; // GET
-    const QString ALL_ORDERS = "/api/v3/allOrders"; // GET
-    const QString ORDER_LIST = "/api/v3/orderList"; // GET
-    const QString ALL_ORDER_LIST = "/api/v3/allOrderList"; // GET
-    const QString OPEN_ORDER_LIST = "/api/v3/openOrderList"; // GET
-    const QString MY_TRADES = "/api/v3/myTrades"; // GET
-    const QString UNFILLED_ORDER_COUNT = "/api/v3/rateLimit/order"; // GET
-    const QString PREVENTED_MATCHES = "/api/v3/myPreventedMatches"; // GET
-    const QString ALLOCATIONS = "/api/v3/myAllocations"; // GET
-    const QString COMISSION_RATES = "/api/v3/account/commission"; // GET
-    const QString ORDER_AMENDMENTS = "/api/v3/order/amendments"; // GET
+    const QString ACCOUNT = "/api/v3/account";
+    const QString OPEN_ORDERS = "/api/v3/openOrders";
+    const QString ALL_ORDERS = "/api/v3/allOrders";
+    const QString ORDER_LIST = "/api/v3/orderList";
+    const QString ALL_ORDER_LIST = "/api/v3/allOrderList";
+    const QString OPEN_ORDER_LIST = "/api/v3/openOrderList";
+    const QString MY_TRADES = "/api/v3/myTrades";
+    const QString UNFILLED_ORDER_COUNT = "/api/v3/rateLimit/order";
+    const QString PREVENTED_MATCHES = "/api/v3/myPreventedMatches";
+    const QString ALLOCATIONS = "/api/v3/myAllocations";
+    const QString COMISSION_RATES = "/api/v3/account/commission";
+    const QString ORDER_AMENDMENTS = "/api/v3/order/amendments";
 
     // User Data Stream endpoints
     const QString USER_DATA_STREAM = "/api/v3/userDataStream"; // POST
