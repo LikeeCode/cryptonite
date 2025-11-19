@@ -5,13 +5,28 @@
 #include <QVariant>
 
 #include "enums/Enums.h"
+#include "enums/Converter.h"
 #include "filters/Filters.h"
 
 namespace Binance::MarketData{
     struct OrderBookRequest{
         QString symbol;
-        int limit{}; // Optional, default 100; max 5000
+        int limit{100}; // Optional, default 100; max 5000
         SymbolStatus status{ SymbolStatus::TRADING };
+
+        QVariantMap toVariantMap() const {
+            QVariantMap params;
+
+            params.insert("symbol", symbol);
+            if(limit != 100 && limit > 0 && limit <= 5000){
+                params.insert("limit", limit);
+            }
+            if(status != SymbolStatus::TRADING){
+                params.insert("status", Binance::Enum::toString(status));
+            }
+            
+            return params;
+        }
     };
 
     struct OrderBook{

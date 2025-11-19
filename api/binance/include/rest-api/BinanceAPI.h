@@ -8,6 +8,7 @@
 
 #include "rest-api/APIEndpoints.h"
 #include "rest-api/GeneralData.h"
+#include "rest-api/MarketData.h"
 #include "../../../RequestType.h"
 
 namespace Binance
@@ -26,6 +27,8 @@ namespace Binance
         void time();
         void exchangeInfo();
         void exchangeInfo(const Binance::GeneralData::ExchangeInfoRequest &request);
+
+        void orderBook(const Binance::MarketData::OrderBookRequest &request);
 
     private:
         void getApiKeys();
@@ -48,5 +51,7 @@ namespace Binance
         void pingResponse(const QJsonDocument &data);
         void timeResponse(const QJsonDocument &data);
         void exchangeInfoResponse(const QJsonDocument &data);
+
+        void orderBookResponse(const QJsonDocument &data);
     };
 } // namespace Binance

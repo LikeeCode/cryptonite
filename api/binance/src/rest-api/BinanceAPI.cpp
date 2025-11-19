@@ -53,6 +53,11 @@ namespace Binance
     {
         sendPublicRequest(API::EXCHANGE_INFO, request.toVariantMap());
     }
+
+    // MarketData
+    void BinanceAPI::orderBook(const Binance::MarketData::OrderBookRequest &request)
+    {
+        sendPublicRequest(API::DEPTH, request.toVariantMap());
     }
 
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
@@ -81,6 +86,10 @@ namespace Binance
         else if (endpoint == API::EXCHANGE_INFO)
         {
             emit exchangeInfoResponse(jsonDoc);
+        }
+        else if (endpoint == API::DEPTH)
+        {
+            emit orderBookResponse(jsonDoc);
         }
 
         reply->deleteLater();
