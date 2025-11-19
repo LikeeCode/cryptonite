@@ -291,6 +291,48 @@ namespace Binance::Enum
             {"DECREMENT", SelfTradePreventionMode::DECREMENT}};
         return map.value(mode, {});
     }
+
+    QString toString(Interval interval){
+        static const QHash<Interval, QString> map = {
+            {Interval::ONE_SECOND, "1s"},
+            {Interval::ONE_MINUTE, "1m"},
+            {Interval::THREE_MINUTES, "3m"},
+            {Interval::FIVE_MINUTES, "5m"},
+            {Interval::FIFTEEN_MINUTES, "15m"},
+            {Interval::THIRTY_MINUTES, "30m"},
+            {Interval::ONE_HOUR, "1h"},
+            {Interval::TWO_HOURS, "2h"},
+            {Interval::FOUR_HOURS, "4h"},
+            {Interval::SIX_HOURS, "6h"},
+            {Interval::EIGHT_HOURS, "8h"},
+            {Interval::TWELVE_HOURS, "12h"},
+            {Interval::ONE_DAY, "1d"},
+            {Interval::THREE_DAYS, "3d"},
+            {Interval::ONE_WEEK, "1w"},
+            {Interval::ONE_MONTH, "1M"}};
+        return map.value(interval);
+    }
+
+    std::optional<Interval> toInterval(const QString &interval){
+        static const QHash<QString, Interval> map = {
+            {"1s", Interval::ONE_SECOND},
+            {"1m", Interval::ONE_MINUTE},
+            {"3m", Interval::THREE_MINUTES},
+            {"5m", Interval::FIVE_MINUTES},
+            {"15m", Interval::FIFTEEN_MINUTES},
+            {"30m", Interval::THIRTY_MINUTES},
+            {"1h", Interval::ONE_HOUR},
+            {"2h", Interval::TWO_HOURS},
+            {"4h", Interval::FOUR_HOURS},
+            {"6h", Interval::SIX_HOURS},
+            {"8h", Interval::EIGHT_HOURS},
+            {"12h", Interval::TWELVE_HOURS},
+            {"1d", Interval::ONE_DAY},
+            {"3d", Interval::THREE_DAYS},
+            {"1w", Interval::ONE_WEEK},
+            {"1M", Interval::ONE_MONTH}};
+        return map.value(interval, {});
+    }
     
     QString toString(PegPriceType type)
     {

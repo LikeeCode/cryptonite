@@ -60,6 +60,10 @@ namespace Binance::Enum
     QString toString(RateLimitInterval interval);
     std::optional<RateLimitInterval> toRateLimitInterval(const QString &interval);
 
+    // Interval
+    QString toString(Interval interval);
+    std::optional<Interval> toInterval(const QString &interval);
+    
     // RateLimitType
     QString toString(RateLimitType type);
     std::optional<RateLimitType> toRateLimitType(const QString &type);

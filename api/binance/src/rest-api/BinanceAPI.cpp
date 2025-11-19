@@ -75,6 +75,11 @@ namespace Binance
         sendPublicRequest(API::AGG_TRADES, request.toVariantMap());
     }
 
+    void BinanceAPI::klines(const Binance::MarketData::KlineRequest &request)
+    {
+        sendPublicRequest(API::KLINES, request.toVariantMap());
+    }
+
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
     {
         if (reply->error() != QNetworkReply::NoError)
@@ -117,6 +122,10 @@ namespace Binance
         else if (endpoint == API::AGG_TRADES)
         {
             emit aggTradesResponse(jsonDoc);
+        }
+        else if (endpoint == API::KLINES)
+        {
+            emit klinesResponse(jsonDoc);
         }
 
         reply->deleteLater();

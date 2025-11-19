@@ -133,3 +133,28 @@ TEST_F(MarketDataParserTest, AggregatedTrades)
 
     ASSERT_TRUE(aggTrades.has_value());
 }
+
+TEST_F(MarketDataParserTest, Klines)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<QList<Binance::MarketData::Kline>> klines{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::klinesResponse, [&](const QJsonDocument &data) {
+        response = data;
+        klines = Binance::MarketDataParser::parseKlines(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest Klines API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->klines(Binance::MarketData::KlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isArray());
+
+    ASSERT_TRUE(klines.has_value());
+}

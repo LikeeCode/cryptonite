@@ -33,6 +33,8 @@ namespace Binance
         void historicalTrades(const Binance::MarketData::OldTradesRequest &request);
         void aggregatedTrades(const Binance::MarketData::AggregatedTradeRequest &request);
 
+        void klines(const Binance::MarketData::KlineRequest &request);
+
     private:
         void getApiKeys();
         void sendPublicRequest(const QString &endpoint, const QVariantMap &params = {}, RequestType type = RequestType::Get);
@@ -58,5 +60,7 @@ namespace Binance
         void orderBookResponse(const QJsonDocument &data);
         void tradesResponse(const QJsonDocument &data);
         void aggTradesResponse(const QJsonDocument &data);
+
+        void klinesResponse(const QJsonDocument &data);
     };
 } // namespace Binance
