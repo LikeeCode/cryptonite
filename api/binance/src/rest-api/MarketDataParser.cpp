@@ -72,4 +72,161 @@ namespace Binance{
 
         return orderBook;
     }
+
+    std::optional<QList<MarketData::Trade>> MarketDataParser::parseTrades(const QJsonDocument &jsonDoc)
+    {
+        QList<MarketData::Trade> trades;
+
+        // json array
+        if (!jsonDoc.isArray())
+        {
+            return {}; // invalid format
+        }
+        QJsonArray jsonArray = jsonDoc.array();
+
+        for (int i = 0; i < jsonArray.size(); ++i)
+        {
+            if (!jsonArray[i].isObject())
+            {
+                continue; // skip malformed entries
+            }
+            QJsonObject tradeObj = jsonArray[i].toObject();
+            MarketData::Trade trade{};
+
+            // id
+            if (!tradeObj.contains("id") && !tradeObj["id"].isDouble())
+            {
+                return {}; // id is required
+            }
+            trade.id = static_cast<qint64>(tradeObj["id"].toDouble());
+
+            // price
+            if (!tradeObj.contains("price") && !tradeObj["price"].isString())
+            {
+                return {}; // price is required
+            }
+            trade.price = tradeObj["price"].toString().toDouble();
+
+            // qty
+            if (!tradeObj.contains("qty") && !tradeObj["qty"].isString())
+            {
+                return {}; // qty is required
+            }
+            trade.qty = tradeObj["qty"].toString().toDouble();
+
+            // quoteQty
+            if (!tradeObj.contains("quoteQty") && !tradeObj["quoteQty"].isString())
+            {
+                return {}; // quoteQty is required
+            }
+            trade.quoteQty = tradeObj["quoteQty"].toString().toDouble();
+
+            // time
+            if (!tradeObj.contains("time") && !tradeObj["time"].isDouble())
+            {
+                return {}; // time is required
+            }
+            trade.time = tradeObj["time"].toString().toDouble();
+
+            // isBuyerMaker
+            if (!tradeObj.contains("isBuyerMaker") && !tradeObj["isBuyerMaker"].isBool())
+            {
+                return {}; // isBuyerMaker is required
+            }
+            trade.isBuyerMaker = tradeObj["isBuyerMaker"].toBool();
+
+            // isBestMatch
+            if (!tradeObj.contains("isBestMatch") && !tradeObj["isBestMatch"].isBool())
+            {
+                return {}; // isBestMatch is required
+            }
+            trade.isBestMatch = tradeObj["isBestMatch"].toBool();
+
+            trades.append(trade);
+        }
+
+        return trades;
+    }
+
+    std::optional<QList<MarketData::AggregatedTrade>> MarketDataParser::parseAggregatedTrades(const QJsonDocument &jsonDoc)
+    {
+        QList<MarketData::AggregatedTrade> aggTrades;
+
+        // json array
+        if (!jsonDoc.isArray())
+        {
+            return {}; // invalid format
+        }
+        QJsonArray jsonArray = jsonDoc.array();
+
+        for (int i = 0; i < jsonArray.size(); ++i)
+        {
+            if (!jsonArray[i].isObject())
+            {
+                continue; // skip malformed entries
+            }
+            QJsonObject tradeObj = jsonArray[i].toObject();
+            MarketData::AggregatedTrade trade{};
+
+            // aggregate tradeId
+            if (!tradeObj.contains("a") && !tradeObj["a"].isDouble())
+            {
+                return {}; // aggregate tradeId is required
+            }
+            trade.a = static_cast<qint64>(tradeObj["a"].toDouble());
+
+            // price
+            if (!tradeObj.contains("p") && !tradeObj["p"].isString())
+            {
+                return {}; // price is required
+            }
+            trade.p = tradeObj["p"].toString().toDouble();
+
+            // quantity
+            if (!tradeObj.contains("q") && !tradeObj["q"].isString())
+            {
+                return {}; // quantity is required
+            }
+            trade.q = tradeObj["q"].toString().toDouble();
+
+            // first tradeId
+            if (!tradeObj.contains("f") && !tradeObj["f"].isDouble())
+            {
+                return {}; // first tradeId is required
+            }
+            trade.f = static_cast<qint64>(tradeObj["f"].toDouble());
+
+            // last tradeId
+            if (!tradeObj.contains("l") && !tradeObj["l"].isDouble())
+            {
+                return {}; // last tradeId is required
+            }
+            trade.l = static_cast<qint64>(tradeObj["l"].toDouble());
+
+            // timestamp
+            if (!tradeObj.contains("T") && !tradeObj["T"].isDouble())
+            {
+                return {}; // timestamp is required
+            }
+            trade.T = static_cast<qint64>(tradeObj["T"].toDouble());
+
+            // was the buyer the maker?
+            if (!tradeObj.contains("m") && !tradeObj["m"].isBool())
+            {
+                return {}; // was the buyer the maker? is required
+            }
+            trade.m = tradeObj["m"].toBool();
+
+            // was the trade the best price match?
+            if (!tradeObj.contains("M") && !tradeObj["M"].isBool())
+            {
+                return {}; // was the trade the best price match? is required
+            }
+            trade.M = tradeObj["M"].toBool();
+
+            aggTrades.append(trade);
+        }
+
+        return aggTrades;
+    }
 }

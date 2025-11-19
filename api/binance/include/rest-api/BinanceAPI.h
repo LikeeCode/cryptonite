@@ -29,12 +29,15 @@ namespace Binance
         void exchangeInfo(const Binance::GeneralData::ExchangeInfoRequest &request);
 
         void orderBook(const Binance::MarketData::OrderBookRequest &request);
+        void recentTrades(const Binance::MarketData::RecentTradesRequest &request);
+        void historicalTrades(const Binance::MarketData::OldTradesRequest &request);
+        void aggregatedTrades(const Binance::MarketData::AggregatedTradeRequest &request);
 
     private:
         void getApiKeys();
         void sendPublicRequest(const QString &endpoint, const QVariantMap &params = {}, RequestType type = RequestType::Get);
         void sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type);
-
+        
         bool m_useTestNetwork;
         QString m_baseUrl;
         QString m_apiKey;
@@ -53,5 +56,7 @@ namespace Binance
         void exchangeInfoResponse(const QJsonDocument &data);
 
         void orderBookResponse(const QJsonDocument &data);
+        void tradesResponse(const QJsonDocument &data);
+        void aggTradesResponse(const QJsonDocument &data);
     };
 } // namespace Binance

@@ -11,7 +11,8 @@ namespace Binance
     class MarketDataParser
     {
     public:
-        // Order Book
         static std::optional<MarketData::OrderBook> parseOrderBook(const QJsonDocument &jsonDoc);
+        static std::optional<QList<MarketData::Trade>> parseTrades(const QJsonDocument &jsonDoc);
+        static std::optional<QList<MarketData::AggregatedTrade>> parseAggregatedTrades(const QJsonDocument &jsonDoc);
     };
 } // namespace Binance

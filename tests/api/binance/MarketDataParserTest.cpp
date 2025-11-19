@@ -47,7 +47,7 @@ TEST_F(MarketDataParserTest, OrderBook)
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
                      {
-        FAIL() << "GeneralDataParserTest OrderBook API Error received: " << error.toStdString();
+        FAIL() << "MarketDataParserTest OrderBook API Error received: " << error.toStdString();
         loop.quit(); });
 
     binanceAPI->orderBook(Binance::MarketData::OrderBookRequest{"BTCUSDT"});
@@ -57,4 +57,79 @@ TEST_F(MarketDataParserTest, OrderBook)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(orderBook.has_value());
+}
+
+TEST_F(MarketDataParserTest, RecentTrades)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<QList<Binance::MarketData::Trade>> trades{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradesResponse, [&](const QJsonDocument &data) {
+        response = data;
+        trades = Binance::MarketDataParser::parseTrades(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest RecentTrades API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->recentTrades(Binance::MarketData::RecentTradesRequest{"BTCUSDT"});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isArray());
+
+    ASSERT_TRUE(trades.has_value());
+}
+
+TEST_F(MarketDataParserTest, OldTrades)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<QList<Binance::MarketData::Trade>> trades{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradesResponse, [&](const QJsonDocument &data) {
+        response = data;
+        trades = Binance::MarketDataParser::parseTrades(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest OldTrades API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->historicalTrades(Binance::MarketData::OldTradesRequest{"BTCUSDT"});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isArray());
+
+    ASSERT_TRUE(trades.has_value());
+}
+
+TEST_F(MarketDataParserTest, AggregatedTrades)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<QList<Binance::MarketData::AggregatedTrade>> aggTrades{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::aggTradesResponse, [&](const QJsonDocument &data) {
+        response = data;
+        aggTrades = Binance::MarketDataParser::parseAggregatedTrades(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest AggregatedTrades API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->aggregatedTrades(Binance::MarketData::AggregatedTradeRequest{"BTCUSDT"});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isArray());
+
+    ASSERT_TRUE(aggTrades.has_value());
 }

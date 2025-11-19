@@ -60,6 +60,21 @@ namespace Binance
         sendPublicRequest(API::DEPTH, request.toVariantMap());
     }
 
+    void BinanceAPI::recentTrades(const Binance::MarketData::RecentTradesRequest &request)
+    {
+        sendPublicRequest(API::TRADES, request.toVariantMap());
+    }
+
+    void BinanceAPI::historicalTrades(const Binance::MarketData::OldTradesRequest &request)
+    {
+        sendPublicRequest(API::HISTORICAL_TRADES, request.toVariantMap());
+    }
+
+    void BinanceAPI::aggregatedTrades(const Binance::MarketData::AggregatedTradeRequest &request)
+    {
+        sendPublicRequest(API::AGG_TRADES, request.toVariantMap());
+    }
+
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
     {
         if (reply->error() != QNetworkReply::NoError)
@@ -90,6 +105,18 @@ namespace Binance
         else if (endpoint == API::DEPTH)
         {
             emit orderBookResponse(jsonDoc);
+        }
+        else if (endpoint == API::TRADES)
+        {
+            emit tradesResponse(jsonDoc);
+        }
+        else if (endpoint == API::HISTORICAL_TRADES)
+        {
+            emit tradesResponse(jsonDoc);
+        }
+        else if (endpoint == API::AGG_TRADES)
+        {
+            emit aggTradesResponse(jsonDoc);
         }
 
         reply->deleteLater();

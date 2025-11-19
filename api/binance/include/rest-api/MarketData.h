@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include <QList>
 #include <QString>
 #include <QVariant>
@@ -37,7 +39,18 @@ namespace Binance::MarketData{
 
     struct RecentTradesRequest{
         QString symbol;
-        int limit{}; // Optional, default 500; max 1000
+        int limit{500}; // Optional, default 500; max 1000
+
+        QVariantMap toVariantMap() const {
+            QVariantMap params;
+
+            params.insert("symbol", symbol);
+            if(limit != 500 && limit > 0 && limit <= 1000){
+                params.insert("limit", limit);
+            }
+            
+            return params;
+        }
     };
 
     struct Trade{
@@ -52,16 +65,50 @@ namespace Binance::MarketData{
 
     struct OldTradesRequest{
         QString symbol;
-        int limit{}; // Optional, default 500; max 1000
-        qint64 fromId{}; // Trade id to fetch from. Default gets most recent trades.
+        int limit{500}; // Optional, default 500; max 1000
+        std::optional<qint64> fromId{}; // Trade id to fetch from. Default gets most recent trades.
+
+        QVariantMap toVariantMap() const {
+            QVariantMap params;
+
+            params.insert("symbol", symbol);
+            if(limit != 500 && limit > 0 && limit <= 1000){
+                params.insert("limit", limit);
+            }
+            if(fromId.has_value()){
+                params.insert("fromId", fromId.value());
+            }
+            
+            return params;
+        }
     };
 
     struct AggregatedTradeRequest{
         QString symbol;
-        qint64 fromId{}; // Optional, id to get aggregate trades from INCLUSIVE.
-        qint64 startTime{}; // Optional, timestamp in ms to get aggregate trades from INCLUSIVE.
-        qint64 endTime{}; // Optional, timestamp in ms to get aggregate trades until INCLUSIVE.
-        int limit{}; // Optional, default 500; max 1000
+        std::optional<qint64> fromId{}; // Optional, id to get aggregate trades from INCLUSIVE.
+        std::optional<qint64> startTime{}; // Optional, timestamp in ms to get aggregate trades from INCLUSIVE.
+        std::optional<qint64> endTime{}; // Optional, timestamp in ms to get aggregate trades until INCLUSIVE.
+        int limit{500}; // Optional, default 500; max 1000
+
+        QVariantMap toVariantMap() const {
+            QVariantMap params;
+
+            params.insert("symbol", symbol);
+            if(fromId.has_value()){
+                params.insert("fromId", fromId.value());
+            }
+            if(startTime.has_value()){
+                params.insert("startTime", startTime.value());
+            }
+            if(endTime.has_value()){
+                params.insert("endTime", endTime.value());
+            }
+            if(limit != 500 && limit > 0 && limit <= 1000){
+                params.insert("limit", limit);
+            }
+            
+            return params;
+        }
     };
 
     struct AggregatedTrade{
