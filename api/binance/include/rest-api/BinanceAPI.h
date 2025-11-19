@@ -34,6 +34,7 @@ namespace Binance
         void aggregatedTrades(const Binance::MarketData::AggregatedTradeRequest &request);
 
         void klines(const Binance::MarketData::KlineRequest &request);
+        void currentAveragePrice(const Binance::MarketData::CurrentAveragePriceRequest &request);
 
     private:
         void getApiKeys();
@@ -62,5 +63,6 @@ namespace Binance
         void aggTradesResponse(const QJsonDocument &data);
 
         void klinesResponse(const QJsonDocument &data);
+        void currentAveragePriceResponse(const QJsonDocument &data);
     };
 } // namespace Binance

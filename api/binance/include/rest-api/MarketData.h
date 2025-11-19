@@ -193,12 +193,20 @@ namespace Binance::MarketData{
 
     struct CurrentAveragePriceRequest{
         QString symbol;
+
+        QVariantMap toVariantMap() const {
+            QVariantMap params;
+
+            params.insert("symbol", symbol);
+            
+            return params;
+        }
     };
 
     struct CurrentAveragePrice{
-        int interval{};
-        double price{};
-        qint64 mins{};
+        int interval{}; // Average price interval (in minutes)
+        double price{}; // Average price
+        qint64 closeTime{}; // Last trade time
     };
 
     struct ticker24hrRequest{

@@ -158,3 +158,28 @@ TEST_F(MarketDataParserTest, Klines)
 
     ASSERT_TRUE(klines.has_value());
 }
+
+TEST_F(MarketDataParserTest, CurrentAveragePrice)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::MarketData::CurrentAveragePrice> avgPrice{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::currentAveragePriceResponse, [&](const QJsonDocument &data) {
+        response = data;
+        avgPrice = Binance::MarketDataParser::parseCurrentAveragePrice(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest CurrentAveragePrice API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->currentAveragePrice(Binance::MarketData::CurrentAveragePriceRequest{"BTCUSDT"});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(avgPrice.has_value());
+}

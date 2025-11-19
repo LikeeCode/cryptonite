@@ -272,4 +272,39 @@ namespace Binance{
 
         return klines;
     }
+
+    std::optional<MarketData::CurrentAveragePrice> MarketDataParser::parseCurrentAveragePrice(const QJsonDocument &jsonDoc)
+    {
+        MarketData::CurrentAveragePrice avgPrice{};
+
+        // json object
+        if (!jsonDoc.isObject())
+        {
+            return {}; // invalid format
+        }
+        QJsonObject json = jsonDoc.object();
+
+        // mins
+        if (!json.contains("mins") || !json["mins"].isDouble())
+        {
+            return {}; // mins is required
+        }
+        avgPrice.interval = static_cast<int>(json["mins"].toDouble());
+
+        // price
+        if (!json.contains("price") || !json["price"].isString())
+        {
+            return {}; // price is required
+        }
+        avgPrice.price = json["price"].toString().toDouble();
+
+        // closeTime
+        if (!json.contains("closeTime") || !json["closeTime"].isDouble())
+        {
+            return {}; // closeTime is required
+        }
+        avgPrice.closeTime = static_cast<qint64>(json["closeTime"].toDouble());
+
+        return avgPrice;
+    }
 }

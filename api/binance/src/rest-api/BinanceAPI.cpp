@@ -80,6 +80,11 @@ namespace Binance
         sendPublicRequest(API::KLINES, request.toVariantMap());
     }
 
+    void BinanceAPI::currentAveragePrice(const Binance::MarketData::CurrentAveragePriceRequest &request)
+    {
+        sendPublicRequest(API::AVG_PRICE, request.toVariantMap());
+    }
+
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
     {
         if (reply->error() != QNetworkReply::NoError)
@@ -126,6 +131,10 @@ namespace Binance
         else if (endpoint == API::KLINES)
         {
             emit klinesResponse(jsonDoc);
+        }
+        else if (endpoint == API::AVG_PRICE)
+        {
+            emit currentAveragePriceResponse(jsonDoc);
         }
 
         reply->deleteLater();
