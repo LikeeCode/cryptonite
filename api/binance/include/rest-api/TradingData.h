@@ -1,9 +1,10 @@
 #pragma once
 
+#include <optional>
+
 #include <QList>
 #include <QString>
 #include <QVariant>
-#include <optional>
 
 #include "enums/Enums.h"
 #include "enums/Converter.h"
