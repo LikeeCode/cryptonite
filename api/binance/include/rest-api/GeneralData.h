@@ -1,5 +1,9 @@
 #pragma once
 
+#include <optional>
+
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QList>
 #include <QString>
 #include <QVariant>
@@ -52,6 +56,26 @@ namespace Binance::GeneralData
         QList<AccountAndSymbolPermissions> permissionSets;
         QString defaultSelfTradePreventionMode;
         QList<SelfTradePreventionMode> allowedSelfTradePreventionModes;
+    };
+
+    struct ExchangeInfoRequest
+    {
+        std::optional<QString> symbol{};
+        std::optional<QList<QString>> symbols{};
+
+        QVariantMap toVariantMap() const {
+            QVariantMap params;
+            if (symbol.has_value()) {
+                params.insert("symbol", symbol.value());
+            } else if (symbols.has_value()) {
+                QJsonArray jsonArray;
+                for (const auto& sym : symbols.value()) {
+                    jsonArray.append(sym);
+                }
+                params.insert("symbols", QJsonDocument(jsonArray).toJson(QJsonDocument::Compact));
+            }
+            return params;
+        }
     };
     
     struct ExchangeInfo

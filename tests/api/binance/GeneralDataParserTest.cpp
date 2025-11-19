@@ -129,11 +129,10 @@ TEST_F(GeneralDataParserTest, ExchangeInfoSymbol)
         FAIL() << "GeneralDataParserTest ExchangeInfoWithParams API Error received: " << error.toStdString();
         loop.quit(); });
 
-    // Create parameters to request info for a single symbol
-    QVariantMap params;
-    params.insert("symbol", "BTCUSDT");
-
-    binanceAPI->exchangeInfo(params);
+    Binance::GeneralData::ExchangeInfoRequest request;
+    request.symbol = "BTCUSDT";
+    
+    binanceAPI->exchangeInfo(request);
     QTimer::singleShot(15000, &loop, &QEventLoop::quit); // 15-second timeout
     loop.exec();
 
@@ -162,12 +161,11 @@ TEST_F(GeneralDataParserTest, ExchangeInfoSymbols)
                      {
         FAIL() << "GeneralDataParserTest ExchangeInfoWithParams API Error received: " << error.toStdString();
         loop.quit(); });
+    
+    Binance::GeneralData::ExchangeInfoRequest request;
+    request.symbols = {"BTCUSDT", "BNBBTC"};
 
-    // Create parameters to request info for a single symbol
-    QVariantMap params;
-    params.insert("symbols", "[\"BTCUSDT\",\"BNBBTC\"]");
-
-    binanceAPI->exchangeInfo(params);
+    binanceAPI->exchangeInfo(request);
     QTimer::singleShot(15000, &loop, &QEventLoop::quit); // 15-second timeout
     loop.exec();
 

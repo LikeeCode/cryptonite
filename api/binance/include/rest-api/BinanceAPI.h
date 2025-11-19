@@ -7,6 +7,7 @@
 #include <QVariantMap>
 
 #include "rest-api/APIEndpoints.h"
+#include "rest-api/GeneralData.h"
 #include "../../../RequestType.h"
 
 namespace Binance
@@ -24,7 +25,7 @@ namespace Binance
         void ping();
         void time();
         void exchangeInfo();
-        void exchangeInfo(const QVariantMap &params);
+        void exchangeInfo(const Binance::GeneralData::ExchangeInfoRequest &request);
 
     private:
         void getApiKeys();
@@ -43,6 +44,7 @@ namespace Binance
     signals:
         void apiKeysFileError();
         void apiError(const QString &error);
+
         void pingResponse(const QJsonDocument &data);
         void timeResponse(const QJsonDocument &data);
         void exchangeInfoResponse(const QJsonDocument &data);

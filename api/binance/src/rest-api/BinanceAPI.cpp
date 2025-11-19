@@ -1,5 +1,7 @@
 #include <QDir>
 #include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QMessageAuthenticationCode>
 #include <QNetworkReply>
 #include <QUrlQuery>
@@ -36,6 +38,7 @@ namespace Binance
         sendPublicRequest(API::PING);
     }
 
+    // GeneralData
     void BinanceAPI::time()
     {
         sendPublicRequest(API::TIME);
@@ -46,9 +49,10 @@ namespace Binance
         sendPublicRequest(API::EXCHANGE_INFO);
     }
     
-    void BinanceAPI::exchangeInfo(const QVariantMap &params)
+    void BinanceAPI::exchangeInfo(const Binance::GeneralData::ExchangeInfoRequest &request)
     {
-        sendPublicRequest(API::EXCHANGE_INFO, params);
+        sendPublicRequest(API::EXCHANGE_INFO, request.toVariantMap());
+    }
     }
 
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
