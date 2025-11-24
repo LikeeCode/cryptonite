@@ -2,11 +2,20 @@
 This is Qt/QML trading bot project.
 
 ## Prerequisites
-Qt 6.8.3 LTS
+Download and install Qt 6.8.3 LTS
+- MSVC 2022 64-bit
 
-CMake 4.1 or higher
+Download and install CMake 4.1 or higher
 
-VSCode or Visual Studio
+IDE: VSCode or Visual Studio
+
+Install "Visual Studio Build Tools 2022" using visual studio installer
+
+Add Qt6_DIR variable to your Environment Variables:
+Qt6_DIR = C:\Qt\6.8.3\msvc2022_64\lib\cmake\Qt6
+
+Add the following to your PATH variable:
+C:\Qt\6.8.3\msvc2022_64\bin
 
 ## Helpful VSCode Extensions
 C/C++
