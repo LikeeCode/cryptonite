@@ -6,7 +6,7 @@ This is Qt/QML trading bot project.
 2. Install CMake 4.1 or higher
 3. Install Qt 6.8.3 LTS
 - MSVC 2022 64-bit
-4. Install Visual Studio 2026 Community
+4. Install Visual Studio 2022 Community (https://learn.microsoft.com/en-us/visualstudio/releases/2022/release-history)
 5. Install VSCode with extensions:
 - C/C++
 - C/C++ Extension Pack
