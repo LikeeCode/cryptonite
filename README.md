@@ -20,6 +20,9 @@ Qt6_DIR = C:\Qt\6.8.3\msvc2022_64\lib\cmake\Qt6
 8. Add the following to your PATH variable:
 C:\Qt\6.8.3\msvc2022_64\bin
 
+## Build
+```>cmake -S . -B build```
+
 ## Debugging in VSCode
 For the better readability of the complex classes such as QString add qt6.natvis as a visualizer tool. To do so add the following line to .vscode/launch.json file:
 
