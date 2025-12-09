@@ -22,6 +22,10 @@ C:\Qt\6.8.3\msvc2022_64\bin
 
 ## Build
 ```>cmake -S . -B build```
+```>cmake --build build```
+Restart VSCode
+Choose the following compiler kit:
+Visual Studio Community 2022 Release - amd64_x86
 
 ## Debugging in VSCode
 For the better readability of the complex classes such as QString add qt6.natvis as a visualizer tool. To do so add the following line to .vscode/launch.json file:
