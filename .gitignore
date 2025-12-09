@@ -76,3 +76,4 @@ CMakeFiles/
 
 # User's API keys
 /apiKeys/*
+!/apiKeys/.gitkeep
