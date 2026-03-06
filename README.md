@@ -1,35 +1,154 @@
 # Cryptonite
-This is Qt/QML trading bot project.
+
+A C++/Qt6/QML algorithmic trading bot for the [Binance](https://www.binance.com) exchange.
+
+**Platform:** Windows &nbsp;|&nbsp; **Compiler:** MSVC 2022 &nbsp;|&nbsp; **Qt:** 6.8.3 LTS &nbsp;|&nbsp; **Standard:** C++17
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [API Key Setup](#api-key-setup)
+- [Build](#build)
+- [Running](#running)
+- [Testing](#testing)
+- [Debugging in VSCode](#debugging-in-vscode)
+- [Project Structure](#project-structure)
+
+---
+
+## Features
+
+- Binance REST API client (market data, order book, trades, klines)
+- Testnet support for safe development and testing
+- Qt/QML UI with a reactive data model layer
+- Unit-tested parsing layer via Google Test
+
+---
 
 ## Prerequisites
-1. Install Git
-2. Install CMake 4.1 or higher
-3. Install Qt 6.8.3 LTS (!!! make sure to install MSVC 2022 64-bit component !!!)
-4. Install Visual Studio 2022 Community (https://learn.microsoft.com/en-us/visualstudio/releases/2022/release-history)
-5. Install VSCode with extensions:
-- C/C++
-- C/C++ Extension Pack
-- C/C++ Themes
-- Qt Extension Pack
-- CMake Tools
-- Markdown Preview Enhanced
-6. Install "Visual Studio Build Tools 2022" using visual studio installer
-7. Add Qt6_DIR variable to your Environment Variables:
-Qt6_DIR = C:\Qt\6.8.3\msvc2022_64\lib\cmake\Qt6
-8. Add the following to your PATH variable:
+
+Install the following tools in order:
+
+1. **Git** — [git-scm.com](https://git-scm.com)
+2. **CMake 3.14 or higher** — [cmake.org](https://cmake.org/download)
+3. **Qt 6.8.3 LTS** — [qt.io/download](https://www.qt.io/download)
+   > [!IMPORTANT]
+   > During installation, select the **MSVC 2022 64-bit** component under Qt 6.8.3.
+4. **Visual Studio 2022 Community** — [release history](https://learn.microsoft.com/en-us/visualstudio/releases/2022/release-history)
+   - In the Visual Studio Installer, ensure the **"Desktop development with C++"** workload is installed.
+5. **VSCode** with the following extensions:
+   - [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+   - [C/C++ Extension Pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack)
+   - [Qt Extension Pack](https://marketplace.visualstudio.com/items?itemName=qt-official.qt-extension-pack)
+   - [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
+
+### Environment Variables
+
+After installing Qt, add the following to your system environment:
+
+| Variable | Value |
+|---|---|
+| `Qt6_DIR` | `C:\Qt\6.8.3\msvc2022_64\lib\cmake\Qt6` |
+
+Also append to your `PATH`:
+
+```
 C:\Qt\6.8.3\msvc2022_64\bin
+```
+
+---
+
+## API Key Setup
+
+The application reads Binance API credentials from `apiKeys/binanceAPI.txt` at runtime.
+This file is excluded from version control — you must create it manually before building.
+
+Create `apiKeys/binanceAPI.txt` with your API key on the first line and your secret key on the second:
+
+```
+YOUR_BINANCE_API_KEY
+YOUR_BINANCE_SECRET_KEY
+```
+
+> [!TIP]
+> The application uses the **Binance Testnet** by default, so you can generate safe testnet
+> credentials at [testnet.binance.vision](https://testnet.binance.vision) without risking real funds.
+
+---
 
 ## Build
-```>cmake -S . -B build```
-```>cmake --build build```
-Restart VSCode
-Choose the following compiler kit:
-Qt-6.8.3-msvc2022_64_VSCommunity_2022_Release_amd64 (this corresponds to the MSVC 2022 64-bit component which you must install when installing Qt)
+
+Configure and build from the repository root:
+
+```bash
+cmake -S . -B build
+cmake --build build
+```
+
+The compiled executable and all required Qt DLLs are placed in `build/bin/Debug/` (or `Release/`).
+
+### Selecting the Compiler Kit in VSCode
+
+After the first build, reload VSCode and select the compiler kit when prompted by CMake Tools:
+
+```
+Qt-6.8.3-msvc2022_64_VSCommunity_2022_Release_amd64
+```
+
+This corresponds to the MSVC 2022 64-bit Qt component installed in step 3.
+
+---
+
+## Running
+
+Launch the executable directly from the build output directory:
+
+```bash
+./build/bin/Debug/Cryptonite.exe
+```
+
+Or use the **CMake Tools** launch button in VSCode after selecting a build target.
+
+---
+
+## Testing
+
+Tests are built automatically as part of the main build. Run them with CTest:
+
+```bash
+ctest --test-dir build -C Debug --output-on-failure
+```
+
+---
 
 ## Debugging in VSCode
-For the better readability of the complex classes such as QString add qt6.natvis as a visualizer tool. To do so add the following line to .vscode/launch.json file:
 
-```"visualizerFile": "${workspaceFolder}/qt6.natvis"```
+The repository includes a pre-configured launch configuration (`Target (Debug)`) in `.vscode/launch.json`.
 
-This settings are already added to the "Cryptonite Debug" configuration as an example.
-Note: this settings does not work in VSCode if you use the debug button located in the bottom area (this buttons come from CMake Tools extension).
+It uses `.vscode/qt.natvis` as a visualizer, which provides human-readable display of Qt types
+such as `QString` and `QList` in the debugger watch window.
+
+> [!NOTE]
+> The natvis visualizer only works when launching via the **Run and Debug** panel (`F5`).
+> It does not apply when using the debug button in the CMake Tools bottom toolbar.
+
+---
+
+## Project Structure
+
+```
+cryptonite/
+├── api/
+│   └── binance/          # Binance REST API client (requests, parsers, enums, filters)
+├── models/               # Qt data models exposed to QML
+├── tests/                # Google Test unit tests for API parsers
+├── 3rdParty/
+│   └── googletest/       # Vendored Google Test / Google Mock
+├── apiKeys/              # API credentials — git-ignored, must be created manually
+├── main.cpp              # Application entry point
+├── main.qml              # Root QML component
+└── CMakeLists.txt        # Top-level build configuration
+```
