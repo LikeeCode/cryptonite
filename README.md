@@ -4,8 +4,7 @@ This is Qt/QML trading bot project.
 ## Prerequisites
 1. Install Git
 2. Install CMake 4.1 or higher
-3. Install Qt 6.8.3 LTS
-- MSVC 2022 64-bit
+3. Install Qt 6.8.3 LTS (!!! make sure to install MSVC 2022 64-bit component !!!)
 4. Install Visual Studio 2022 Community (https://learn.microsoft.com/en-us/visualstudio/releases/2022/release-history)
 5. Install VSCode with extensions:
 - C/C++
@@ -25,7 +24,7 @@ C:\Qt\6.8.3\msvc2022_64\bin
 ```>cmake --build build```
 Restart VSCode
 Choose the following compiler kit:
-Visual Studio Community 2022 Release - amd64_x86
+Qt-6.8.3-msvc2022_64_VSCommunity_2022_Release_amd64 (this corresponds to the MSVC 2022 64-bit component which you must install when installing Qt)
 
 ## Debugging in VSCode
 For the better readability of the complex classes such as QString add qt6.natvis as a visualizer tool. To do so add the following line to .vscode/launch.json file:
