@@ -37,6 +37,7 @@ namespace Binance
         void uiKlines(const Binance::MarketData::UIKlineRequest &request);
         void currentAveragePrice(const Binance::MarketData::CurrentAveragePriceRequest &request);
         void tickerPrice24hr(const Binance::MarketData::Ticker24hrRequest &request);
+        void tradingDay(const Binance::MarketData::TradingDayRequest &request);
 
     private:
         void getApiKeys();
@@ -70,5 +71,7 @@ namespace Binance
         void currentAveragePriceResponse(const QJsonDocument &data);
         void tickerPrice24hrResponseFull(const QJsonDocument &data);
         void tickerPrice24hrResponseMini(const QJsonDocument &data);
+        void tradingDayResponseFull(const QJsonDocument &data);
+        void tradingDayResponseMini(const QJsonDocument &data);
     };
 } // namespace Binance

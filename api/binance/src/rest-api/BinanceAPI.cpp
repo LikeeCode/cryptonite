@@ -96,6 +96,11 @@ namespace Binance
         sendPublicRequest(API::TICKER_24HR, request.toVariantMap());
     }
 
+    void BinanceAPI::tradingDay(const Binance::MarketData::TradingDayRequest &request)
+    {
+        sendPublicRequest(API::TRADING_DAY, request.toVariantMap());
+    }
+
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
     {
         if (reply->error() != QNetworkReply::NoError)
@@ -163,6 +168,21 @@ namespace Binance
             {
                 emit tickerPrice24hrResponseMini(jsonDoc);
             }
+        }
+        else if (endpoint == API::TRADING_DAY)
+        {
+            if(jsonDoc.isObject() && jsonDoc.object().contains("priceChange")) // Full trading day info contains "priceChange", while mini trading day does not
+            {
+                emit tradingDayResponseFull(jsonDoc);
+            }
+            else
+            {
+                emit tradingDayResponseMini(jsonDoc);
+            }
+        }
+        else
+        {
+            emit apiError("Unknown API endpoint: " + endpoint);
         }
 
         reply->deleteLater();
