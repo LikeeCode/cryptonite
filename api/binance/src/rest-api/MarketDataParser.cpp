@@ -746,7 +746,7 @@ namespace Binance{
             return {}; // symbol is required
         }
         tradingDayMini.symbol = json["symbol"].toString();
-        
+
         // openPrice
         if (!json.contains("openPrice") || !json["openPrice"].isString())
         {
@@ -825,5 +825,32 @@ namespace Binance{
         tradingDayMini.count = static_cast<qint64>(json["count"].toDouble());
 
         return tradingDayMini;
+    }
+
+    std::optional<MarketData::SymbolPriceTicker> MarketDataParser::parseSymbolPriceTickerResponse(const QJsonDocument &jsonDoc){
+        MarketData::SymbolPriceTicker symbolPriceTicker{};
+
+        // json object
+        if (!jsonDoc.isObject())
+        {
+            return {}; // invalid format
+        }
+        QJsonObject json = jsonDoc.object();
+        
+        // symbol
+        if (!json.contains("symbol") || !json["symbol"].isString())
+        {
+            return {}; // symbol is required
+        }
+        symbolPriceTicker.symbol = json["symbol"].toString();
+
+        // price
+        if (!json.contains("price") || !json["price"].isString())
+        {
+            return {}; // price is required
+        }
+        symbolPriceTicker.price = json["price"].toString().toDouble();
+
+        return symbolPriceTicker;
     }
 }

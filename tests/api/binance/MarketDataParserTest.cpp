@@ -312,3 +312,28 @@ TEST_F(MarketDataParserTest, TradingDayMini)
 
     ASSERT_TRUE(tradingDayMini.has_value());
 }
+
+TEST_F(MarketDataParserTest, SymbolPriceTicker)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::MarketData::SymbolPriceTicker> symbolPriceTicker{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolPriceTickerResponse, [&](const QJsonDocument &data) {
+        response = data;
+        symbolPriceTicker = Binance::MarketDataParser::parseSymbolPriceTickerResponse(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest SymbolPriceTicker API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->symbolPriceTicker(Binance::MarketData::SymbolPriceTickerRequest{"BTCUSDT"});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(symbolPriceTicker.has_value());
+}

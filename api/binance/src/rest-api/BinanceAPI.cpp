@@ -101,6 +101,10 @@ namespace Binance
         sendPublicRequest(API::TRADING_DAY, request.toVariantMap());
     }
 
+    void BinanceAPI::symbolPriceTicker(const Binance::MarketData::SymbolPriceTickerRequest &request)
+    {
+        sendPublicRequest(API::PRICE_TICKER, request.toVariantMap());
+    }
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
     {
         if (reply->error() != QNetworkReply::NoError)
@@ -179,6 +183,10 @@ namespace Binance
             {
                 emit tradingDayResponseMini(jsonDoc);
             }
+        }
+        else if (endpoint == API::PRICE_TICKER)
+        {
+            emit symbolPriceTickerResponse(jsonDoc);
         }
         else
         {
