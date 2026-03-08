@@ -57,6 +57,9 @@ TEST_F(MarketDataParserTest, OrderBook)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(orderBook.has_value());
+    EXPECT_GT(orderBook->lastUpdateId, 0);
+    EXPECT_FALSE(orderBook->bids.isEmpty());
+    EXPECT_FALSE(orderBook->asks.isEmpty());
 }
 
 TEST_F(MarketDataParserTest, RecentTrades)
@@ -82,6 +85,14 @@ TEST_F(MarketDataParserTest, RecentTrades)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(trades.has_value());
+    EXPECT_FALSE(trades->isEmpty());
+    if (!trades->isEmpty()) {
+        const auto& trade = trades->first();
+        EXPECT_GT(trade.id, 0);
+        EXPECT_GT(trade.price, 0);
+        EXPECT_GT(trade.qty, 0);
+        EXPECT_GT(trade.quoteQty, 0);
+    }
 }
 
 TEST_F(MarketDataParserTest, HistoricalTrades)
@@ -107,6 +118,14 @@ TEST_F(MarketDataParserTest, HistoricalTrades)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(trades.has_value());
+    EXPECT_FALSE(trades->isEmpty());
+    if (!trades->isEmpty()) {
+        const auto& trade = trades->first();
+        EXPECT_GT(trade.id, 0);
+        EXPECT_GT(trade.price, 0);
+        EXPECT_GT(trade.qty, 0);
+        EXPECT_GT(trade.quoteQty, 0);
+    }
 }
 
 TEST_F(MarketDataParserTest, AggregatedTrades)
@@ -132,6 +151,16 @@ TEST_F(MarketDataParserTest, AggregatedTrades)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(aggTrades.has_value());
+    EXPECT_FALSE(aggTrades->isEmpty());
+    if(!aggTrades->isEmpty()){
+        const auto& trade = aggTrades->first();
+        EXPECT_GT(trade.a, 0);
+        EXPECT_GT(trade.p, 0);
+        EXPECT_GT(trade.q, 0);
+        EXPECT_GT(trade.f, 0);
+        EXPECT_GT(trade.l, 0);
+        EXPECT_GT(trade.T, 0);
+    }
 }
 
 TEST_F(MarketDataParserTest, Klines)
@@ -157,6 +186,21 @@ TEST_F(MarketDataParserTest, Klines)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(klines.has_value());
+    EXPECT_FALSE(klines->isEmpty());
+    if(!klines->isEmpty()){
+        const auto& kline = klines->first();
+        EXPECT_GT(kline.openTime, 0);
+        EXPECT_GT(kline.open, 0);
+        EXPECT_GT(kline.high, 0);
+        EXPECT_GT(kline.low, 0);
+        EXPECT_GT(kline.close, 0);
+        EXPECT_GE(kline.volume, 0);
+        EXPECT_GT(kline.closeTime, 0);
+        EXPECT_GE(kline.quoteAssetVolume, 0);
+        EXPECT_GE(kline.numberOfTrades, 0);
+        EXPECT_GE(kline.takerBuyBaseAssetVolume, 0);
+        EXPECT_GE(kline.takerBuyQuoteAssetVolume, 0);
+    }
 }
 
 TEST_F(MarketDataParserTest, UIKlines)
@@ -182,6 +226,21 @@ TEST_F(MarketDataParserTest, UIKlines)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(uiKlines.has_value());
+    EXPECT_FALSE(uiKlines->isEmpty());
+    if(!uiKlines->isEmpty()){
+        const auto& kline = uiKlines->first();
+        EXPECT_GT(kline.openTime, 0);
+        EXPECT_GT(kline.open, 0);
+        EXPECT_GT(kline.high, 0);
+        EXPECT_GT(kline.low, 0);
+        EXPECT_GT(kline.close, 0);
+        EXPECT_GE(kline.volume, 0);
+        EXPECT_GT(kline.closeTime, 0);
+        EXPECT_GE(kline.quoteAssetVolume, 0);
+        EXPECT_GE(kline.numberOfTrades, 0);
+        EXPECT_GE(kline.takerBuyBaseAssetVolume, 0);
+        EXPECT_GE(kline.takerBuyQuoteAssetVolume, 0);
+    }
 }
 
 TEST_F(MarketDataParserTest, CurrentAveragePrice)
@@ -207,6 +266,9 @@ TEST_F(MarketDataParserTest, CurrentAveragePrice)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(avgPrice.has_value());
+    EXPECT_GT(avgPrice->interval, 0);
+    EXPECT_GT(avgPrice->price, 0);
+    EXPECT_GT(avgPrice->closeTime, 0);
 }
 
 TEST_F(MarketDataParserTest, TickerPrice24hrFull)
@@ -232,6 +294,13 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(ticker24hrFull.has_value());
+    EXPECT_EQ(ticker24hrFull->symbol, "BTCUSDT");
+    EXPECT_GT(ticker24hrFull->openTime, 0);
+    EXPECT_GT(ticker24hrFull->closeTime, 0);
+    EXPECT_GT(ticker24hrFull->highPrice, 0);
+    EXPECT_GT(ticker24hrFull->lowPrice, 0);
+    EXPECT_GT(ticker24hrFull->lastPrice, 0);
+    EXPECT_GE(ticker24hrFull->count, 0);
 }
 
 TEST_F(MarketDataParserTest, TickerPrice24hrMini)
@@ -259,6 +328,13 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(ticker24hrMini.has_value());
+    EXPECT_EQ(ticker24hrMini->symbol, "BTCUSDT");
+    EXPECT_GT(ticker24hrMini->openTime, 0);
+    EXPECT_GT(ticker24hrMini->closeTime, 0);
+    EXPECT_GT(ticker24hrMini->highPrice, 0);
+    EXPECT_GT(ticker24hrMini->lowPrice, 0);
+    EXPECT_GT(ticker24hrMini->lastPrice, 0);
+    EXPECT_GE(ticker24hrMini->count, 0);
 }
 
 TEST_F(MarketDataParserTest, TradingDayFull)
@@ -284,6 +360,13 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(tradingDayFull.has_value());
+    EXPECT_EQ(tradingDayFull->symbol, "BTCUSDT");
+    EXPECT_GT(tradingDayFull->openTime, 0);
+    EXPECT_GT(tradingDayFull->closeTime, 0);
+    EXPECT_GT(tradingDayFull->highPrice, 0);
+    EXPECT_GT(tradingDayFull->lowPrice, 0);
+    EXPECT_GT(tradingDayFull->lastPrice, 0);
+    EXPECT_GE(tradingDayFull->count, 0);
 }
 
 TEST_F(MarketDataParserTest, TradingDayMini)
@@ -311,6 +394,13 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(tradingDayMini.has_value());
+    EXPECT_EQ(tradingDayMini->symbol, "BTCUSDT");
+    EXPECT_GT(tradingDayMini->openTime, 0);
+    EXPECT_GT(tradingDayMini->closeTime, 0);
+    EXPECT_GT(tradingDayMini->highPrice, 0);
+    EXPECT_GT(tradingDayMini->lowPrice, 0);
+    EXPECT_GT(tradingDayMini->lastPrice, 0);
+    EXPECT_GE(tradingDayMini->count, 0);
 }
 
 TEST_F(MarketDataParserTest, SymbolPriceTicker)
@@ -336,6 +426,8 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(symbolPriceTicker.has_value());
+    EXPECT_EQ(symbolPriceTicker->symbol, "BTCUSDT");
+    EXPECT_GT(symbolPriceTicker->price, 0);
 }
 
 TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
@@ -361,6 +453,11 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(symbolOrderBookTicker.has_value());
+    EXPECT_EQ(symbolOrderBookTicker->symbol, "BTCUSDT");
+    EXPECT_GT(symbolOrderBookTicker->bidPrice, 0);
+    EXPECT_GE(symbolOrderBookTicker->bidQty, 0);
+    EXPECT_GT(symbolOrderBookTicker->askPrice, 0);
+    EXPECT_GE(symbolOrderBookTicker->askQty, 0);
 }
 
 TEST_F(MarketDataParserTest, RollingWindowTickerFull)
@@ -386,6 +483,13 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(tickerFull.has_value());
+    EXPECT_EQ(tickerFull->symbol, "BTCUSDT");
+    EXPECT_GT(tickerFull->openTime, 0);
+    EXPECT_GT(tickerFull->closeTime, 0);
+    EXPECT_GT(tickerFull->highPrice, 0);
+    EXPECT_GT(tickerFull->lowPrice, 0);
+    EXPECT_GT(tickerFull->lastPrice, 0);
+    EXPECT_GE(tickerFull->count, 0);
 }
 
 TEST_F(MarketDataParserTest, RollingWindowTickerMini)
@@ -413,4 +517,11 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     ASSERT_TRUE(response.isObject());
 
     ASSERT_TRUE(tickerMini.has_value());
+    EXPECT_EQ(tickerMini->symbol, "BTCUSDT");
+    EXPECT_GT(tickerMini->openTime, 0);
+    EXPECT_GT(tickerMini->closeTime, 0);
+    EXPECT_GT(tickerMini->highPrice, 0);
+    EXPECT_GT(tickerMini->lowPrice, 0);
+    EXPECT_GT(tickerMini->lastPrice, 0);
+    EXPECT_GE(tickerMini->count, 0);
 }
