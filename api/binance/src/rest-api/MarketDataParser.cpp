@@ -853,4 +853,52 @@ namespace Binance{
 
         return symbolPriceTicker;
     }
+
+    std::optional<MarketData::SymbolOrderBookTicker> MarketDataParser::parseSymbolOrderBookTickerResponse(const QJsonDocument &jsonDoc){
+        MarketData::SymbolOrderBookTicker symbolOrderBookTicker{};
+
+        // json object
+        if (!jsonDoc.isObject())
+        {
+            return {}; // invalid format
+        }
+        QJsonObject json = jsonDoc.object();
+
+        // symbol
+        if (!json.contains("symbol") || !json["symbol"].isString())
+        {
+            return {}; // symbol is required
+        }
+        symbolOrderBookTicker.symbol = json["symbol"].toString();
+
+        // bidPrice
+        if (!json.contains("bidPrice") || !json["bidPrice"].isString())
+        {
+            return {}; // bidPrice is required
+        }
+        symbolOrderBookTicker.bidPrice = json["bidPrice"].toString().toDouble();
+
+        // bidQty
+        if (!json.contains("bidQty") || !json["bidQty"].isString())
+        {
+            return {}; // bidQty is required
+        }
+        symbolOrderBookTicker.bidQty = json["bidQty"].toString().toDouble();
+
+        // askPrice
+        if (!json.contains("askPrice") || !json["askPrice"].isString())
+        {
+            return {}; // askPrice is required
+        }
+        symbolOrderBookTicker.askPrice = json["askPrice"].toString().toDouble();
+
+        // askQty
+        if (!json.contains("askQty") || !json["askQty"].isString())
+        {
+            return {}; // askQty is required
+        }
+        symbolOrderBookTicker.askQty = json["askQty"].toString().toDouble();
+
+        return symbolOrderBookTicker;
+    }
 }

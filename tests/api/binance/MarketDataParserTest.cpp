@@ -337,3 +337,28 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
 
     ASSERT_TRUE(symbolPriceTicker.has_value());
 }
+
+TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::MarketData::SymbolOrderBookTicker> symbolOrderBookTicker{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolOrderBookTickerResponse, [&](const QJsonDocument &data) {
+        response = data;
+        symbolOrderBookTicker = Binance::MarketDataParser::parseSymbolOrderBookTickerResponse(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest SymbolOrderBookTicker API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->symbolOrderBookTicker(Binance::MarketData::SymbolOrderBookTickerRequest{"BTCUSDT"});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(symbolOrderBookTicker.has_value());
+}

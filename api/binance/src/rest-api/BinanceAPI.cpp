@@ -105,6 +105,11 @@ namespace Binance
     {
         sendPublicRequest(API::PRICE_TICKER, request.toVariantMap());
     }
+
+    void BinanceAPI::symbolOrderBookTicker(const Binance::MarketData::SymbolOrderBookTickerRequest &request)
+    {
+        sendPublicRequest(API::BOOK_TICKER, request.toVariantMap());
+    }
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
     {
         if (reply->error() != QNetworkReply::NoError)
@@ -187,6 +192,10 @@ namespace Binance
         else if (endpoint == API::PRICE_TICKER)
         {
             emit symbolPriceTickerResponse(jsonDoc);
+        }
+        else if (endpoint == API::BOOK_TICKER)
+        {
+            emit symbolOrderBookTickerResponse(jsonDoc);
         }
         else
         {

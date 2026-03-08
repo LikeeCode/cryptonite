@@ -388,8 +388,23 @@ namespace Binance::MarketData{
     };
 
     struct SymbolOrderBookTickerRequest{
-        QString symbol;
-        SymbolStatus status{ SymbolStatus::TRADING };
+        std::optional<QString> symbol;
+        std::optional<QList<QString>> symbols;
+        std::optional<SymbolStatus> symbolStatus{ SymbolStatus::TRADING };
+
+        QVariantMap toVariantMap() const {
+            QVariantMap params;
+            if(symbol.has_value()){
+                params.insert("symbol", symbol.value());
+            }
+            else if(symbols.has_value()){
+                params.insert("symbols", QVariant::fromValue(symbols.value()));
+            }
+            if(symbolStatus.has_value()){
+                params.insert("symbolStatus", Binance::Enum::toString(symbolStatus.value()));
+            }
+            return params;
+        }
     };
 
     struct SymbolOrderBookTicker{
