@@ -417,12 +417,35 @@ namespace Binance::MarketData{
 
     struct TickerRequest{
         QString symbol;
-        QString windowSize; // e.g., "1m", "5m", "1h", "1d"
-        ResponseType type{ ResponseType::FULL };
-        SymbolStatus status{ SymbolStatus::TRADING };
+        QList<QString> symbols;
+        std::optional<QString> windowSize; // e.g., "1m", "5m", "1h", "1d"
+        std::optional<ResponseType> type{ ResponseType::FULL };
+        std::optional<SymbolStatus> symbolStatus{ SymbolStatus::TRADING };
+
+        QVariantMap toVariantMap() const {
+            QVariantMap params;
+
+            if(symbol != ""){
+                params.insert("symbol", symbol);
+            }
+            else if(!symbols.isEmpty()){
+                params.insert("symbols", QVariant::fromValue(symbols));
+            }
+
+            if(windowSize.has_value()){
+                params.insert("windowSize", windowSize.value());
+            }
+            if(type.has_value()){
+                params.insert("type", Binance::Enum::toString(type.value()));
+            }
+            if(symbolStatus.has_value()){
+                params.insert("symbolStatus", Binance::Enum::toString(symbolStatus.value()));
+            }
+            return params;
+        }
     };
 
-    struct Ticker{
+    struct TickerFull{
         QString symbol;
         double priceChange{};
         double priceChangePercent{};

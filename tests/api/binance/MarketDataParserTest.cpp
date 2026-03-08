@@ -362,3 +362,55 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
 
     ASSERT_TRUE(symbolOrderBookTicker.has_value());
 }
+
+TEST_F(MarketDataParserTest, RollingWindowTickerFull)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::MarketData::TickerFull> tickerFull{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseFull, [&](const QJsonDocument &data) {
+        response = data;
+        tickerFull = Binance::MarketDataParser::parseRollingWindowTickerResponseFull(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest RollingWindowTickerFull API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->rollingWindowTicker(Binance::MarketData::TickerRequest{"BTCUSDT"});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(tickerFull.has_value());
+}
+
+TEST_F(MarketDataParserTest, RollingWindowTickerMini)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::MarketData::TickerMini> tickerMini{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseMini, [&](const QJsonDocument &data) {
+        response = data;
+        tickerMini = Binance::MarketDataParser::parseRollingWindowTickerResponseMini(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest RollingWindowTickerMini API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    Binance::MarketData::TickerRequest tickerRequestMini{"BTCUSDT"};
+    tickerRequestMini.type = Binance::ResponseType::MINI;
+    binanceAPI->rollingWindowTicker(tickerRequestMini);
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(tickerMini.has_value());
+}

@@ -40,6 +40,7 @@ namespace Binance
         void tradingDay(const Binance::MarketData::TradingDayRequest &request);
         void symbolPriceTicker(const Binance::MarketData::SymbolPriceTickerRequest &request);
         void symbolOrderBookTicker(const Binance::MarketData::SymbolOrderBookTickerRequest &request);
+        void rollingWindowTicker(const Binance::MarketData::TickerRequest &request);
 
     private:
         void getApiKeys();
@@ -77,5 +78,7 @@ namespace Binance
         void tradingDayResponseMini(const QJsonDocument &data);
         void symbolPriceTickerResponse(const QJsonDocument &data);
         void symbolOrderBookTickerResponse(const QJsonDocument &data);
+        void rollingWindowTickerResponseFull(const QJsonDocument &data);
+        void rollingWindowTickerResponseMini(const QJsonDocument &data);
     };
 } // namespace Binance

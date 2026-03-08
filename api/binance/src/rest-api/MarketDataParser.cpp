@@ -901,4 +901,219 @@ namespace Binance{
 
         return symbolOrderBookTicker;
     }
+
+    std::optional<MarketData::TickerFull> MarketDataParser::parseRollingWindowTickerResponseFull(const QJsonDocument &jsonDoc){
+        MarketData::TickerFull tickerFull{};
+
+        // json object
+        if (!jsonDoc.isObject())
+        {
+            return {}; // invalid format
+        }
+        QJsonObject json = jsonDoc.object();
+
+        // symbol
+        if (!json.contains("symbol") || !json["symbol"].isString())
+        {
+            return {}; // symbol is required
+        }
+        tickerFull.symbol = json["symbol"].toString();
+
+        // priceChange
+        if (!json.contains("priceChange") || !json["priceChange"].isString())
+        {
+            return {}; // priceChange is required
+        }
+        tickerFull.priceChange = json["priceChange"].toString().toDouble();
+
+        // priceChangePercent
+        if (!json.contains("priceChangePercent") || !json["priceChangePercent"].isString())
+        {
+            return {}; // priceChangePercent is required
+        }
+        tickerFull.priceChangePercent = json["priceChangePercent"].toString().toDouble();
+
+        // weightedAvgPrice
+        if (!json.contains("weightedAvgPrice") || !json["weightedAvgPrice"].isString())
+        {
+            return {}; // weightedAvgPrice is required
+        }
+        tickerFull.weightedAvgPrice = json["weightedAvgPrice"].toString().toDouble();
+
+        // openPrice
+        if (!json.contains("openPrice") || !json["openPrice"].isString())
+        {
+            return {}; // openPrice is required
+        }
+        tickerFull.openPrice = json["openPrice"].toString().toDouble();
+
+        // highPrice
+        if (!json.contains("highPrice") || !json["highPrice"].isString())
+        {
+            return {}; // highPrice is required
+        }
+        tickerFull.highPrice = json["highPrice"].toString().toDouble();
+
+        // lowPrice
+        if (!json.contains("lowPrice") || !json["lowPrice"].isString())
+        {
+            return {}; // lowPrice is required
+        }
+        tickerFull.lowPrice = json["lowPrice"].toString().toDouble();
+
+        // lastPrice
+        if (!json.contains("lastPrice") || !json["lastPrice"].isString())
+        {
+            return {}; // lastPrice is required
+        }
+        tickerFull.lastPrice = json["lastPrice"].toString().toDouble();
+        
+        // volume
+        if (!json.contains("volume") || !json["volume"].isString())
+        {
+            return {}; // volume is required
+        }
+        tickerFull.volume = json["volume"].toString().toDouble();
+
+        // quoteVolume
+        if (!json.contains("quoteVolume") || !json["quoteVolume"].isString())
+        {
+            return {}; // quoteVolume is required
+        }
+        tickerFull.quoteVolume = json["quoteVolume"].toString().toDouble();
+        
+        // openTime
+        if (!json.contains("openTime") || !json["openTime"].isDouble())
+        {
+            return {}; // openTime is required
+        }
+        tickerFull.openTime = static_cast<qint64>(json["openTime"].toDouble());
+
+        // closeTime
+        if (!json.contains("closeTime") || !json["closeTime"].isDouble())
+        {
+            return {}; // closeTime is required
+        }
+        tickerFull.closeTime = static_cast<qint64>(json["closeTime"].toDouble());
+
+        // firstId
+        if (!json.contains("firstId") || !json["firstId"].isDouble())
+        {
+            return {}; // firstId is required
+        }
+        tickerFull.firstId = static_cast<qint64>(json["firstId"].toDouble());
+        
+        // lastId
+        if (!json.contains("lastId") || !json["lastId"].isDouble())
+        {
+            return {}; // lastId is required
+        }
+        tickerFull.lastId = static_cast<qint64>(json["lastId"].toDouble());
+
+        // count
+        if (!json.contains("count") || !json["count"].isDouble())
+        {
+            return {}; // count is required
+        }
+        tickerFull.count = static_cast<qint64>(json["count"].toDouble());
+        
+        return tickerFull;
+    }
+
+    std::optional<MarketData::TickerMini> MarketDataParser::parseRollingWindowTickerResponseMini(const QJsonDocument &jsonDoc){
+        MarketData::TickerMini tickerMini{};
+
+        // json object
+        if (!jsonDoc.isObject())
+        {
+            return {}; // invalid format
+        }
+        QJsonObject json = jsonDoc.object();
+
+        // symbol
+        if (!json.contains("symbol") || !json["symbol"].isString())
+        {
+            return {}; // symbol is required
+        }
+        tickerMini.symbol = json["symbol"].toString();
+
+        // openPrice
+        if (!json.contains("openPrice") || !json["openPrice"].isString())
+        {
+            return {}; // openPrice is required
+        }
+        tickerMini.openPrice = json["openPrice"].toString().toDouble();
+
+        // highPrice
+        if (!json.contains("highPrice") || !json["highPrice"].isString())
+        {
+            return {}; // highPrice is required
+        }
+        tickerMini.highPrice = json["highPrice"].toString().toDouble();
+
+        // lowPrice
+        if (!json.contains("lowPrice") || !json["lowPrice"].isString())
+        {
+            return {}; // lowPrice is required
+        }
+        tickerMini.lowPrice = json["lowPrice"].toString().toDouble();
+
+        // lastPrice
+        if (!json.contains("lastPrice") || !json["lastPrice"].isString())
+        {
+            return {}; // lastPrice is required
+        }
+        tickerMini.lastPrice = json["lastPrice"].toString().toDouble();
+
+        // volume
+        if (!json.contains("volume") || !json["volume"].isString())
+        {
+            return {}; // volume is required
+        }
+        tickerMini.volume = json["volume"].toString().toDouble();
+
+        // quoteVolume
+        if (!json.contains("quoteVolume") || !json["quoteVolume"].isString())
+        {
+            return {}; // quoteVolume is required
+        }
+        tickerMini.quoteVolume = json["quoteVolume"].toString().toDouble();
+
+        // openTime
+        if (!json.contains("openTime") || !json["openTime"].isDouble())
+        {
+            return {}; // openTime is required
+        }
+        tickerMini.openTime = static_cast<qint64>(json["openTime"].toDouble());
+
+        // closeTime
+        if (!json.contains("closeTime") || !json["closeTime"].isDouble())
+        {
+            return {}; // closeTime is required
+        }
+        tickerMini.closeTime = static_cast<qint64>(json["closeTime"].toDouble());
+
+        // firstId
+        if (!json.contains("firstId") || !json["firstId"].isDouble())
+        {
+            return {}; // firstId is required
+        }
+        tickerMini.firstId = static_cast<qint64>(json["firstId"].toDouble());
+
+        // lastId
+        if (!json.contains("lastId") || !json["lastId"].isDouble())
+        {
+            return {}; // lastId is required
+        }
+        tickerMini.lastId = static_cast<qint64>(json["lastId"].toDouble());
+
+        // count
+        if (!json.contains("count") || !json["count"].isDouble())
+        {
+            return {}; // count is required
+        }
+        tickerMini.count = static_cast<qint64>(json["count"].toDouble());
+
+        return tickerMini;
+    }
 }

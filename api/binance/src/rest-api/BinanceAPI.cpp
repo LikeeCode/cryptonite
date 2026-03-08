@@ -110,6 +110,12 @@ namespace Binance
     {
         sendPublicRequest(API::BOOK_TICKER, request.toVariantMap());
     }
+
+    void BinanceAPI::rollingWindowTicker(const Binance::MarketData::TickerRequest &request)
+    {
+        sendPublicRequest(API::ROLLING_WINDOW_TICKER, request.toVariantMap());
+    }
+
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
     {
         if (reply->error() != QNetworkReply::NoError)
@@ -196,6 +202,17 @@ namespace Binance
         else if (endpoint == API::BOOK_TICKER)
         {
             emit symbolOrderBookTickerResponse(jsonDoc);
+        }
+        else if (endpoint == API::ROLLING_WINDOW_TICKER)
+        {
+            if(jsonDoc.isObject() && jsonDoc.object().contains("priceChange")) // Full rolling window ticker info contains "priceChange", while mini rolling window ticker does not
+            {
+                emit rollingWindowTickerResponseFull(jsonDoc);
+            }
+            else
+            {
+                emit rollingWindowTickerResponseMini(jsonDoc);
+            }
         }
         else
         {
