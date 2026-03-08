@@ -260,3 +260,55 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
 
     ASSERT_TRUE(ticker24hrMini.has_value());
 }
+
+TEST_F(MarketDataParserTest, TradingDayFull)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::MarketData::TradingDayFull> tradingDayFull{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseFull, [&](const QJsonDocument &data) {
+        response = data;
+        tradingDayFull = Binance::MarketDataParser::parseTradingDayFull(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest TradingDayFull API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->tradingDay(Binance::MarketData::TradingDayRequest{"BTCUSDT"});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(tradingDayFull.has_value());
+}
+
+TEST_F(MarketDataParserTest, TradingDayMini)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::MarketData::TradingDayMini> tradingDayMini{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseMini, [&](const QJsonDocument &data) {
+        response = data;
+        tradingDayMini = Binance::MarketDataParser::parseTradingDayMini(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest TradingDayMini API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    Binance::MarketData::TradingDayRequest requestMini{"BTCUSDT"};
+    requestMini.type = Binance::ResponseType::MINI;
+    binanceAPI->tradingDay(requestMini);
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(tradingDayMini.has_value());
+}
