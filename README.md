@@ -1,6 +1,6 @@
 # Cryptonite
 
-A C++/Qt6/QML algorithmic trading bot for the [Binance](https://www.binance.com) exchange.
+A C++/Qt6/QML algorithmic trading bot for the [Binance](https://www.binance.com) exchange. Rest-api documentation: [binance-spot-api-docs](https://github.com/binance/binance-spot-api-docs/blob/master/testnet/rest-api.md)
 
 **Platform:** Windows &nbsp;|&nbsp; **Compiler:** MSVC 2022 &nbsp;|&nbsp; **Qt:** 6.8.3 LTS &nbsp;|&nbsp; **Standard:** C++17
 
