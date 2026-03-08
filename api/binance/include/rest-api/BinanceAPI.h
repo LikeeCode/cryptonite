@@ -59,7 +59,7 @@ namespace Binance
         void exchangeInfoResponse(const QJsonDocument &data);
 
         void orderBookResponse(const QJsonDocument &data);
-        void tradesResponse(const QJsonDocument &data);
+        void recentTradesResponse(const QJsonDocument &data);
         void aggTradesResponse(const QJsonDocument &data);
 
         void klinesResponse(const QJsonDocument &data);
