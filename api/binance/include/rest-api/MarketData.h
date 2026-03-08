@@ -2,6 +2,8 @@
 
 #include <optional>
 
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QList>
 #include <QString>
 #include <QVariant>
@@ -242,9 +244,12 @@ namespace Binance::MarketData{
             if(symbol.has_value()){
                 params.insert("symbol", symbol.value());
             }
-            if(symbols.has_value()){
-                params.insert("symbols", QVariant::fromValue(symbols.value()));
+            else if(symbols.has_value()){
+                QJsonArray symbolsArray;
+                for(const auto& s : symbols.value()) symbolsArray.append(s);
+                params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
+
             if(type.has_value()){
                 params.insert("type", Binance::Enum::toString(type.value()));
             }
@@ -309,7 +314,9 @@ namespace Binance::MarketData{
                 params.insert("symbol", symbol);
             }
             else if(!symbols.isEmpty()){
-                params.insert("symbols", QVariant::fromValue(symbols));
+                QJsonArray symbolsArray;
+                for(const auto& s : symbols) symbolsArray.append(s);
+                params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
 
             if(timeZone.has_value()){
@@ -371,7 +378,9 @@ namespace Binance::MarketData{
                 params.insert("symbol", symbol.value());
             }
             else if(symbols.has_value()){
-                params.insert("symbols", QVariant::fromValue(symbols.value()));
+                QJsonArray symbolsArray;
+                for(const auto& s : symbols.value()) symbolsArray.append(s);
+                params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
             
             if(symbolStatus.has_value()){
@@ -398,7 +407,9 @@ namespace Binance::MarketData{
                 params.insert("symbol", symbol.value());
             }
             else if(symbols.has_value()){
-                params.insert("symbols", QVariant::fromValue(symbols.value()));
+                QJsonArray symbolsArray;
+                for(const auto& s : symbols.value()) symbolsArray.append(s);
+                params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
             if(symbolStatus.has_value()){
                 params.insert("symbolStatus", Binance::Enum::toString(symbolStatus.value()));
@@ -429,7 +440,9 @@ namespace Binance::MarketData{
                 params.insert("symbol", symbol);
             }
             else if(!symbols.isEmpty()){
-                params.insert("symbols", QVariant::fromValue(symbols));
+                QJsonArray symbolsArray;
+                for(const auto& s : symbols) symbolsArray.append(s);
+                params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
 
             if(windowSize.has_value()){
