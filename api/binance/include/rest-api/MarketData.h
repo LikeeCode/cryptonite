@@ -230,11 +230,30 @@ namespace Binance::MarketData{
         qint64 closeTime{}; // Last trade time
     };
 
-    struct ticker24hrRequest{
-        QString symbol;
-        QList<QString> symbols;
-        ResponseType type{ ResponseType::FULL };
-        SymbolStatus status{ SymbolStatus::TRADING };
+    struct Ticker24hrRequest{
+        std::optional<QString> symbol;
+        std::optional<QList<QString>> symbols;
+        std::optional<ResponseType> type{ ResponseType::FULL };
+        std::optional<SymbolStatus> symbolStatus{ SymbolStatus::TRADING };
+
+        QVariantMap toVariantMap() const {
+            QVariantMap params;
+
+            if(symbol.has_value()){
+                params.insert("symbol", symbol.value());
+            }
+            if(symbols.has_value()){
+                params.insert("symbols", QVariant::fromValue(symbols.value()));
+            }
+            if(type.has_value()){
+                params.insert("type", Binance::Enum::toString(type.value()));
+            }
+            if(symbolStatus.has_value()){
+                params.insert("symbolStatus", Binance::Enum::toString(symbolStatus.value()));
+            }
+            
+            return params;
+        }
     };
 
     struct ticker24hr{
