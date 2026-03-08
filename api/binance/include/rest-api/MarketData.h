@@ -170,10 +170,31 @@ namespace Binance::MarketData{
     struct UIKlineRequest{
         QString symbol;
         Interval interval;
-        qint64 startTime{}; // Optional, timestamp in ms to get candlesticks from INCLUSIVE.
-        qint64 endTime{}; // Optional, timestamp in ms to get candlesticks until INCLUSIVE.
-        QString timeZone; // Optional, default 0 UTC
-        int limit{}; // Optional, default 500; max 1000
+        std::optional<qint64> startTime{}; // Optional, timestamp in ms to get candlesticks from INCLUSIVE.
+        std::optional<qint64> endTime{}; // Optional, timestamp in ms to get candlesticks until INCLUSIVE.
+        std::optional<QString> timeZone; // Optional, default 0 UTC
+        int limit{500}; // Optional, default 500; max 1000
+
+        QVariantMap toVariantMap() const {
+            QVariantMap params;
+
+            params.insert("symbol", symbol);
+            params.insert("interval", Binance::Enum::toString(interval));
+            if(startTime.has_value()){
+                params.insert("startTime", startTime.value());
+            }
+            if(endTime.has_value()){
+                params.insert("endTime", endTime.value());
+            }
+            if(timeZone.has_value()){
+                params.insert("timeZone", timeZone.value());
+            }
+            if(limit != 500 && limit > 0 && limit <= 1000){
+                params.insert("limit", limit);
+            }
+            
+            return params;
+        }
     };
 
     struct UIKline{

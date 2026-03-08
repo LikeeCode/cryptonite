@@ -28,12 +28,13 @@ namespace Binance
         void exchangeInfo();
         void exchangeInfo(const Binance::GeneralData::ExchangeInfoRequest &request);
 
+        // Market Data endpoints
         void orderBook(const Binance::MarketData::OrderBookRequest &request);
         void recentTrades(const Binance::MarketData::RecentTradesRequest &request);
         void historicalTrades(const Binance::MarketData::OldTradesRequest &request);
         void aggregatedTrades(const Binance::MarketData::AggregatedTradeRequest &request);
-
         void klines(const Binance::MarketData::KlineRequest &request);
+        void uiKlines(const Binance::MarketData::UIKlineRequest &request);
         void currentAveragePrice(const Binance::MarketData::CurrentAveragePriceRequest &request);
 
     private:
@@ -64,6 +65,7 @@ namespace Binance
         void aggTradesResponse(const QJsonDocument &data);
 
         void klinesResponse(const QJsonDocument &data);
+        void uiKlinesResponse(const QJsonDocument &data);
         void currentAveragePriceResponse(const QJsonDocument &data);
     };
 } // namespace Binance

@@ -273,6 +273,49 @@ namespace Binance{
         return klines;
     }
 
+    std::optional<QList<MarketData::UIKline>> MarketDataParser::parseUIKlines(const QJsonDocument &jsonDoc)
+    {
+        QList<MarketData::UIKline> uiKlines;
+
+        // json array
+        if (!jsonDoc.isArray())
+        {
+            return {}; // invalid format
+        }
+        QJsonArray jsonArray = jsonDoc.array();
+
+        for (int i = 0; i < jsonArray.size(); ++i)
+        {
+            if (!jsonArray[i].isArray())
+            {
+                continue; // skip malformed entries
+            }
+            QJsonArray klineArray = jsonArray[i].toArray();
+            if (klineArray.size() < 12)
+            {
+                continue; // skip incomplete entries
+            }
+            MarketData::UIKline uiKline{};
+
+            uiKline.openTime = static_cast<qint64>(klineArray[0].toDouble());
+            uiKline.open = klineArray[1].toString().toDouble();
+            uiKline.high = klineArray[2].toString().toDouble();
+            uiKline.low = klineArray[3].toString().toDouble();
+            uiKline.close = klineArray[4].toString().toDouble();
+            uiKline.volume = klineArray[5].toString().toDouble();
+            uiKline.closeTime = static_cast<qint64>(klineArray[6].toDouble());
+            uiKline.quoteAssetVolume = klineArray[7].toString().toDouble();
+            uiKline.numberOfTrades = static_cast<qint64>(klineArray[8].toDouble());
+            uiKline.takerBuyBaseAssetVolume = klineArray[9].toString().toDouble();
+            uiKline.takerBuyQuoteAssetVolume = klineArray[10].toString().toDouble();
+            // Ignore the 12th element (ignore)
+
+            uiKlines.append(uiKline);
+        }
+
+        return uiKlines;
+    }
+
     std::optional<MarketData::CurrentAveragePrice> MarketDataParser::parseCurrentAveragePrice(const QJsonDocument &jsonDoc)
     {
         MarketData::CurrentAveragePrice avgPrice{};

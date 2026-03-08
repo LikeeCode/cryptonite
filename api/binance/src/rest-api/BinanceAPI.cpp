@@ -79,6 +79,11 @@ namespace Binance
     {
         sendPublicRequest(API::KLINES, request.toVariantMap());
     }
+    
+    void BinanceAPI::uiKlines(const Binance::MarketData::UIKlineRequest &request)
+    {
+        sendPublicRequest(API::UI_KLINES, request.toVariantMap());
+    }
 
     void BinanceAPI::currentAveragePrice(const Binance::MarketData::CurrentAveragePriceRequest &request)
     {
@@ -133,6 +138,10 @@ namespace Binance
         else if (endpoint == API::KLINES)
         {
             emit klinesResponse(jsonDoc);
+        }
+        else if (endpoint == API::UI_KLINES)
+        {
+            emit uiKlinesResponse(jsonDoc);
         }
         else if (endpoint == API::AVG_PRICE)
         {
