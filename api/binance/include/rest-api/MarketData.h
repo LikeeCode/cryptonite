@@ -256,7 +256,7 @@ namespace Binance::MarketData{
         }
     };
 
-    struct ticker24hr{
+    struct Ticker24hrFull{
         QString symbol;
         double priceChange{};
         double priceChangePercent{};
@@ -280,7 +280,7 @@ namespace Binance::MarketData{
         int count{};     // Trade count
     };
 
-    struct ticker24hrMini{
+    struct Ticker24hrMini{
         QString symbol;
         double openPrice{};
         double highPrice{};
