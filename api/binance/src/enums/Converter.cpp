@@ -40,7 +40,7 @@ namespace Binance::Enum
         static const QHash<QString, AccountAndSymbolPermissions> map = {
             {"SPOT", AccountAndSymbolPermissions::SPOT},
             {"MARGIN", AccountAndSymbolPermissions::MARGIN}};
-        return map.value(permission);
+        return map.value(permission, {});
     }
 
     QString toString(OrderStatus status)
