@@ -90,6 +90,11 @@ namespace Binance
         sendPublicRequest(API::AVG_PRICE, request.toVariantMap());
     }
 
+    void BinanceAPI::tickerPrice24hr(const Binance::MarketData::Ticker24hrRequest &request)
+    {
+        sendPublicRequest(API::TICKER_24HR, request.toVariantMap());
+    }
+
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
     {
         if (reply->error() != QNetworkReply::NoError)

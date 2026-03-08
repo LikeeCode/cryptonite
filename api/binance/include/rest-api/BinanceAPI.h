@@ -36,6 +36,7 @@ namespace Binance
         void klines(const Binance::MarketData::KlineRequest &request);
         void uiKlines(const Binance::MarketData::UIKlineRequest &request);
         void currentAveragePrice(const Binance::MarketData::CurrentAveragePriceRequest &request);
+        void tickerPrice24hr(const Binance::MarketData::Ticker24hrRequest &request);
 
     private:
         void getApiKeys();
