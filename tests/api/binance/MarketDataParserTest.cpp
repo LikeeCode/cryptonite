@@ -159,6 +159,31 @@ TEST_F(MarketDataParserTest, Klines)
     ASSERT_TRUE(klines.has_value());
 }
 
+TEST_F(MarketDataParserTest, UIKlines)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<QList<Binance::MarketData::UIKline>> uiKlines{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::uiKlinesResponse, [&](const QJsonDocument &data) {
+        response = data;
+        uiKlines = Binance::MarketDataParser::parseUIKlines(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest UIKlines API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->uiKlines(Binance::MarketData::UIKlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isArray());
+
+    ASSERT_TRUE(uiKlines.has_value());
+}
+
 TEST_F(MarketDataParserTest, CurrentAveragePrice)
 {
     QEventLoop loop;
