@@ -301,8 +301,8 @@ namespace Binance::MarketData{
     };
 
     struct TradingDayRequest{
-        QString symbol;
-        QList<QString> symbols;
+        std::optional<QString> symbol;
+        std::optional<QList<QString>> symbols;
         std::optional<QString> timeZone; // Optional, default 0 UTC
         std::optional<ResponseType> type;
         std::optional<SymbolStatus> symbolStatus;
@@ -310,12 +310,12 @@ namespace Binance::MarketData{
         QVariantMap toVariantMap() const {
             QVariantMap params;
 
-            if(symbol != ""){
-                params.insert("symbol", symbol);
+            if(symbol.has_value()){
+                params.insert("symbol", symbol.value());
             }
-            else if(!symbols.isEmpty()){
+            else if(symbols.has_value() && !symbols.value().isEmpty()){
                 QJsonArray symbolsArray;
-                for(const auto& s : symbols) symbolsArray.append(s);
+                for(const auto& s : symbols.value()) symbolsArray.append(s);
                 params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
 
@@ -427,8 +427,8 @@ namespace Binance::MarketData{
     };
 
     struct TickerRequest{
-        QString symbol;
-        QList<QString> symbols;
+        std::optional<QString> symbol;
+        std::optional<QList<QString>> symbols;
         std::optional<QString> windowSize; // e.g., "1m", "5m", "1h", "1d"
         std::optional<ResponseType> type;
         std::optional<SymbolStatus> symbolStatus;
@@ -436,12 +436,12 @@ namespace Binance::MarketData{
         QVariantMap toVariantMap() const {
             QVariantMap params;
 
-            if(symbol != ""){
-                params.insert("symbol", symbol);
+            if(symbol.has_value()){
+                params.insert("symbol", symbol.value());
             }
-            else if(!symbols.isEmpty()){
+            else if(symbols.has_value() && !symbols.value().isEmpty()){
                 QJsonArray symbolsArray;
-                for(const auto& s : symbols) symbolsArray.append(s);
+                for(const auto& s : symbols.value()) symbolsArray.append(s);
                 params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
 
