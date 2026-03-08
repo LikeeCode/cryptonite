@@ -124,7 +124,7 @@ namespace Binance
         }
         else if (endpoint == API::HISTORICAL_TRADES)
         {
-            emit tradesResponse(jsonDoc);
+            emit historicalTradesResponse(jsonDoc);
         }
         else if (endpoint == API::AGG_TRADES)
         {
