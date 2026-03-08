@@ -184,6 +184,23 @@ namespace Binance::Enum
         return map.value(type, {});
     }
 
+    QString toString(ResponseType type)
+    {
+        static const QHash<ResponseType, QString> map = {
+            {ResponseType::FULL, "FULL"},
+            {ResponseType::MINI, "MINI"}};
+
+        return map.value(type);
+    }
+
+    std::optional<ResponseType> toResponseType(const QString &type)
+    {
+        static const QHash<QString, ResponseType> map = {
+            {"FULL", ResponseType::FULL},
+            {"MINI", ResponseType::MINI}};
+        return map.value(type, {});
+    }
+
     QString toString(WorkingFloor floor)
     {
         static const QHash<WorkingFloor, QString> map = {
