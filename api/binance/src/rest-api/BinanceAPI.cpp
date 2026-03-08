@@ -100,6 +100,7 @@ namespace Binance
         // Determine which signal to emit based on the URL
         const QString endpoint = reply->url().path();
 
+        // General endpoints
         if (endpoint == API::PING)
         {
             emit pingResponse(jsonDoc);
@@ -112,6 +113,7 @@ namespace Binance
         {
             emit exchangeInfoResponse(jsonDoc);
         }
+        // Market data endpoints
         else if (endpoint == API::DEPTH)
         {
             emit orderBookResponse(jsonDoc);
