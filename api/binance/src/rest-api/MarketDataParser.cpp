@@ -609,4 +609,221 @@ namespace Binance{
 
         return ticker24hrMini;
     }
+
+    std::optional<MarketData::TradingDayFull> MarketDataParser::parseTradingDayFull(const QJsonDocument &jsonDoc)
+    {
+        MarketData::TradingDayFull tradingDayFull{};
+
+        // json object
+        if (!jsonDoc.isObject())
+        {
+            return {}; // invalid format
+        }
+        QJsonObject json = jsonDoc.object();
+
+        // symbol
+        if (!json.contains("symbol") || !json["symbol"].isString())
+        {
+            return {}; // symbol is required
+        }
+        tradingDayFull.symbol = json["symbol"].toString();
+
+        // priceChange
+        if (!json.contains("priceChange") || !json["priceChange"].isString())
+        {
+            return {}; // priceChange is required
+        }
+        tradingDayFull.priceChange = json["priceChange"].toString().toDouble();
+
+        // priceChangePercent
+        if (!json.contains("priceChangePercent") || !json["priceChangePercent"].isString())
+        {
+            return {}; // priceChangePercent is required
+        }
+        tradingDayFull.priceChangePercent = json["priceChangePercent"].toString().toDouble();
+
+        // weightedAvgPrice
+        if (!json.contains("weightedAvgPrice") || !json["weightedAvgPrice"].isString())
+        {
+            return {}; // weightedAvgPrice is required
+        }
+        tradingDayFull.weightedAvgPrice = json["weightedAvgPrice"].toString().toDouble();
+
+        // openPrice
+        if (!json.contains("openPrice") || !json["openPrice"].isString())
+        {
+            return {}; // openPrice is required
+        }
+        tradingDayFull.openPrice = json["openPrice"].toString().toDouble();
+
+        // highPrice
+        if (!json.contains("highPrice") || !json["highPrice"].isString())
+        {
+            return {}; // highPrice is required
+        }
+        tradingDayFull.highPrice = json["highPrice"].toString().toDouble();
+
+        // lowPrice
+        if (!json.contains("lowPrice") || !json["lowPrice"].isString())
+        {
+            return {}; // lowPrice is required
+        }
+        tradingDayFull.lowPrice = json["lowPrice"].toString().toDouble();
+
+        // lastPrice
+        if (!json.contains("lastPrice") || !json["lastPrice"].isString())
+        {
+            return {}; // lastPrice is required
+        }
+        tradingDayFull.lastPrice = json["lastPrice"].toString().toDouble();
+
+        // volume
+        if (!json.contains("volume") || !json["volume"].isString())
+        {
+            return {}; // volume is required
+        }
+        tradingDayFull.volume = json["volume"].toString().toDouble();
+
+        // quoteVolume
+        if (!json.contains("quoteVolume") || !json["quoteVolume"].isString())
+        {
+            return {}; // quoteVolume is required
+        }
+        tradingDayFull.quoteVolume = json["quoteVolume"].toString().toDouble();
+
+        // openTime
+        if (!json.contains("openTime") || !json["openTime"].isDouble())
+        {
+            return {}; // openTime is required
+        }
+        tradingDayFull.openTime = static_cast<qint64>(json["openTime"].toDouble());
+
+        // closeTime
+        if (!json.contains("closeTime") || !json["closeTime"].isDouble())
+        {
+            return {}; // closeTime is required
+        }
+        tradingDayFull.closeTime = static_cast<qint64>(json["closeTime"].toDouble());
+
+        // firstId
+        if (!json.contains("firstId") || !json["firstId"].isDouble())
+        {
+            return {}; // firstId is required
+        }
+        tradingDayFull.firstId = static_cast<qint64>(json["firstId"].toDouble());
+
+        // lastId
+        if (!json.contains("lastId") || !json["lastId"].isDouble())
+        {
+            return {}; // lastId is required
+        }
+        tradingDayFull.lastId = static_cast<qint64>(json["lastId"].toDouble());
+
+        // count
+        if (!json.contains("count") || !json["count"].isDouble())
+        {
+            return {}; // count is required
+        }
+        tradingDayFull.count = static_cast<qint64>(json["count"].toDouble());
+
+        return tradingDayFull;
+    }
+
+    std::optional<MarketData::TradingDayMini> MarketDataParser::parseTradingDayMini(const QJsonDocument &jsonDoc)
+    {
+        MarketData::TradingDayMini tradingDayMini{};
+    
+        // json object
+        if (!jsonDoc.isObject())
+        {
+            return {}; // invalid format
+        }
+        QJsonObject json = jsonDoc.object();
+
+        // symbol
+        if (!json.contains("symbol") || !json["symbol"].isString())
+        {
+            return {}; // symbol is required
+        }
+        tradingDayMini.symbol = json["symbol"].toString();
+        
+        // openPrice
+        if (!json.contains("openPrice") || !json["openPrice"].isString())
+        {
+            return {}; // openPrice is required
+        }
+        tradingDayMini.openPrice = json["openPrice"].toString().toDouble();
+        
+        // highPrice
+        if (!json.contains("highPrice") || !json["highPrice"].isString())
+        {
+            return {}; // highPrice is required
+        }
+        tradingDayMini.highPrice = json["highPrice"].toString().toDouble();
+        
+        // lowPrice
+        if (!json.contains("lowPrice") || !json["lowPrice"].isString())
+        {
+            return {}; // lowPrice is required
+        }
+        tradingDayMini.lowPrice = json["lowPrice"].toString().toDouble();
+        
+        // lastPrice
+        if (!json.contains("lastPrice") || !json["lastPrice"].isString())
+        {
+            return {}; // lastPrice is required
+        }
+        tradingDayMini.lastPrice = json["lastPrice"].toString().toDouble();
+
+        // volume
+        if (!json.contains("volume") || !json["volume"].isString())
+        {
+            return {}; // volume is required
+        }
+        tradingDayMini.volume = json["volume"].toString().toDouble();
+
+        // quoteVolume
+        if (!json.contains("quoteVolume") || !json["quoteVolume"].isString())
+        {
+            return {}; // quoteVolume is required
+        }
+        tradingDayMini.quoteVolume = json["quoteVolume"].toString().toDouble();
+
+        // openTime
+        if (!json.contains("openTime") || !json["openTime"].isDouble())
+        {
+            return {}; // openTime is required
+        }
+        tradingDayMini.openTime = static_cast<qint64>(json["openTime"].toDouble());
+
+        // closeTime
+        if (!json.contains("closeTime") || !json["closeTime"].isDouble())
+        {
+            return {}; // closeTime is required
+        }
+        tradingDayMini.closeTime = static_cast<qint64>(json["closeTime"].toDouble());
+
+        // firstId
+        if (!json.contains("firstId") || !json["firstId"].isDouble())
+        {
+            return {}; // firstId is required
+        }
+        tradingDayMini.firstId = static_cast<qint64>(json["firstId"].toDouble());
+
+        // lastId
+        if (!json.contains("lastId") || !json["lastId"].isDouble())
+        {
+            return {}; // lastId is required
+        }
+        tradingDayMini.lastId = static_cast<qint64>(json["lastId"].toDouble());
+
+        // count
+        if (!json.contains("count") || !json["count"].isDouble())
+        {
+            return {}; // count is required
+        }
+        tradingDayMini.count = static_cast<qint64>(json["count"].toDouble());
+
+        return tradingDayMini;
+    }
 }
