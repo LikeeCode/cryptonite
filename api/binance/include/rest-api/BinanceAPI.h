@@ -68,5 +68,7 @@ namespace Binance
         void klinesResponse(const QJsonDocument &data);
         void uiKlinesResponse(const QJsonDocument &data);
         void currentAveragePriceResponse(const QJsonDocument &data);
+        void tickerPrice24hrResponseFull(const QJsonDocument &data);
+        void tickerPrice24hrResponseMini(const QJsonDocument &data);
     };
 } // namespace Binance

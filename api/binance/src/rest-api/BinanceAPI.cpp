@@ -1,6 +1,7 @@
 #include <QDir>
 #include <QFile>
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QJsonDocument>
 #include <QMessageAuthenticationCode>
 #include <QNetworkReply>
@@ -151,6 +152,17 @@ namespace Binance
         else if (endpoint == API::AVG_PRICE)
         {
             emit currentAveragePriceResponse(jsonDoc);
+        }
+        else if (endpoint == API::TICKER_24HR)
+        {
+            if(jsonDoc.isObject() && jsonDoc.object().contains("priceChange")) // Full ticker info contains "priceChange", while mini ticker does not
+            {
+                emit tickerPrice24hrResponseFull(jsonDoc);
+            }
+            else
+            {
+                emit tickerPrice24hrResponseMini(jsonDoc);
+            }
         }
 
         reply->deleteLater();
