@@ -235,8 +235,8 @@ namespace Binance::MarketData{
     struct Ticker24hrRequest{
         std::optional<QString> symbol;
         std::optional<QList<QString>> symbols;
-        std::optional<ResponseType> type{ ResponseType::FULL };
-        std::optional<SymbolStatus> symbolStatus{ SymbolStatus::TRADING };
+        std::optional<ResponseType> type;
+        std::optional<SymbolStatus> symbolStatus;
 
         QVariantMap toVariantMap() const {
             QVariantMap params;
@@ -304,8 +304,8 @@ namespace Binance::MarketData{
         QString symbol;
         QList<QString> symbols;
         std::optional<QString> timeZone; // Optional, default 0 UTC
-        std::optional<ResponseType> type{ ResponseType::FULL };
-        std::optional<SymbolStatus> symbolStatus{ SymbolStatus::TRADING };
+        std::optional<ResponseType> type;
+        std::optional<SymbolStatus> symbolStatus;
 
         QVariantMap toVariantMap() const {
             QVariantMap params;
@@ -369,7 +369,7 @@ namespace Binance::MarketData{
     struct SymbolPriceTickerRequest{
         std::optional<QString> symbol;
         std::optional<QList<QString>> symbols;
-        std::optional<SymbolStatus> symbolStatus{ SymbolStatus::TRADING };
+        std::optional<SymbolStatus> symbolStatus;
 
         QVariantMap toVariantMap() const {
             QVariantMap params;
@@ -399,7 +399,7 @@ namespace Binance::MarketData{
     struct SymbolOrderBookTickerRequest{
         std::optional<QString> symbol;
         std::optional<QList<QString>> symbols;
-        std::optional<SymbolStatus> symbolStatus{ SymbolStatus::TRADING };
+        std::optional<SymbolStatus> symbolStatus;
 
         QVariantMap toVariantMap() const {
             QVariantMap params;
@@ -430,8 +430,8 @@ namespace Binance::MarketData{
         QString symbol;
         QList<QString> symbols;
         std::optional<QString> windowSize; // e.g., "1m", "5m", "1h", "1d"
-        std::optional<ResponseType> type{ ResponseType::FULL };
-        std::optional<SymbolStatus> symbolStatus{ SymbolStatus::TRADING };
+        std::optional<ResponseType> type;
+        std::optional<SymbolStatus> symbolStatus;
 
         QVariantMap toVariantMap() const {
             QVariantMap params;
