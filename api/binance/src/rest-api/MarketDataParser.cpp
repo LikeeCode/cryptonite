@@ -350,4 +350,263 @@ namespace Binance{
 
         return avgPrice;
     }
+
+    std::optional<MarketData::Ticker24hrFull> MarketDataParser::parseTicker24hrFull(const QJsonDocument &jsonDoc)
+    {
+        MarketData::Ticker24hrFull ticker24hrFull{};
+
+        // json object
+        if (!jsonDoc.isObject())
+        {
+            return {}; // invalid format
+        }
+        QJsonObject json = jsonDoc.object();
+
+        // symbol
+        if (!json.contains("symbol") || !json["symbol"].isString())
+        {
+            return {}; // symbol is required
+        }
+        ticker24hrFull.symbol = json["symbol"].toString();
+
+        // priceChange
+        if (!json.contains("priceChange") || !json["priceChange"].isString())
+        {
+            return {}; // priceChange is required
+        }
+        ticker24hrFull.priceChange = json["priceChange"].toString().toDouble();
+
+        // priceChangePercent
+        if (!json.contains("priceChangePercent") || !json["priceChangePercent"].isString())
+        {
+            return {}; // priceChangePercent is required
+        }
+        ticker24hrFull.priceChangePercent = json["priceChangePercent"].toString().toDouble();
+
+        // weightedAvgPrice
+        if (!json.contains("weightedAvgPrice") || !json["weightedAvgPrice"].isString())
+        {
+            return {}; // weightedAvgPrice is required
+        }
+        ticker24hrFull.weightedAvgPrice = json["weightedAvgPrice"].toString().toDouble();
+
+        // prevClosePrice
+        if (!json.contains("prevClosePrice") || !json["prevClosePrice"].isString())
+        {
+            return {}; // prevClosePrice is required
+        }
+        ticker24hrFull.prevClosePrice = json["prevClosePrice"].toString().toDouble();
+
+        // lastPrice
+        if (!json.contains("lastPrice") || !json["lastPrice"].isString())
+        {
+            return {}; // lastPrice is required
+        }
+        ticker24hrFull.lastPrice = json["lastPrice"].toString().toDouble();
+
+        // lastQty
+        if (!json.contains("lastQty") || !json["lastQty"].isString())
+        {
+            return {}; // lastQty is required
+        }
+        ticker24hrFull.lastQty = json["lastQty"].toString().toDouble();
+
+        // bidPrice
+        if (!json.contains("bidPrice") || !json["bidPrice"].isString())
+        {
+            return {}; // bidPrice is required
+        }
+        ticker24hrFull.bidPrice = json["bidPrice"].toString().toDouble();
+
+        // bidQty
+        if (!json.contains("bidQty") || !json["bidQty"].isString())
+        {
+            return {}; // bidQty is required
+        }
+        ticker24hrFull.bidQty = json["bidQty"].toString().toDouble();
+
+        // askPrice
+        if (!json.contains("askPrice") || !json["askPrice"].isString())
+        {
+            return {}; // askPrice is required
+        }
+        ticker24hrFull.askPrice = json["askPrice"].toString().toDouble();
+
+        // askQty
+        if (!json.contains("askQty") || !json["askQty"].isString())
+        {
+            return {}; // askQty is required
+        }
+        ticker24hrFull.askQty = json["askQty"].toString().toDouble();
+
+        // openPrice
+        if (!json.contains("openPrice") || !json["openPrice"].isString())
+        {
+            return {}; // openPrice is required
+        }
+        ticker24hrFull.openPrice = json["openPrice"].toString().toDouble();
+
+        // highPrice
+        if (!json.contains("highPrice") || !json["highPrice"].isString())
+        {
+            return {}; // highPrice is required
+        }
+        ticker24hrFull.highPrice = json["highPrice"].toString().toDouble();
+
+        // lowPrice
+        if (!json.contains("lowPrice") || !json["lowPrice"].isString())
+        {
+            return {}; // lowPrice is required
+        }
+        ticker24hrFull.lowPrice = json["lowPrice"].toString().toDouble();
+
+        // volume
+        if (!json.contains("volume") || !json["volume"].isString())
+        {
+            return {}; // volume is required
+        }
+        ticker24hrFull.volume = json["volume"].toString().toDouble();
+
+        // quoteVolume
+        if (!json.contains("quoteVolume") || !json["quoteVolume"].isString())
+        {
+            return {}; // quoteVolume is required
+        }
+        ticker24hrFull.quoteVolume = json["quoteVolume"].toString().toDouble();
+
+        // openTime
+        if (!json.contains("openTime") || !json["openTime"].isDouble())
+        {
+            return {}; // openTime is required
+        }
+        ticker24hrFull.openTime = static_cast<qint64>(json["openTime"].toDouble());
+
+        // closeTime
+        if (!json.contains("closeTime") || !json["closeTime"].isDouble())
+        {
+            return {}; // closeTime is required
+        }
+        ticker24hrFull.closeTime = static_cast<qint64>(json["closeTime"].toDouble());
+
+        // firstId
+        if (!json.contains("firstId") || !json["firstId"].isDouble())
+        {
+            return {}; // firstId is required
+        }
+        ticker24hrFull.firstId = static_cast<qint64>(json["firstId"].toDouble());
+
+        // lastId
+        if (!json.contains("lastId") || !json["lastId"].isDouble())
+        {
+            return {}; // lastId is required
+        }
+        ticker24hrFull.lastId = static_cast<qint64>(json["lastId"].toDouble());
+
+        // count
+        if (!json.contains("count") || !json["count"].isDouble())
+        {
+            return {}; // count is required
+        }
+        ticker24hrFull.count = static_cast<qint64>(json["count"].toDouble());
+
+        return ticker24hrFull;
+    }
+
+    std::optional<MarketData::Ticker24hrMini> MarketDataParser::parseTicker24hrMini(const QJsonDocument &jsonDoc)
+    {
+        MarketData::Ticker24hrMini ticker24hrMini{};
+
+        // json object
+        if (!jsonDoc.isObject())
+        {
+            return {}; // invalid format
+        }
+        QJsonObject json = jsonDoc.object();
+
+        // symbol
+        if (!json.contains("symbol") || !json["symbol"].isString())
+        {
+            return {}; // symbol is required
+        }
+        ticker24hrMini.symbol = json["symbol"].toString();
+
+        // openPrice
+        if (!json.contains("openPrice") || !json["openPrice"].isString())
+        {
+            return {}; // openPrice is required
+        }
+        ticker24hrMini.openPrice = json["openPrice"].toString().toDouble();
+
+        // highPrice
+        if (!json.contains("highPrice") || !json["highPrice"].isString())
+        {
+            return {}; // highPrice is required
+        }
+        ticker24hrMini.highPrice = json["highPrice"].toString().toDouble();
+
+        // lowPrice
+        if (!json.contains("lowPrice") || !json["lowPrice"].isString())
+        {
+            return {}; // lowPrice is required
+        }
+        ticker24hrMini.lowPrice = json["lowPrice"].toString().toDouble();
+
+        // lastPrice
+        if (!json.contains("lastPrice") || !json["lastPrice"].isString())
+        {
+            return {}; // lastPrice is required
+        }
+        ticker24hrMini.lastPrice = json["lastPrice"].toString().toDouble();
+
+        // volume
+        if (!json.contains("volume") || !json["volume"].isString())
+        {
+            return {}; // volume is required
+        }
+        ticker24hrMini.volume = json["volume"].toString().toDouble();
+
+        // quoteVolume
+        if (!json.contains("quoteVolume") || !json["quoteVolume"].isString())
+        {
+            return {}; // quoteVolume is required
+        }
+        ticker24hrMini.quoteVolume = json["quoteVolume"].toString().toDouble();
+
+        // openTime
+        if (!json.contains("openTime") || !json["openTime"].isDouble())
+        {
+            return {}; // openTime is required
+        }
+        ticker24hrMini.openTime = static_cast<qint64>(json["openTime"].toDouble());
+
+        // closeTime
+        if (!json.contains("closeTime") || !json["closeTime"].isDouble())
+        {
+            return {}; // closeTime is required
+        }
+        ticker24hrMini.closeTime = static_cast<qint64>(json["closeTime"].toDouble());
+
+        // firstId
+        if (!json.contains("firstId") || !json["firstId"].isDouble())
+        {
+            return {}; // firstId is required
+        }
+        ticker24hrMini.firstId = static_cast<qint64>(json["firstId"].toDouble());
+
+        // lastId
+        if (!json.contains("lastId") || !json["lastId"].isDouble())
+        {
+            return {}; // lastId is required
+        }
+        ticker24hrMini.lastId = static_cast<qint64>(json["lastId"].toDouble());
+
+        // count
+        if (!json.contains("count") || !json["count"].isDouble())
+        {
+            return {}; // count is required
+        }
+        ticker24hrMini.count = static_cast<qint64>(json["count"].toDouble());
+
+        return ticker24hrMini;
+    }
 }

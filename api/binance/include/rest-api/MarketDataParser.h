@@ -17,5 +17,7 @@ namespace Binance
         static std::optional<QList<MarketData::Kline>> parseKlines(const QJsonDocument &jsonDoc);
         static std::optional<QList<MarketData::UIKline>> parseUIKlines(const QJsonDocument &jsonDoc);
         static std::optional<MarketData::CurrentAveragePrice> parseCurrentAveragePrice(const QJsonDocument &jsonDoc);
+        static std::optional<MarketData::Ticker24hrFull> parseTicker24hrFull(const QJsonDocument &jsonDoc);
+        static std::optional<MarketData::Ticker24hrMini> parseTicker24hrMini(const QJsonDocument &jsonDoc);
     };
 } // namespace Binance
