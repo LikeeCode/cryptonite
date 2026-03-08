@@ -175,7 +175,17 @@ namespace Binance
         }
         else if (endpoint == API::TICKER_24HR)
         {
-            if(jsonDoc.isObject() && jsonDoc.object().contains("priceChange")) // Full ticker info contains "priceChange", while mini ticker does not
+            bool isFull = false;
+            if (jsonDoc.isObject()) {
+                isFull = jsonDoc.object().contains("priceChange");
+            } else if (jsonDoc.isArray()) {
+                const QJsonArray arr = jsonDoc.array();
+                if (!arr.isEmpty() && arr.first().isObject()) {
+                    isFull = arr.first().toObject().contains("priceChange");
+                }
+            }
+
+            if(isFull)
             {
                 emit tickerPrice24hrResponseFull(jsonDoc);
             }
@@ -186,7 +196,17 @@ namespace Binance
         }
         else if (endpoint == API::TRADING_DAY)
         {
-            if(jsonDoc.isObject() && jsonDoc.object().contains("priceChange")) // Full trading day info contains "priceChange", while mini trading day does not
+            bool isFull = false;
+            if (jsonDoc.isObject()) {
+                isFull = jsonDoc.object().contains("priceChange");
+            } else if (jsonDoc.isArray()) {
+                const QJsonArray arr = jsonDoc.array();
+                if (!arr.isEmpty() && arr.first().isObject()) {
+                    isFull = arr.first().toObject().contains("priceChange");
+                }
+            }
+            
+            if(isFull)
             {
                 emit tradingDayResponseFull(jsonDoc);
             }
@@ -205,7 +225,17 @@ namespace Binance
         }
         else if (endpoint == API::ROLLING_WINDOW_TICKER)
         {
-            if(jsonDoc.isObject() && jsonDoc.object().contains("priceChange")) // Full rolling window ticker info contains "priceChange", while mini rolling window ticker does not
+            bool isFull = false;
+            if (jsonDoc.isObject()) {
+                isFull = jsonDoc.object().contains("priceChange");
+            } else if (jsonDoc.isArray()) {
+                const QJsonArray arr = jsonDoc.array();
+                if (!arr.isEmpty() && arr.first().isObject()) {
+                    isFull = arr.first().toObject().contains("priceChange");
+                }
+            }
+
+            if(isFull)
             {
                 emit rollingWindowTickerResponseFull(jsonDoc);
             }
