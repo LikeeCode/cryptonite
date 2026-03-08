@@ -208,3 +208,55 @@ TEST_F(MarketDataParserTest, CurrentAveragePrice)
 
     ASSERT_TRUE(avgPrice.has_value());
 }
+
+TEST_F(MarketDataParserTest, TickerPrice24hrFull)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::MarketData::Ticker24hrFull> ticker24hrFull{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseFull, [&](const QJsonDocument &data) {
+        response = data;
+        ticker24hrFull = Binance::MarketDataParser::parseTicker24hrFull(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest TickerPrice24hrFull API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    binanceAPI->tickerPrice24hr(Binance::MarketData::Ticker24hrRequest{"BTCUSDT"});
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(ticker24hrFull.has_value());
+}
+
+TEST_F(MarketDataParserTest, TickerPrice24hrMini)
+{
+    QEventLoop loop;
+    QJsonDocument response;
+    std::optional<Binance::MarketData::Ticker24hrMini> ticker24hrMini{};
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseMini, [&](const QJsonDocument &data) {
+        response = data;
+        ticker24hrMini = Binance::MarketDataParser::parseTicker24hrMini(data);
+        loop.quit(); });
+
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+                     {
+        FAIL() << "MarketDataParserTest TickerPrice24hrMini API Error received: " << error.toStdString();
+        loop.quit(); });
+
+    Binance::MarketData::Ticker24hrRequest requestMini{"BTCUSDT"};
+    requestMini.type = Binance::ResponseType::MINI;
+    binanceAPI->tickerPrice24hr(requestMini);
+    loop.exec();
+
+    ASSERT_FALSE(response.isNull());
+    ASSERT_TRUE(response.isObject());
+
+    ASSERT_TRUE(ticker24hrMini.has_value());
+}
