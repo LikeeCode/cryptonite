@@ -93,12 +93,16 @@ namespace Binance
 
     void BinanceAPI::tickerPrice24hr(const Binance::MarketData::Ticker24hrRequest &request)
     {
-        sendPublicRequest(API::TICKER_24HR, request.toVariantMap());
+        QNetworkReply *reply = sendPublicRequest(API::TICKER_24HR, request.toVariantMap());
+        const bool isFull = !request.type.has_value() || request.type.value() == ResponseType::FULL;
+        reply->setProperty("isFull", isFull);
     }
 
     void BinanceAPI::tradingDay(const Binance::MarketData::TradingDayRequest &request)
     {
-        sendPublicRequest(API::TRADING_DAY, request.toVariantMap());
+        QNetworkReply *reply = sendPublicRequest(API::TRADING_DAY, request.toVariantMap());
+        const bool isFull = !request.type.has_value() || request.type.value() == ResponseType::FULL;
+        reply->setProperty("isFull", isFull);
     }
 
     void BinanceAPI::symbolPriceTicker(const Binance::MarketData::SymbolPriceTickerRequest &request)
@@ -113,7 +117,9 @@ namespace Binance
 
     void BinanceAPI::rollingWindowTicker(const Binance::MarketData::TickerRequest &request)
     {
-        sendPublicRequest(API::ROLLING_WINDOW_TICKER, request.toVariantMap());
+        QNetworkReply *reply = sendPublicRequest(API::ROLLING_WINDOW_TICKER, request.toVariantMap());
+        const bool isFull = !request.type.has_value() || request.type.value() == ResponseType::FULL;
+        reply->setProperty("isFull", isFull);
     }
 
     void BinanceAPI::onReplyFinished(QNetworkReply *reply)
@@ -185,7 +191,7 @@ namespace Binance
                 }
             }
 
-            if(isFull)
+            if(reply->property("isFull").toBool() || isFull)
             {
                 emit tickerPrice24hrResponseFull(jsonDoc);
             }
@@ -195,18 +201,8 @@ namespace Binance
             }
         }
         else if (endpoint == API::TRADING_DAY)
-        {
-            bool isFull = false;
-            if (jsonDoc.isObject()) {
-                isFull = jsonDoc.object().contains("priceChange");
-            } else if (jsonDoc.isArray()) {
-                const QJsonArray arr = jsonDoc.array();
-                if (!arr.isEmpty() && arr.first().isObject()) {
-                    isFull = arr.first().toObject().contains("priceChange");
-                }
-            }
-            
-            if(isFull)
+        {            
+            if(reply->property("isFull").toBool())
             {
                 emit tradingDayResponseFull(jsonDoc);
             }
@@ -225,17 +221,7 @@ namespace Binance
         }
         else if (endpoint == API::ROLLING_WINDOW_TICKER)
         {
-            bool isFull = false;
-            if (jsonDoc.isObject()) {
-                isFull = jsonDoc.object().contains("priceChange");
-            } else if (jsonDoc.isArray()) {
-                const QJsonArray arr = jsonDoc.array();
-                if (!arr.isEmpty() && arr.first().isObject()) {
-                    isFull = arr.first().toObject().contains("priceChange");
-                }
-            }
-
-            if(isFull)
+            if(reply->property("isFull").toBool())
             {
                 emit rollingWindowTickerResponseFull(jsonDoc);
             }
@@ -268,7 +254,7 @@ namespace Binance
         }
     }
 
-    void BinanceAPI::sendPublicRequest(const QString &endpoint, const QVariantMap &params, RequestType type)
+    QNetworkReply* BinanceAPI::sendPublicRequest(const QString &endpoint, const QVariantMap &params, RequestType type)
     {
         QUrl url(m_baseUrl + endpoint);
 
@@ -284,25 +270,28 @@ namespace Binance
         }
 
         QNetworkRequest request(url);
+        QNetworkReply *reply = nullptr;
 
         switch (type)
         {
         case RequestType::Get:
-            m_networkManager->get(request);
+            reply = m_networkManager->get(request);
             break;
         case RequestType::Post:
-            m_networkManager->post(request, QByteArray());
+            reply = m_networkManager->post(request, QByteArray());
             break;
         case RequestType::Put:
-            m_networkManager->put(request, QByteArray());
+            reply = m_networkManager->put(request, QByteArray());
             break;
         case RequestType::Delete:
-            m_networkManager->deleteResource(request);
+            reply = m_networkManager->deleteResource(request);
             break;
         }
+
+        return reply;
     }
 
-    void BinanceAPI::sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type)
+    QNetworkReply* BinanceAPI::sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type)
     {
         // Create a query string from the parameters. This is what gets signed.
         QUrlQuery query;
@@ -329,24 +318,27 @@ namespace Binance
         // 4. Create the request and add the API key to the header
         QNetworkRequest request(url);
         request.setRawHeader(QByteArray(API::API_HEADER.toUtf8()), QByteArray(m_apiKey.toUtf8()));
+        QNetworkReply *reply = nullptr;
 
         // 5. Send the request
         switch (type)
         {
         case RequestType::Get:
-            m_networkManager->get(request);
+            reply = m_networkManager->get(request);
             break;
         case RequestType::Post:
             // Note: For POST, params would typically be in the body, not the URL.
             // This implementation assumes params are always in the query string.
-            m_networkManager->post(request, QByteArray());
+            reply = m_networkManager->post(request, QByteArray());
             break;
         case RequestType::Put:
-            m_networkManager->put(request, QByteArray());
+            reply = m_networkManager->put(request, QByteArray());
             break;
         case RequestType::Delete:
-            m_networkManager->deleteResource(request);
+            reply = m_networkManager->deleteResource(request);
             break;
         }
+
+        return reply;
     }
 } // namespace Binance

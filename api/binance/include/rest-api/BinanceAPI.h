@@ -44,8 +44,8 @@ namespace Binance
 
     private:
         void getApiKeys();
-        void sendPublicRequest(const QString &endpoint, const QVariantMap &params = {}, RequestType type = RequestType::Get);
-        void sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type);
+        QNetworkReply* sendPublicRequest(const QString &endpoint, const QVariantMap &params = {}, RequestType type = RequestType::Get);
+        QNetworkReply* sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type);
         
         bool m_useTestNetwork;
         QString m_baseUrl;
