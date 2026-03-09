@@ -341,7 +341,7 @@ TEST_F(MarketDataParserTest, TradingDayFull)
 {
     QEventLoop loop;
     QJsonDocument response;
-    std::optional<Binance::MarketData::TradingDayFull> tradingDayFull{};
+    QList<Binance::MarketData::TradingDayFull> tradingDayFull{};
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseFull, [&](const QJsonDocument &data) {
         response = data;
@@ -359,21 +359,21 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
 
-    ASSERT_TRUE(tradingDayFull.has_value());
-    EXPECT_EQ(tradingDayFull->symbol, "BTCUSDT");
-    EXPECT_GT(tradingDayFull->openTime, 0);
-    EXPECT_GT(tradingDayFull->closeTime, 0);
-    EXPECT_GT(tradingDayFull->highPrice, 0);
-    EXPECT_GT(tradingDayFull->lowPrice, 0);
-    EXPECT_GT(tradingDayFull->lastPrice, 0);
-    EXPECT_GE(tradingDayFull->count, 0);
+    ASSERT_FALSE(tradingDayFull.isEmpty());
+    EXPECT_EQ(tradingDayFull.first().symbol, "BTCUSDT");
+    EXPECT_GT(tradingDayFull.first().openTime, 0);
+    EXPECT_GT(tradingDayFull.first().closeTime, 0);
+    EXPECT_GT(tradingDayFull.first().highPrice, 0);
+    EXPECT_GT(tradingDayFull.first().lowPrice, 0);
+    EXPECT_GT(tradingDayFull.first().lastPrice, 0);
+    EXPECT_GE(tradingDayFull.first().count, 0);
 }
 
 TEST_F(MarketDataParserTest, TradingDayMini)
 {
     QEventLoop loop;
     QJsonDocument response;
-    std::optional<Binance::MarketData::TradingDayMini> tradingDayMini{};
+    QList<Binance::MarketData::TradingDayMini> tradingDayMini{};
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseMini, [&](const QJsonDocument &data) {
         response = data;
@@ -393,14 +393,14 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
 
-    ASSERT_TRUE(tradingDayMini.has_value());
-    EXPECT_EQ(tradingDayMini->symbol, "BTCUSDT");
-    EXPECT_GT(tradingDayMini->openTime, 0);
-    EXPECT_GT(tradingDayMini->closeTime, 0);
-    EXPECT_GT(tradingDayMini->highPrice, 0);
-    EXPECT_GT(tradingDayMini->lowPrice, 0);
-    EXPECT_GT(tradingDayMini->lastPrice, 0);
-    EXPECT_GE(tradingDayMini->count, 0);
+    ASSERT_FALSE(tradingDayMini.isEmpty());
+    EXPECT_EQ(tradingDayMini.first().symbol, "BTCUSDT");
+    EXPECT_GT(tradingDayMini.first().openTime, 0);
+    EXPECT_GT(tradingDayMini.first().closeTime, 0);
+    EXPECT_GT(tradingDayMini.first().highPrice, 0);
+    EXPECT_GT(tradingDayMini.first().lowPrice, 0);
+    EXPECT_GT(tradingDayMini.first().lastPrice, 0);
+    EXPECT_GE(tradingDayMini.first().count, 0);
 }
 
 TEST_F(MarketDataParserTest, SymbolPriceTicker)

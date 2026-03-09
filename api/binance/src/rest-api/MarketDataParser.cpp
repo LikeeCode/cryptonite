@@ -688,7 +688,49 @@ namespace Binance{
         return ticker24hrMini;
     }
 
-    std::optional<MarketData::TradingDayFull> MarketDataParser::parseTradingDayFull(const QJsonDocument &jsonDoc)
+    QList<MarketData::TradingDayFull> MarketDataParser::parseTradingDayFull(const QJsonDocument &jsonDoc)
+    {
+        QList<MarketData::TradingDayFull> tradingDayFull;
+
+        // json can be either an object or an array (when multiple symbols are requested)
+        if (jsonDoc.isObject())
+        {
+            auto maybeTradingDayFull = parseSymbolTradingDayFull(jsonDoc);
+            if (maybeTradingDayFull.has_value()) {
+                tradingDayFull.append(maybeTradingDayFull.value());
+            }
+        }
+        else if (jsonDoc.isArray())
+        {
+            const QJsonArray array = jsonDoc.array();
+            if (array.isEmpty())
+            {
+                for(const auto& item : array)
+                {
+                    if(!item.isObject())
+                    {
+                        return {}; // invalid format
+                    }
+                    auto maybeTradingDayFull = parseSymbolTradingDayFull(jsonDoc);
+                    if (maybeTradingDayFull.has_value()) {
+                        tradingDayFull.append(maybeTradingDayFull.value());
+                    }
+                }
+            }
+            else
+            {
+                return {}; // empty array is invalid
+            }
+        }
+        else
+        {
+            return {}; // invalid format
+        }
+
+        return tradingDayFull;
+    }
+
+    std::optional<MarketData::TradingDayFull> MarketDataParser::parseSymbolTradingDayFull(const QJsonDocument &jsonDoc)
     {
         MarketData::TradingDayFull tradingDayFull{};
 
@@ -807,7 +849,49 @@ namespace Binance{
         return tradingDayFull;
     }
 
-    std::optional<MarketData::TradingDayMini> MarketDataParser::parseTradingDayMini(const QJsonDocument &jsonDoc)
+    QList<MarketData::TradingDayMini> MarketDataParser::parseTradingDayMini(const QJsonDocument &jsonDoc)
+    {
+        QList<MarketData::TradingDayMini> tradingDayMini;
+
+        // json can be either an object or an array (when multiple symbols are requested)
+        if (jsonDoc.isObject())
+        {
+            auto maybeTradingDayMini = parseSymbolTradingDayMini(jsonDoc);
+            if (maybeTradingDayMini.has_value()) {
+                tradingDayMini.append(maybeTradingDayMini.value());
+            }
+        }
+        else if (jsonDoc.isArray())
+        {
+            const QJsonArray array = jsonDoc.array();
+            if (array.isEmpty())
+            {
+                for(const auto& item : array)
+                {
+                    if(!item.isObject())
+                    {
+                        return {}; // invalid format
+                    }
+                    auto maybeTradingDayMini = parseSymbolTradingDayMini(jsonDoc);
+                    if (maybeTradingDayMini.has_value()) {
+                        tradingDayMini.append(maybeTradingDayMini.value());
+                    }
+                }
+            }
+            else
+            {
+                return {}; // empty array is invalid
+            }
+        }
+        else
+        {
+            return {}; // invalid format
+        }
+
+        return tradingDayMini;
+    }
+
+    std::optional<MarketData::TradingDayMini> MarketDataParser::parseSymbolTradingDayMini(const QJsonDocument &jsonDoc)
     {
         MarketData::TradingDayMini tradingDayMini{};
     
