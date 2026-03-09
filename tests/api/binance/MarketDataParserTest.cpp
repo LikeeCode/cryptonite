@@ -275,7 +275,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
 {
     QEventLoop loop;
     QJsonDocument response;
-    std::optional<Binance::MarketData::Ticker24hrFull> ticker24hrFull{};
+    QList<Binance::MarketData::Ticker24hrFull> ticker24hrFull{};
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseFull, [&](const QJsonDocument &data) {
         response = data;
@@ -293,21 +293,21 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
 
-    ASSERT_TRUE(ticker24hrFull.has_value());
-    EXPECT_EQ(ticker24hrFull->symbol, "BTCUSDT");
-    EXPECT_GT(ticker24hrFull->openTime, 0);
-    EXPECT_GT(ticker24hrFull->closeTime, 0);
-    EXPECT_GT(ticker24hrFull->highPrice, 0);
-    EXPECT_GT(ticker24hrFull->lowPrice, 0);
-    EXPECT_GT(ticker24hrFull->lastPrice, 0);
-    EXPECT_GE(ticker24hrFull->count, 0);
+    ASSERT_FALSE(ticker24hrFull.isEmpty());
+    EXPECT_EQ(ticker24hrFull.first().symbol, "BTCUSDT");
+    EXPECT_GT(ticker24hrFull.first().openTime, 0);
+    EXPECT_GT(ticker24hrFull.first().closeTime, 0);
+    EXPECT_GT(ticker24hrFull.first().highPrice, 0);
+    EXPECT_GT(ticker24hrFull.first().lowPrice, 0);
+    EXPECT_GT(ticker24hrFull.first().lastPrice, 0);
+    EXPECT_GE(ticker24hrFull.first().count, 0);
 }
 
 TEST_F(MarketDataParserTest, TickerPrice24hrMini)
 {
     QEventLoop loop;
     QJsonDocument response;
-    std::optional<Binance::MarketData::Ticker24hrMini> ticker24hrMini{};
+    QList<Binance::MarketData::Ticker24hrMini> ticker24hrMini{};
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseMini, [&](const QJsonDocument &data) {
         response = data;
@@ -327,14 +327,14 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
 
-    ASSERT_TRUE(ticker24hrMini.has_value());
-    EXPECT_EQ(ticker24hrMini->symbol, "BTCUSDT");
-    EXPECT_GT(ticker24hrMini->openTime, 0);
-    EXPECT_GT(ticker24hrMini->closeTime, 0);
-    EXPECT_GT(ticker24hrMini->highPrice, 0);
-    EXPECT_GT(ticker24hrMini->lowPrice, 0);
-    EXPECT_GT(ticker24hrMini->lastPrice, 0);
-    EXPECT_GE(ticker24hrMini->count, 0);
+    ASSERT_FALSE(ticker24hrMini.isEmpty());
+    EXPECT_EQ(ticker24hrMini.first().symbol, "BTCUSDT");
+    EXPECT_GT(ticker24hrMini.first().openTime, 0);
+    EXPECT_GT(ticker24hrMini.first().closeTime, 0);
+    EXPECT_GT(ticker24hrMini.first().highPrice, 0);
+    EXPECT_GT(ticker24hrMini.first().lowPrice, 0);
+    EXPECT_GT(ticker24hrMini.first().lastPrice, 0);
+    EXPECT_GE(ticker24hrMini.first().count, 0);
 }
 
 TEST_F(MarketDataParserTest, TradingDayFull)

@@ -351,15 +351,51 @@ namespace Binance{
         return avgPrice;
     }
 
-    std::optional<MarketData::Ticker24hrFull> MarketDataParser::parseTicker24hrFull(const QJsonDocument &jsonDoc)
+    QList<MarketData::Ticker24hrFull> MarketDataParser::parseTicker24hrFull(const QJsonDocument &jsonDoc)
     {
-        MarketData::Ticker24hrFull ticker24hrFull{};
+        QList<MarketData::Ticker24hrFull> tickers;
 
-        // json object
-        if (!jsonDoc.isObject())
+        // json can be either an object or an array (when multiple symbols are requested)
+        if (jsonDoc.isObject())
+        {
+            auto maybeTicker = parseSymbolTicker24hrFull(jsonDoc);
+            if (maybeTicker.has_value())            {
+                tickers.append(maybeTicker.value());
+            }
+        }
+        else if (jsonDoc.isArray())
+        {
+            const QJsonArray array = jsonDoc.array();
+            if (array.isEmpty())
+            {
+                for(const auto& item : array)
+                {
+                    if(!item.isObject())
+                    {
+                        return {}; // invalid format
+                    }
+                    auto maybeTicker = parseSymbolTicker24hrFull(jsonDoc);
+                    if (maybeTicker.has_value())            {
+                        tickers.append(maybeTicker.value());
+                    }
+                }
+            }
+            else
+            {
+                return {}; // empty array is invalid
+            }
+        }
+        else
         {
             return {}; // invalid format
         }
+
+        return tickers;
+    }
+
+    std::optional<MarketData::Ticker24hrFull> MarketDataParser::parseSymbolTicker24hrFull(const QJsonDocument &jsonDoc)
+    {
+        MarketData::Ticker24hrFull ticker24hrFull{};
         QJsonObject json = jsonDoc.object();
 
         // symbol
@@ -512,7 +548,49 @@ namespace Binance{
         return ticker24hrFull;
     }
 
-    std::optional<MarketData::Ticker24hrMini> MarketDataParser::parseTicker24hrMini(const QJsonDocument &jsonDoc)
+    QList<MarketData::Ticker24hrMini> MarketDataParser::parseTicker24hrMini(const QJsonDocument &jsonDoc)
+    {
+        QList<MarketData::Ticker24hrMini> tickers;
+
+        // json can be either an object or an array (when multiple symbols are requested)
+        if (jsonDoc.isObject())
+        {
+            auto maybeTicker = parseSymbolTicker24hrMini(jsonDoc);
+            if (maybeTicker.has_value())            {
+                tickers.append(maybeTicker.value());
+            }
+        }
+        else if (jsonDoc.isArray())
+        {
+            const QJsonArray array = jsonDoc.array();
+            if (array.isEmpty())
+            {
+                for(const auto& item : array)
+                {
+                    if(!item.isObject())
+                    {
+                        return {}; // invalid format
+                    }
+                    auto maybeTicker = parseSymbolTicker24hrMini(jsonDoc);
+                    if (maybeTicker.has_value())            {
+                        tickers.append(maybeTicker.value());
+                    }
+                }
+            }
+            else
+            {
+                return {}; // empty array is invalid
+            }
+        }
+        else
+        {
+            return {}; // invalid format
+        }
+
+        return tickers;
+    }
+
+    std::optional<MarketData::Ticker24hrMini> MarketDataParser::parseSymbolTicker24hrMini(const QJsonDocument &jsonDoc)
     {
         MarketData::Ticker24hrMini ticker24hrMini{};
 
