@@ -411,7 +411,7 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolPriceTickerResponse, [&](const QJsonDocument &data) {
         response = data;
-        symbolPriceTicker = Binance::MarketDataParser::parseSymbolPriceTickerResponse(data);
+        symbolPriceTicker = Binance::MarketDataParser::parseSingleSymbolPriceTickerResponse(data);
         loop.quit(); });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
@@ -438,7 +438,7 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolOrderBookTickerResponse, [&](const QJsonDocument &data) {
         response = data;
-        symbolOrderBookTicker = Binance::MarketDataParser::parseSymbolOrderBookTickerResponse(data);
+        symbolOrderBookTicker = Binance::MarketDataParser::parseSingleSymbolOrderBookTickerResponse(data);
         loop.quit(); });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
@@ -468,7 +468,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseFull, [&](const QJsonDocument &data) {
         response = data;
-        tickerFull = Binance::MarketDataParser::parseRollingWindowTickerResponseFull(data);
+        tickerFull = Binance::MarketDataParser::parseSingleRollingWindowTickerResponseFull(data);
         loop.quit(); });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
@@ -500,7 +500,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseMini, [&](const QJsonDocument &data) {
         response = data;
-        tickerMini = Binance::MarketDataParser::parseRollingWindowTickerResponseMini(data);
+        tickerMini = Binance::MarketDataParser::parseSingleRollingWindowTickerResponseMini(data);
         loop.quit(); });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
