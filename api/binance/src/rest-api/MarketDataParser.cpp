@@ -7,7 +7,8 @@
 #include "filters/Converter.h"
 #include "rest-api/MarketDataParser.h"
 
-namespace Binance{
+namespace Binance
+{
     std::optional<MarketData::OrderBook> MarketDataParser::parseOrderBook(const QJsonDocument &jsonDoc)
     {
         MarketData::OrderBook orderBook{};
@@ -359,7 +360,8 @@ namespace Binance{
         if (jsonDoc.isObject())
         {
             auto maybeTicker = parseSingleTicker24hrFull(jsonDoc);
-            if (maybeTicker.has_value())            {
+            if (maybeTicker.has_value())
+            {
                 tickers.append(maybeTicker.value());
             }
         }
@@ -368,14 +370,15 @@ namespace Binance{
             const QJsonArray array = jsonDoc.array();
             if (array.isEmpty())
             {
-                for(const auto& item : array)
+                for (const auto& item : array)
                 {
-                    if(!item.isObject())
+                    if (!item.isObject())
                     {
                         return {}; // invalid format
                     }
                     auto maybeTicker = parseSingleTicker24hrFull(jsonDoc);
-                    if (maybeTicker.has_value())            {
+                    if (maybeTicker.has_value())
+                    {
                         tickers.append(maybeTicker.value());
                     }
                 }
@@ -556,7 +559,8 @@ namespace Binance{
         if (jsonDoc.isObject())
         {
             auto maybeTicker = parseSingleTicker24hrMini(jsonDoc);
-            if (maybeTicker.has_value())            {
+            if (maybeTicker.has_value())
+            {
                 tickers.append(maybeTicker.value());
             }
         }
@@ -565,14 +569,15 @@ namespace Binance{
             const QJsonArray array = jsonDoc.array();
             if (array.isEmpty())
             {
-                for(const auto& item : array)
+                for (const auto& item : array)
                 {
-                    if(!item.isObject())
+                    if (!item.isObject())
                     {
                         return {}; // invalid format
                     }
                     auto maybeTicker = parseSingleTicker24hrMini(jsonDoc);
-                    if (maybeTicker.has_value())            {
+                    if (maybeTicker.has_value())
+                    {
                         tickers.append(maybeTicker.value());
                     }
                 }
@@ -696,7 +701,8 @@ namespace Binance{
         if (jsonDoc.isObject())
         {
             auto maybeTradingDayFull = parseSingleTradingDayFull(jsonDoc);
-            if (maybeTradingDayFull.has_value()) {
+            if (maybeTradingDayFull.has_value())
+            {
                 tradingDayFull.append(maybeTradingDayFull.value());
             }
         }
@@ -705,14 +711,15 @@ namespace Binance{
             const QJsonArray array = jsonDoc.array();
             if (array.isEmpty())
             {
-                for(const auto& item : array)
+                for (const auto& item : array)
                 {
-                    if(!item.isObject())
+                    if (!item.isObject())
                     {
                         return {}; // invalid format
                     }
                     auto maybeTradingDayFull = parseSingleTradingDayFull(jsonDoc);
-                    if (maybeTradingDayFull.has_value()) {
+                    if (maybeTradingDayFull.has_value())
+                    {
                         tradingDayFull.append(maybeTradingDayFull.value());
                     }
                 }
@@ -857,7 +864,8 @@ namespace Binance{
         if (jsonDoc.isObject())
         {
             auto maybeTradingDayMini = parseSingleTradingDayMini(jsonDoc);
-            if (maybeTradingDayMini.has_value()) {
+            if (maybeTradingDayMini.has_value())
+            {
                 tradingDayMini.append(maybeTradingDayMini.value());
             }
         }
@@ -866,14 +874,15 @@ namespace Binance{
             const QJsonArray array = jsonDoc.array();
             if (array.isEmpty())
             {
-                for(const auto& item : array)
+                for (const auto& item : array)
                 {
-                    if(!item.isObject())
+                    if (!item.isObject())
                     {
                         return {}; // invalid format
                     }
                     auto maybeTradingDayMini = parseSingleTradingDayMini(jsonDoc);
-                    if (maybeTradingDayMini.has_value()) {
+                    if (maybeTradingDayMini.has_value())
+                    {
                         tradingDayMini.append(maybeTradingDayMini.value());
                     }
                 }
@@ -989,14 +998,16 @@ namespace Binance{
         return tradingDayMini;
     }
 
-    QList<MarketData::SymbolPriceTicker> MarketDataParser::parseSymbolPriceTicker(const QJsonDocument &jsonDoc){
+    QList<MarketData::SymbolPriceTicker> MarketDataParser::parseSymbolPriceTicker(const QJsonDocument &jsonDoc)
+    {
         QList<MarketData::SymbolPriceTicker> tickers;
 
         // json can be either an object or an array (when multiple symbols are requested)
         if (jsonDoc.isObject())
         {
             auto maybeTicker = parseSingleSymbolPriceTicker(jsonDoc);
-            if (maybeTicker.has_value())            {
+            if (maybeTicker.has_value())
+            {
                 tickers.append(maybeTicker.value());
             }
         }
@@ -1005,14 +1016,15 @@ namespace Binance{
             const QJsonArray array = jsonDoc.array();
             if (array.isEmpty())
             {
-                for(const auto& item : array)
+                for (const auto& item : array)
                 {
-                    if(!item.isObject())
+                    if (!item.isObject())
                     {
                         return {}; // invalid format
                     }
                     auto maybeTicker = parseSingleSymbolPriceTicker(jsonDoc);
-                    if (maybeTicker.has_value())            {
+                    if (maybeTicker.has_value())
+                    {
                         tickers.append(maybeTicker.value());
                     }
                 }
@@ -1030,7 +1042,8 @@ namespace Binance{
         return tickers;
     }
 
-    std::optional<MarketData::SymbolPriceTicker> MarketDataParser::parseSingleSymbolPriceTicker(const QJsonDocument &jsonDoc){
+    std::optional<MarketData::SymbolPriceTicker> MarketDataParser::parseSingleSymbolPriceTicker(const QJsonDocument &jsonDoc)
+    {
         MarketData::SymbolPriceTicker symbolPriceTicker{};
 
         // json object
@@ -1057,14 +1070,16 @@ namespace Binance{
         return symbolPriceTicker;
     }
 
-    QList<MarketData::SymbolOrderBookTicker> MarketDataParser::parseSymbolOrderBookTicker(const QJsonDocument &jsonDoc){
+    QList<MarketData::SymbolOrderBookTicker> MarketDataParser::parseSymbolOrderBookTicker(const QJsonDocument &jsonDoc)
+    {
         QList<MarketData::SymbolOrderBookTicker> tickers;
 
         // json can be either an object or an array (when multiple symbols are requested)
         if (jsonDoc.isObject())
         {
             auto maybeTicker = parseSingleSymbolOrderBookTicker(jsonDoc);
-            if (maybeTicker.has_value())            {
+            if (maybeTicker.has_value())
+            {
                 tickers.append(maybeTicker.value());
             }
         }
@@ -1073,14 +1088,15 @@ namespace Binance{
             const QJsonArray array = jsonDoc.array();
             if (array.isEmpty())
             {
-                for(const auto& item : array)
+                for (const auto& item : array)
                 {
-                    if(!item.isObject())
+                    if (!item.isObject())
                     {
                         return {}; // invalid format
                     }
                     auto maybeTicker = parseSingleSymbolOrderBookTicker(jsonDoc);
-                    if (maybeTicker.has_value())            {
+                    if (maybeTicker.has_value())
+                    {
                         tickers.append(maybeTicker.value());
                     }
                 }
@@ -1098,7 +1114,8 @@ namespace Binance{
         return tickers;
     }
 
-    std::optional<MarketData::SymbolOrderBookTicker> MarketDataParser::parseSingleSymbolOrderBookTicker(const QJsonDocument &jsonDoc){
+    std::optional<MarketData::SymbolOrderBookTicker> MarketDataParser::parseSingleSymbolOrderBookTicker(const QJsonDocument &jsonDoc)
+    {
         MarketData::SymbolOrderBookTicker symbolOrderBookTicker{};
 
         // json object
@@ -1146,14 +1163,16 @@ namespace Binance{
         return symbolOrderBookTicker;
     }
 
-    QList<MarketData::TickerFull> MarketDataParser::parseRollingWindowTickerFull(const QJsonDocument &jsonDoc){
+    QList<MarketData::TickerFull> MarketDataParser::parseRollingWindowTickerFull(const QJsonDocument &jsonDoc)
+    {
         QList<MarketData::TickerFull> tickers;
 
         // json can be either an object or an array (when multiple symbols are requested)
         if (jsonDoc.isObject())
         {
             auto maybeTicker = parseSingleRollingWindowTickerFull(jsonDoc);
-            if (maybeTicker.has_value())            {
+            if (maybeTicker.has_value())
+            {
                 tickers.append(maybeTicker.value());
             }
         }
@@ -1162,14 +1181,15 @@ namespace Binance{
             const QJsonArray array = jsonDoc.array();
             if (array.isEmpty())
             {
-                for(const auto& item : array)
+                for (const auto& item : array)
                 {
-                    if(!item.isObject())
+                    if (!item.isObject())
                     {
                         return {}; // invalid format
                     }
                     auto maybeTicker = parseSingleRollingWindowTickerFull(jsonDoc);
-                    if (maybeTicker.has_value())            {
+                    if (maybeTicker.has_value())
+                    {
                         tickers.append(maybeTicker.value());
                     }
                 }
@@ -1187,7 +1207,8 @@ namespace Binance{
         return tickers;
     }
 
-    std::optional<MarketData::TickerFull> MarketDataParser::parseSingleRollingWindowTickerFull(const QJsonDocument &jsonDoc){
+    std::optional<MarketData::TickerFull> MarketDataParser::parseSingleRollingWindowTickerFull(const QJsonDocument &jsonDoc)
+    {
         MarketData::TickerFull tickerFull{};
 
         // json object
@@ -1305,14 +1326,16 @@ namespace Binance{
         return tickerFull;
     }
 
-    QList<MarketData::TickerMini> MarketDataParser::parseRollingWindowTickerMini(const QJsonDocument &jsonDoc){
+    QList<MarketData::TickerMini> MarketDataParser::parseRollingWindowTickerMini(const QJsonDocument &jsonDoc)
+    {
         QList<MarketData::TickerMini> tickers;
 
         // json can be either an object or an array (when multiple symbols are requested)
         if (jsonDoc.isObject())
         {
             auto maybeTicker = parseSingleRollingWindowTickerMini(jsonDoc);
-            if (maybeTicker.has_value())            {
+            if (maybeTicker.has_value())
+            {
                 tickers.append(maybeTicker.value());
             }
         }
@@ -1321,14 +1344,15 @@ namespace Binance{
             const QJsonArray array = jsonDoc.array();
             if (array.isEmpty())
             {
-                for(const auto& item : array)
+                for (const auto& item : array)
                 {
-                    if(!item.isObject())
+                    if (!item.isObject())
                     {
                         return {}; // invalid format
                     }
                     auto maybeTicker = parseSingleRollingWindowTickerMini(jsonDoc);
-                    if (maybeTicker.has_value())            {
+                    if (maybeTicker.has_value())
+                    {
                         tickers.append(maybeTicker.value());
                     }
                 }
@@ -1346,7 +1370,8 @@ namespace Binance{
         return tickers;
     }
 
-    std::optional<MarketData::TickerMini> MarketDataParser::parseSingleRollingWindowTickerMini(const QJsonDocument &jsonDoc){
+    std::optional<MarketData::TickerMini> MarketDataParser::parseSingleRollingWindowTickerMini(const QJsonDocument &jsonDoc)
+    {
         MarketData::TickerMini tickerMini{};
 
         // json object

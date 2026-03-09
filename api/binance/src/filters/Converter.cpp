@@ -71,7 +71,7 @@ namespace Binance::Filter
         auto filterType = jsonObj["filterType"].toString();
 
         // Symbol filters
-        if(filterType == "PRICE_FILTER")
+        if (filterType == "PRICE_FILTER")
         {
             auto filter = std::make_shared<PriceFilter>();
             if (!jsonObj.contains("minPrice") || !jsonObj["minPrice"].isString())

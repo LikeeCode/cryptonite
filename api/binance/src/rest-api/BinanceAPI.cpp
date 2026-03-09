@@ -20,12 +20,12 @@ namespace Binance
         m_baseUrl = m_useTestNetwork ? API::BASE_URL_TESTNET : API::BASE_URL;
         getApiKeys();
         
-        connect(m_networkManager, &QNetworkAccessManager::finished, this, &BinanceAPI::onReplyFinished);
+        m_networkManager = std::make_unique<QNetworkAccessManager>(this);
+        connect(m_networkManager.get(), &QNetworkAccessManager::finished, this, &BinanceAPI::onReplyFinished);
     }
 
     BinanceAPI::~BinanceAPI()
     {
-        delete m_networkManager;
     }
 
     void BinanceAPI::setApiKeys(const QString &key, const QString &secret)

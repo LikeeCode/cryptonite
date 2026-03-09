@@ -40,15 +40,18 @@ TEST_F(MarketDataParserTest, OrderBook)
     QJsonDocument response;
     std::optional<Binance::MarketData::OrderBook> orderBook{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::orderBookResponse, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::orderBookResponse, [&](const QJsonDocument &data)
+    {
         response = data;
         orderBook = Binance::MarketDataParser::parseOrderBook(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest OrderBook API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->orderBook(Binance::MarketData::OrderBookRequest{"BTCUSDT"});
     loop.exec();
@@ -68,15 +71,18 @@ TEST_F(MarketDataParserTest, RecentTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Trade>> trades{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::recentTradesResponse, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::recentTradesResponse, [&](const QJsonDocument &data)
+    {
         response = data;
         trades = Binance::MarketDataParser::parseTrades(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest RecentTrades API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->recentTrades(Binance::MarketData::RecentTradesRequest{"BTCUSDT"});
     loop.exec();
@@ -102,15 +108,18 @@ TEST_F(MarketDataParserTest, HistoricalTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Trade>> trades{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::historicalTradesResponse, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::historicalTradesResponse, [&](const QJsonDocument &data)
+    {
         response = data;
         trades = Binance::MarketDataParser::parseTrades(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest HistoricalTrades API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->historicalTrades(Binance::MarketData::OldTradesRequest{"BTCUSDT"});
     loop.exec();
@@ -136,15 +145,18 @@ TEST_F(MarketDataParserTest, AggregatedTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::AggregatedTrade>> aggTrades{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::aggTradesResponse, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::aggTradesResponse, [&](const QJsonDocument &data)
+    {
         response = data;
         aggTrades = Binance::MarketDataParser::parseAggregatedTrades(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest AggregatedTrades API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->aggregatedTrades(Binance::MarketData::AggregatedTradeRequest{"BTCUSDT"});
     loop.exec();
@@ -172,15 +184,18 @@ TEST_F(MarketDataParserTest, Klines)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Kline>> klines{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::klinesResponse, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::klinesResponse, [&](const QJsonDocument &data)
+    {
         response = data;
         klines = Binance::MarketDataParser::parseKlines(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest Klines API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->klines(Binance::MarketData::KlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
     loop.exec();
@@ -213,15 +228,18 @@ TEST_F(MarketDataParserTest, UIKlines)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::UIKline>> uiKlines{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::uiKlinesResponse, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::uiKlinesResponse, [&](const QJsonDocument &data)
+    {
         response = data;
         uiKlines = Binance::MarketDataParser::parseUIKlines(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest UIKlines API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->uiKlines(Binance::MarketData::UIKlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
     loop.exec();
@@ -254,15 +272,18 @@ TEST_F(MarketDataParserTest, CurrentAveragePrice)
     QJsonDocument response;
     std::optional<Binance::MarketData::CurrentAveragePrice> avgPrice{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::currentAveragePriceResponse, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::currentAveragePriceResponse, [&](const QJsonDocument &data)
+    {
         response = data;
         avgPrice = Binance::MarketDataParser::parseCurrentAveragePrice(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest CurrentAveragePrice API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->currentAveragePrice(Binance::MarketData::CurrentAveragePriceRequest{"BTCUSDT"});
     loop.exec();
@@ -282,15 +303,18 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     QJsonDocument response;
     QList<Binance::MarketData::Ticker24hrFull> ticker24hrFull{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseFull, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseFull, [&](const QJsonDocument &data)
+    {
         response = data;
         ticker24hrFull = Binance::MarketDataParser::parseTicker24hrFull(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest TickerPrice24hrFull API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->tickerPrice24hr(Binance::MarketData::Ticker24hrRequest{"BTCUSDT"});
     loop.exec();
@@ -314,15 +338,18 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     QJsonDocument response;
     QList<Binance::MarketData::Ticker24hrMini> ticker24hrMini{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseMini, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseMini, [&](const QJsonDocument &data)
+    {
         response = data;
         ticker24hrMini = Binance::MarketDataParser::parseTicker24hrMini(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest TickerPrice24hrMini API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     Binance::MarketData::Ticker24hrRequest requestMini{"BTCUSDT"};
     requestMini.type = Binance::ResponseType::MINI;
@@ -348,15 +375,18 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     QJsonDocument response;
     QList<Binance::MarketData::TradingDayFull> tradingDayFull{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseFull, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseFull, [&](const QJsonDocument &data)
+    {
         response = data;
         tradingDayFull = Binance::MarketDataParser::parseTradingDayFull(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest TradingDayFull API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->tradingDay(Binance::MarketData::TradingDayRequest{"BTCUSDT"});
     loop.exec();
@@ -380,15 +410,18 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     QJsonDocument response;
     QList<Binance::MarketData::TradingDayMini> tradingDayMini{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseMini, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseMini, [&](const QJsonDocument &data)
+    {
         response = data;
         tradingDayMini = Binance::MarketDataParser::parseTradingDayMini(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest TradingDayMini API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     Binance::MarketData::TradingDayRequest requestMini{"BTCUSDT"};
     requestMini.type = Binance::ResponseType::MINI;
@@ -414,15 +447,18 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     QJsonDocument response;
     QList<Binance::MarketData::SymbolPriceTicker> symbolPriceTicker{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolPriceTickerResponse, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolPriceTickerResponse, [&](const QJsonDocument &data)
+    {
         response = data;
         symbolPriceTicker = Binance::MarketDataParser::parseSymbolPriceTicker(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest SymbolPriceTicker API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->symbolPriceTicker(Binance::MarketData::SymbolPriceTickerRequest{"BTCUSDT"});
     loop.exec();
@@ -441,15 +477,18 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     QJsonDocument response;
     QList<Binance::MarketData::SymbolOrderBookTicker> symbolOrderBookTicker{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolOrderBookTickerResponse, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolOrderBookTickerResponse, [&](const QJsonDocument &data)
+    {
         response = data;
         symbolOrderBookTicker = Binance::MarketDataParser::parseSymbolOrderBookTicker(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest SymbolOrderBookTicker API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->symbolOrderBookTicker(Binance::MarketData::SymbolOrderBookTickerRequest{"BTCUSDT"});
     loop.exec();
@@ -471,15 +510,18 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
     QJsonDocument response;
     QList<Binance::MarketData::TickerFull> tickerFull{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseFull, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseFull, [&](const QJsonDocument &data)
+    {
         response = data;
         tickerFull = Binance::MarketDataParser::parseRollingWindowTickerFull(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest RollingWindowTickerFull API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     binanceAPI->rollingWindowTicker(Binance::MarketData::TickerRequest{"BTCUSDT"});
     loop.exec();
@@ -503,15 +545,18 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     QJsonDocument response;
     QList<Binance::MarketData::TickerMini> tickerMini{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseMini, [&](const QJsonDocument &data) {
+    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseMini, [&](const QJsonDocument &data)
+    {
         response = data;
         tickerMini = Binance::MarketDataParser::parseRollingWindowTickerMini(data);
-        loop.quit(); });
+        loop.quit();
+    });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
-                     {
+    {
         FAIL() << "MarketDataParserTest RollingWindowTickerMini API Error received: " << error.toStdString();
-        loop.quit(); });
+        loop.quit();
+    });
 
     Binance::MarketData::TickerRequest tickerRequestMini{"BTCUSDT"};
     tickerRequestMini.type = Binance::ResponseType::MINI;

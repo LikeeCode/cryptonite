@@ -51,7 +51,7 @@ namespace Binance
         QString m_baseUrl;
         QString m_apiKey;
         QString m_apiSecret;
-        QNetworkAccessManager* m_networkManager;
+        std::unique_ptr<QNetworkAccessManager> m_networkManager;
 
     private slots:
         void onReplyFinished(QNetworkReply *reply);
