@@ -368,7 +368,7 @@ namespace Binance
         else if (jsonDoc.isArray())
         {
             const QJsonArray array = jsonDoc.array();
-            if (array.isEmpty())
+            if (!array.isEmpty())
             {
                 for (const auto& item : array)
                 {
@@ -567,7 +567,7 @@ namespace Binance
         else if (jsonDoc.isArray())
         {
             const QJsonArray array = jsonDoc.array();
-            if (array.isEmpty())
+            if (!array.isEmpty())
             {
                 for (const auto& item : array)
                 {
@@ -709,7 +709,7 @@ namespace Binance
         else if (jsonDoc.isArray())
         {
             const QJsonArray array = jsonDoc.array();
-            if (array.isEmpty())
+            if (!array.isEmpty())
             {
                 for (const auto& item : array)
                 {
@@ -872,7 +872,7 @@ namespace Binance
         else if (jsonDoc.isArray())
         {
             const QJsonArray array = jsonDoc.array();
-            if (array.isEmpty())
+            if (!array.isEmpty())
             {
                 for (const auto& item : array)
                 {
@@ -1014,7 +1014,7 @@ namespace Binance
         else if (jsonDoc.isArray())
         {
             const QJsonArray array = jsonDoc.array();
-            if (array.isEmpty())
+            if (!array.isEmpty())
             {
                 for (const auto& item : array)
                 {
@@ -1086,7 +1086,7 @@ namespace Binance
         else if (jsonDoc.isArray())
         {
             const QJsonArray array = jsonDoc.array();
-            if (array.isEmpty())
+            if (!array.isEmpty())
             {
                 for (const auto& item : array)
                 {
@@ -1179,7 +1179,7 @@ namespace Binance
         else if (jsonDoc.isArray())
         {
             const QJsonArray array = jsonDoc.array();
-            if (array.isEmpty())
+            if (!array.isEmpty())
             {
                 for (const auto& item : array)
                 {
@@ -1342,7 +1342,7 @@ namespace Binance
         else if (jsonDoc.isArray())
         {
             const QJsonArray array = jsonDoc.array();
-            if (array.isEmpty())
+            if (!array.isEmpty())
             {
                 for (const auto& item : array)
                 {
