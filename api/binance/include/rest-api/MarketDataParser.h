@@ -25,9 +25,13 @@ namespace Binance
         static std::optional<MarketData::TradingDayFull> parseSingleTradingDayFull(const QJsonDocument &jsonDoc);
         static QList<MarketData::TradingDayMini> parseTradingDayMini(const QJsonDocument &jsonDoc);
         static std::optional<MarketData::TradingDayMini> parseSingleTradingDayMini(const QJsonDocument &jsonDoc);
+        static QList<MarketData::SymbolPriceTicker> parseSymbolPriceTickerResponse(const QJsonDocument &jsonDoc);
         static std::optional<MarketData::SymbolPriceTicker> parseSingleSymbolPriceTickerResponse(const QJsonDocument &jsonDoc);
+        static QList<MarketData::SymbolOrderBookTicker> parseSymbolOrderBookTickerResponse(const QJsonDocument &jsonDoc);
         static std::optional<MarketData::SymbolOrderBookTicker> parseSingleSymbolOrderBookTickerResponse(const QJsonDocument &jsonDoc);
+        static QList<MarketData::TickerFull> parseRollingWindowTickerResponseFull(const QJsonDocument &jsonDoc);
         static std::optional<MarketData::TickerFull> parseSingleRollingWindowTickerResponseFull(const QJsonDocument &jsonDoc);
+        static QList<MarketData::TickerMini> parseRollingWindowTickerResponseMini(const QJsonDocument &jsonDoc);
         static std::optional<MarketData::TickerMini> parseSingleRollingWindowTickerResponseMini(const QJsonDocument &jsonDoc);
     };
 } // namespace Binance

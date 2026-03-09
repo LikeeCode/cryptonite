@@ -407,11 +407,11 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
 {
     QEventLoop loop;
     QJsonDocument response;
-    std::optional<Binance::MarketData::SymbolPriceTicker> symbolPriceTicker{};
+    QList<Binance::MarketData::SymbolPriceTicker> symbolPriceTicker{};
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolPriceTickerResponse, [&](const QJsonDocument &data) {
         response = data;
-        symbolPriceTicker = Binance::MarketDataParser::parseSingleSymbolPriceTickerResponse(data);
+        symbolPriceTicker = Binance::MarketDataParser::parseSymbolPriceTickerResponse(data);
         loop.quit(); });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
@@ -425,20 +425,20 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
 
-    ASSERT_TRUE(symbolPriceTicker.has_value());
-    EXPECT_EQ(symbolPriceTicker->symbol, "BTCUSDT");
-    EXPECT_GT(symbolPriceTicker->price, 0);
+    ASSERT_FALSE(symbolPriceTicker.isEmpty());
+    EXPECT_EQ(symbolPriceTicker.first().symbol, "BTCUSDT");
+    EXPECT_GT(symbolPriceTicker.first().price, 0);
 }
 
 TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
 {
     QEventLoop loop;
     QJsonDocument response;
-    std::optional<Binance::MarketData::SymbolOrderBookTicker> symbolOrderBookTicker{};
+    QList<Binance::MarketData::SymbolOrderBookTicker> symbolOrderBookTicker{};
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolOrderBookTickerResponse, [&](const QJsonDocument &data) {
         response = data;
-        symbolOrderBookTicker = Binance::MarketDataParser::parseSingleSymbolOrderBookTickerResponse(data);
+        symbolOrderBookTicker = Binance::MarketDataParser::parseSymbolOrderBookTickerResponse(data);
         loop.quit(); });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
@@ -452,23 +452,23 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
 
-    ASSERT_TRUE(symbolOrderBookTicker.has_value());
-    EXPECT_EQ(symbolOrderBookTicker->symbol, "BTCUSDT");
-    EXPECT_GT(symbolOrderBookTicker->bidPrice, 0);
-    EXPECT_GE(symbolOrderBookTicker->bidQty, 0);
-    EXPECT_GT(symbolOrderBookTicker->askPrice, 0);
-    EXPECT_GE(symbolOrderBookTicker->askQty, 0);
+    ASSERT_FALSE(symbolOrderBookTicker.isEmpty());
+    EXPECT_EQ(symbolOrderBookTicker.first().symbol, "BTCUSDT");
+    EXPECT_GT(symbolOrderBookTicker.first().bidPrice, 0);
+    EXPECT_GE(symbolOrderBookTicker.first().bidQty, 0);
+    EXPECT_GT(symbolOrderBookTicker.first().askPrice, 0);
+    EXPECT_GE(symbolOrderBookTicker.first().askQty, 0);
 }
 
 TEST_F(MarketDataParserTest, RollingWindowTickerFull)
 {
     QEventLoop loop;
     QJsonDocument response;
-    std::optional<Binance::MarketData::TickerFull> tickerFull{};
+    QList<Binance::MarketData::TickerFull> tickerFull{};
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseFull, [&](const QJsonDocument &data) {
         response = data;
-        tickerFull = Binance::MarketDataParser::parseSingleRollingWindowTickerResponseFull(data);
+        tickerFull = Binance::MarketDataParser::parseRollingWindowTickerResponseFull(data);
         loop.quit(); });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
@@ -482,25 +482,25 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
 
-    ASSERT_TRUE(tickerFull.has_value());
-    EXPECT_EQ(tickerFull->symbol, "BTCUSDT");
-    EXPECT_GT(tickerFull->openTime, 0);
-    EXPECT_GT(tickerFull->closeTime, 0);
-    EXPECT_GT(tickerFull->highPrice, 0);
-    EXPECT_GT(tickerFull->lowPrice, 0);
-    EXPECT_GT(tickerFull->lastPrice, 0);
-    EXPECT_GE(tickerFull->count, 0);
+    ASSERT_FALSE(tickerFull.isEmpty());
+    EXPECT_EQ(tickerFull.first().symbol, "BTCUSDT");
+    EXPECT_GT(tickerFull.first().openTime, 0);
+    EXPECT_GT(tickerFull.first().closeTime, 0);
+    EXPECT_GT(tickerFull.first().highPrice, 0);
+    EXPECT_GT(tickerFull.first().lowPrice, 0);
+    EXPECT_GT(tickerFull.first().lastPrice, 0);
+    EXPECT_GE(tickerFull.first().count, 0);
 }
 
 TEST_F(MarketDataParserTest, RollingWindowTickerMini)
 {
     QEventLoop loop;
     QJsonDocument response;
-    std::optional<Binance::MarketData::TickerMini> tickerMini{};
+    QList<Binance::MarketData::TickerMini> tickerMini{};
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseMini, [&](const QJsonDocument &data) {
         response = data;
-        tickerMini = Binance::MarketDataParser::parseSingleRollingWindowTickerResponseMini(data);
+        tickerMini = Binance::MarketDataParser::parseRollingWindowTickerResponseMini(data);
         loop.quit(); });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
@@ -516,12 +516,12 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
 
-    ASSERT_TRUE(tickerMini.has_value());
-    EXPECT_EQ(tickerMini->symbol, "BTCUSDT");
-    EXPECT_GT(tickerMini->openTime, 0);
-    EXPECT_GT(tickerMini->closeTime, 0);
-    EXPECT_GT(tickerMini->highPrice, 0);
-    EXPECT_GT(tickerMini->lowPrice, 0);
-    EXPECT_GT(tickerMini->lastPrice, 0);
-    EXPECT_GE(tickerMini->count, 0);
+    ASSERT_FALSE(tickerMini.isEmpty());
+    EXPECT_EQ(tickerMini.first().symbol, "BTCUSDT");
+    EXPECT_GT(tickerMini.first().openTime, 0);
+    EXPECT_GT(tickerMini.first().closeTime, 0);
+    EXPECT_GT(tickerMini.first().highPrice, 0);
+    EXPECT_GT(tickerMini.first().lowPrice, 0);
+    EXPECT_GT(tickerMini.first().lastPrice, 0);
+    EXPECT_GE(tickerMini.first().count, 0);
 }
