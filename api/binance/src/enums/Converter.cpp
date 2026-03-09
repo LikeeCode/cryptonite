@@ -309,7 +309,8 @@ namespace Binance::Enum
         return map.value(mode, {});
     }
 
-    QString toString(Interval interval){
+    QString toString(Interval interval)
+    {
         static const QHash<Interval, QString> map = {
             {Interval::ONE_SECOND, "1s"},
             {Interval::ONE_MINUTE, "1m"},
@@ -330,7 +331,8 @@ namespace Binance::Enum
         return map.value(interval);
     }
 
-    std::optional<Interval> toInterval(const QString &interval){
+    std::optional<Interval> toInterval(const QString &interval)
+    {
         static const QHash<QString, Interval> map = {
             {"1s", Interval::ONE_SECOND},
             {"1m", Interval::ONE_MINUTE},

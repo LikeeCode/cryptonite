@@ -10,7 +10,8 @@ class SymbolsModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    enum SymbolRoles {
+    enum SymbolRoles
+    {
         SymbolRole = Qt::UserRole + 1,
         StatustRole,
         BaseAssetRole,

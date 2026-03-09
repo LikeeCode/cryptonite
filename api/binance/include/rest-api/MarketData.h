@@ -12,50 +12,60 @@
 #include "enums/Converter.h"
 #include "filters/Filters.h"
 
-namespace Binance::MarketData{
-    struct OrderBookRequest{
+namespace Binance::MarketData
+{
+    struct OrderBookRequest
+    {
         QString symbol;
         int limit{100}; // Optional, default 100; max 5000
         SymbolStatus status{ SymbolStatus::TRADING };
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
 
             params.insert("symbol", symbol);
-            if(limit != 100 && limit > 0 && limit <= 5000){
+            if (limit != 100 && limit > 0 && limit <= 5000)
+            {
                 params.insert("limit", limit);
             }
-            if(status != SymbolStatus::TRADING){
+            if (status != SymbolStatus::TRADING)
+            {
                 params.insert("status", Binance::Enum::toString(status));
             }
-            
+
             return params;
         }
     };
 
-    struct OrderBook{
+    struct OrderBook
+    {
         qint64 lastUpdateId{};
         QList<QPair<double, double>> bids; // price, quantity
         QList<QPair<double, double>> asks; // price, quantity
     };
 
-    struct RecentTradesRequest{
+    struct RecentTradesRequest
+    {
         QString symbol;
         int limit{500}; // Optional, default 500; max 1000
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
 
             params.insert("symbol", symbol);
-            if(limit != 500 && limit > 0 && limit <= 1000){
+            if (limit != 500 && limit > 0 && limit <= 1000)
+            {
                 params.insert("limit", limit);
             }
-            
+
             return params;
         }
     };
 
-    struct Trade{
+    struct Trade
+    {
         qint64 id{};
         double price{};
         double qty{};
@@ -65,55 +75,66 @@ namespace Binance::MarketData{
         bool isBestMatch{};
     };
 
-    struct OldTradesRequest{
+    struct OldTradesRequest
+    {
         QString symbol;
         int limit{500}; // Optional, default 500; max 1000
         std::optional<qint64> fromId{}; // Trade id to fetch from. Default gets most recent trades.
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
 
             params.insert("symbol", symbol);
-            if(limit != 500 && limit > 0 && limit <= 1000){
+            if (limit != 500 && limit > 0 && limit <= 1000)
+            {
                 params.insert("limit", limit);
             }
-            if(fromId.has_value()){
+            if (fromId.has_value())
+            {
                 params.insert("fromId", fromId.value());
             }
-            
+
             return params;
         }
     };
 
-    struct AggregatedTradeRequest{
+    struct AggregatedTradeRequest
+    {
         QString symbol;
         std::optional<qint64> fromId{}; // Optional, id to get aggregate trades from INCLUSIVE.
         std::optional<qint64> startTime{}; // Optional, timestamp in ms to get aggregate trades from INCLUSIVE.
         std::optional<qint64> endTime{}; // Optional, timestamp in ms to get aggregate trades until INCLUSIVE.
         int limit{500}; // Optional, default 500; max 1000
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
 
             params.insert("symbol", symbol);
-            if(fromId.has_value()){
+            if (fromId.has_value())
+            {
                 params.insert("fromId", fromId.value());
             }
-            if(startTime.has_value()){
+            if (startTime.has_value())
+            {
                 params.insert("startTime", startTime.value());
             }
-            if(endTime.has_value()){
+            if (endTime.has_value())
+            {
                 params.insert("endTime", endTime.value());
             }
-            if(limit != 500 && limit > 0 && limit <= 1000){
+            if (limit != 500 && limit > 0 && limit <= 1000)
+            {
                 params.insert("limit", limit);
             }
-            
+
             return params;
         }
     };
 
-    struct AggregatedTrade{
+    struct AggregatedTrade
+    {
         qint64 a{}; // Aggregate tradeId
         double p{}; // Price
         double q{}; // Quantity
@@ -124,7 +145,8 @@ namespace Binance::MarketData{
         bool M{}; // Was the trade the best price match?
     };
 
-    struct KlineRequest{
+    struct KlineRequest
+    {
         QString symbol;
         Interval interval;
         std::optional<qint64> startTime{}; // Optional, timestamp in ms to get candlesticks from INCLUSIVE.
@@ -132,29 +154,35 @@ namespace Binance::MarketData{
         std::optional<QString> timeZone; // Optional, default 0 UTC
         int limit{500}; // Optional, default 500; max 1000
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
 
             params.insert("symbol", symbol);
             params.insert("interval", Binance::Enum::toString(interval));
-            if(startTime.has_value()){
+            if (startTime.has_value())
+            {
                 params.insert("startTime", startTime.value());
             }
-            if(endTime.has_value()){
+            if (endTime.has_value())
+            {
                 params.insert("endTime", endTime.value());
             }
-            if(timeZone.has_value()){
+            if (timeZone.has_value())
+            {
                 params.insert("timeZone", timeZone.value());
             }
-            if(limit != 500 && limit > 0 && limit <= 1000){
+            if (limit != 500 && limit > 0 && limit <= 1000)
+            {
                 params.insert("limit", limit);
             }
-            
+
             return params;
         }
     };
 
-    struct Kline{
+    struct Kline
+    {
         qint64 openTime{};
         double open{};
         double high{};
@@ -169,7 +197,8 @@ namespace Binance::MarketData{
         double ignore{};
     };
 
-    struct UIKlineRequest{
+    struct UIKlineRequest
+    {
         QString symbol;
         Interval interval;
         std::optional<qint64> startTime{}; // Optional, timestamp in ms to get candlesticks from INCLUSIVE.
@@ -177,29 +206,35 @@ namespace Binance::MarketData{
         std::optional<QString> timeZone; // Optional, default 0 UTC
         int limit{500}; // Optional, default 500; max 1000
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
 
             params.insert("symbol", symbol);
             params.insert("interval", Binance::Enum::toString(interval));
-            if(startTime.has_value()){
+            if (startTime.has_value())
+            {
                 params.insert("startTime", startTime.value());
             }
-            if(endTime.has_value()){
+            if (endTime.has_value())
+            {
                 params.insert("endTime", endTime.value());
             }
-            if(timeZone.has_value()){
+            if (timeZone.has_value())
+            {
                 params.insert("timeZone", timeZone.value());
             }
-            if(limit != 500 && limit > 0 && limit <= 1000){
+            if (limit != 500 && limit > 0 && limit <= 1000)
+            {
                 params.insert("limit", limit);
             }
-            
+
             return params;
         }
     };
 
-    struct UIKline{
+    struct UIKline
+    {
         qint64 openTime{};
         double open{};
         double high{};
@@ -214,54 +249,64 @@ namespace Binance::MarketData{
         double ignore{};
     };
 
-    struct CurrentAveragePriceRequest{
+    struct CurrentAveragePriceRequest
+    {
         QString symbol;
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
 
             params.insert("symbol", symbol);
-            
+
             return params;
         }
     };
 
-    struct CurrentAveragePrice{
+    struct CurrentAveragePrice
+    {
         int interval{}; // Average price interval (in minutes)
         double price{}; // Average price
         qint64 closeTime{}; // Last trade time
     };
 
-    struct Ticker24hrRequest{
+    struct Ticker24hrRequest
+    {
         std::optional<QString> symbol;
         std::optional<QList<QString>> symbols;
         std::optional<ResponseType> type;
         std::optional<SymbolStatus> symbolStatus;
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
 
-            if(symbol.has_value()){
+            if (symbol.has_value())
+            {
                 params.insert("symbol", symbol.value());
             }
-            else if(symbols.has_value()){
+            else if (symbols.has_value())
+            {
                 QJsonArray symbolsArray;
-                for(const auto& s : symbols.value()) symbolsArray.append(s);
+                for (const auto& s : symbols.value()) symbolsArray.append(s);
                 params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
 
-            if(type.has_value()){
+            if (type.has_value())
+            {
                 params.insert("type", Binance::Enum::toString(type.value()));
             }
-            if(symbolStatus.has_value()){
+            if (symbolStatus.has_value())
+            {
                 params.insert("symbolStatus", Binance::Enum::toString(symbolStatus.value()));
             }
-            
+
             return params;
         }
     };
 
-    struct Ticker24hrFull{
+    struct Ticker24hrFull
+    {
         QString symbol;
         double priceChange{};
         double priceChangePercent{};
@@ -285,7 +330,8 @@ namespace Binance::MarketData{
         int count{};     // Trade count
     };
 
-    struct Ticker24hrMini{
+    struct Ticker24hrMini
+    {
         QString symbol;
         double openPrice{};
         double highPrice{};
@@ -300,40 +346,48 @@ namespace Binance::MarketData{
         int count{};     // Trade count
     };
 
-    struct TradingDayRequest{
+    struct TradingDayRequest
+    {
         std::optional<QString> symbol;
         std::optional<QList<QString>> symbols;
         std::optional<QString> timeZone; // Optional, default 0 UTC
         std::optional<ResponseType> type;
         std::optional<SymbolStatus> symbolStatus;
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
 
-            if(symbol.has_value()){
+            if (symbol.has_value())
+            {
                 params.insert("symbol", symbol.value());
             }
-            else if(symbols.has_value() && !symbols.value().isEmpty()){
+            else if (symbols.has_value() && !symbols.value().isEmpty())
+            {
                 QJsonArray symbolsArray;
-                for(const auto& s : symbols.value()) symbolsArray.append(s);
+                for (const auto& s : symbols.value()) symbolsArray.append(s);
                 params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
 
-            if(timeZone.has_value()){
+            if (timeZone.has_value())
+            {
                 params.insert("timeZone", timeZone.value());
             }
-            if(type.has_value()){
+            if (type.has_value())
+            {
                 params.insert("type", Binance::Enum::toString(type.value()));
             }
-            if(symbolStatus.has_value()){
+            if (symbolStatus.has_value())
+            {
                 params.insert("symbolStatus", Binance::Enum::toString(symbolStatus.value()));
             }
-            
+
             return params;
         }
     };
 
-    struct TradingDayFull{
+    struct TradingDayFull
+    {
         QString symbol;
         double priceChange{};
         double priceChangePercent{};
@@ -351,7 +405,8 @@ namespace Binance::MarketData{
         int count{};     // Trade count
     };
 
-    struct TradingDayMini{
+    struct TradingDayMini
+    {
         QString symbol;
         double openPrice{};
         double highPrice{};
@@ -366,59 +421,71 @@ namespace Binance::MarketData{
         int count{};     // Trade count
     };
 
-    struct SymbolPriceTickerRequest{
+    struct SymbolPriceTickerRequest
+    {
         std::optional<QString> symbol;
         std::optional<QList<QString>> symbols;
         std::optional<SymbolStatus> symbolStatus;
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
-            
-            if(symbol.has_value()){
+
+            if (symbol.has_value())
+            {
                 params.insert("symbol", symbol.value());
             }
-            else if(symbols.has_value()){
+            else if (symbols.has_value())
+            {
                 QJsonArray symbolsArray;
-                for(const auto& s : symbols.value()) symbolsArray.append(s);
+                for (const auto& s : symbols.value()) symbolsArray.append(s);
                 params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
-            
-            if(symbolStatus.has_value()){
+
+            if (symbolStatus.has_value())
+            {
                 params.insert("symbolStatus", Binance::Enum::toString(symbolStatus.value()));
             }
-            
+
             return params;
         }
     };
 
-    struct SymbolPriceTicker{
+    struct SymbolPriceTicker
+    {
         QString symbol;
         double price{};
     };
 
-    struct SymbolOrderBookTickerRequest{
+    struct SymbolOrderBookTickerRequest
+    {
         std::optional<QString> symbol;
         std::optional<QList<QString>> symbols;
         std::optional<SymbolStatus> symbolStatus;
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
-            if(symbol.has_value()){
+            if (symbol.has_value())
+            {
                 params.insert("symbol", symbol.value());
             }
-            else if(symbols.has_value()){
+            else if (symbols.has_value())
+            {
                 QJsonArray symbolsArray;
-                for(const auto& s : symbols.value()) symbolsArray.append(s);
+                for (const auto& s : symbols.value()) symbolsArray.append(s);
                 params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
-            if(symbolStatus.has_value()){
+            if (symbolStatus.has_value())
+            {
                 params.insert("symbolStatus", Binance::Enum::toString(symbolStatus.value()));
             }
             return params;
         }
     };
 
-    struct SymbolOrderBookTicker{
+    struct SymbolOrderBookTicker
+    {
         QString symbol;
         double bidPrice{};
         double bidQty{};
@@ -426,39 +493,47 @@ namespace Binance::MarketData{
         double askQty{};
     };
 
-    struct TickerRequest{
+    struct TickerRequest
+    {
         std::optional<QString> symbol;
         std::optional<QList<QString>> symbols;
         std::optional<QString> windowSize; // e.g., "1m", "5m", "1h", "1d"
         std::optional<ResponseType> type;
         std::optional<SymbolStatus> symbolStatus;
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
 
-            if(symbol.has_value()){
+            if (symbol.has_value())
+            {
                 params.insert("symbol", symbol.value());
             }
-            else if(symbols.has_value() && !symbols.value().isEmpty()){
+            else if (symbols.has_value() && !symbols.value().isEmpty())
+            {
                 QJsonArray symbolsArray;
-                for(const auto& s : symbols.value()) symbolsArray.append(s);
+                for (const auto& s : symbols.value()) symbolsArray.append(s);
                 params.insert("symbols", QString(QJsonDocument(symbolsArray).toJson(QJsonDocument::Compact)));
             }
 
-            if(windowSize.has_value()){
+            if (windowSize.has_value())
+            {
                 params.insert("windowSize", windowSize.value());
             }
-            if(type.has_value()){
+            if (type.has_value())
+            {
                 params.insert("type", Binance::Enum::toString(type.value()));
             }
-            if(symbolStatus.has_value()){
+            if (symbolStatus.has_value())
+            {
                 params.insert("symbolStatus", Binance::Enum::toString(symbolStatus.value()));
             }
             return params;
         }
     };
 
-    struct TickerFull{
+    struct TickerFull
+    {
         QString symbol;
         double priceChange{};
         double priceChangePercent{};
@@ -476,7 +551,8 @@ namespace Binance::MarketData{
         int count{};
     };
 
-    struct TickerMini{
+    struct TickerMini
+    {
         QString symbol;
         double openPrice{};
         double highPrice{};
@@ -490,4 +566,4 @@ namespace Binance::MarketData{
         int lastId{};
         int count{};
     };
-}
+} // namespace Binance::MarketData

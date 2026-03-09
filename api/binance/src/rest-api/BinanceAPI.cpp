@@ -182,16 +182,20 @@ namespace Binance
         else if (endpoint == API::TICKER_24HR)
         {
             bool isFull = false;
-            if (jsonDoc.isObject()) {
+            if (jsonDoc.isObject())
+            {
                 isFull = jsonDoc.object().contains("priceChange");
-            } else if (jsonDoc.isArray()) {
+            }
+            else if (jsonDoc.isArray())
+            {
                 const QJsonArray arr = jsonDoc.array();
-                if (!arr.isEmpty() && arr.first().isObject()) {
+                if (!arr.isEmpty() && arr.first().isObject())
+                {
                     isFull = arr.first().toObject().contains("priceChange");
                 }
             }
 
-            if(reply->property("isFull").toBool() || isFull)
+            if (reply->property("isFull").toBool() || isFull)
             {
                 emit tickerPrice24hrResponseFull(jsonDoc);
             }
@@ -201,8 +205,8 @@ namespace Binance
             }
         }
         else if (endpoint == API::TRADING_DAY)
-        {            
-            if(reply->property("isFull").toBool())
+        {
+            if (reply->property("isFull").toBool())
             {
                 emit tradingDayResponseFull(jsonDoc);
             }
@@ -221,7 +225,7 @@ namespace Binance
         }
         else if (endpoint == API::ROLLING_WINDOW_TICKER)
         {
-            if(reply->property("isFull").toBool())
+            if (reply->property("isFull").toBool())
             {
                 emit rollingWindowTickerResponseFull(jsonDoc);
             }
@@ -246,7 +250,8 @@ namespace Binance
             emit apiKeysFileError();
             return;
         }
-        else{
+        else
+        {
             QTextStream in(&file);
             m_apiKey = in.readLine().trimmed();
             m_apiSecret = in.readLine().trimmed();

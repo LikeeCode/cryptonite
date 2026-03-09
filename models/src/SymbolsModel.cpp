@@ -40,7 +40,7 @@ QVariant SymbolsModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    switch(role)
+    switch (role)
     {
     case SymbolRole:
         return m_symbols[index.row()].symbol;
@@ -68,7 +68,7 @@ QVariant SymbolsModel::data(const QModelIndex &index, int role) const
 
 QVariant SymbolsModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if(section >= 0 && section < headerNames.size())
+    if (section >= 0 && section < headerNames.size())
     {
         if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
         {

@@ -86,7 +86,8 @@ TEST_F(MarketDataParserTest, RecentTrades)
 
     ASSERT_TRUE(trades.has_value());
     EXPECT_FALSE(trades->isEmpty());
-    if (!trades->isEmpty()) {
+    if (!trades->isEmpty())
+    {
         const auto& trade = trades->first();
         EXPECT_GT(trade.id, 0);
         EXPECT_GT(trade.price, 0);
@@ -119,7 +120,8 @@ TEST_F(MarketDataParserTest, HistoricalTrades)
 
     ASSERT_TRUE(trades.has_value());
     EXPECT_FALSE(trades->isEmpty());
-    if (!trades->isEmpty()) {
+    if (!trades->isEmpty())
+    {
         const auto& trade = trades->first();
         EXPECT_GT(trade.id, 0);
         EXPECT_GT(trade.price, 0);
@@ -152,7 +154,8 @@ TEST_F(MarketDataParserTest, AggregatedTrades)
 
     ASSERT_TRUE(aggTrades.has_value());
     EXPECT_FALSE(aggTrades->isEmpty());
-    if(!aggTrades->isEmpty()){
+    if (!aggTrades->isEmpty())
+    {
         const auto& trade = aggTrades->first();
         EXPECT_GT(trade.a, 0);
         EXPECT_GT(trade.p, 0);
@@ -187,7 +190,8 @@ TEST_F(MarketDataParserTest, Klines)
 
     ASSERT_TRUE(klines.has_value());
     EXPECT_FALSE(klines->isEmpty());
-    if(!klines->isEmpty()){
+    if (!klines->isEmpty())
+    {
         const auto& kline = klines->first();
         EXPECT_GT(kline.openTime, 0);
         EXPECT_GT(kline.open, 0);
@@ -227,7 +231,8 @@ TEST_F(MarketDataParserTest, UIKlines)
 
     ASSERT_TRUE(uiKlines.has_value());
     EXPECT_FALSE(uiKlines->isEmpty());
-    if(!uiKlines->isEmpty()){
+    if (!uiKlines->isEmpty())
+    {
         const auto& kline = uiKlines->first();
         EXPECT_GT(kline.openTime, 0);
         EXPECT_GT(kline.open, 0);
