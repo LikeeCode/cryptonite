@@ -71,7 +71,15 @@ namespace Binance::GeneralData
             {
                 params.insert("symbol", symbol.value());
             }
-            else if (symbols.has_value())
+            else if (symbols.has_value() && !symbols.value().isEmpty())
+            {
+                QJsonArray jsonArray;
+                for (const auto& sym : symbols.value())
+                {
+                    jsonArray.append(sym);
+                }
+                params.insert("symbols", QString::fromUtf8(QJsonDocument(jsonArray).toJson(QJsonDocument::Compact)));
+            }
             {
                 QJsonArray jsonArray;
                 for (const auto& sym : symbols.value())
