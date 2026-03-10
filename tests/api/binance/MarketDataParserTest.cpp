@@ -53,6 +53,8 @@ TEST_F(MarketDataParserTest, OrderBook)
         loop.quit();
     });
 
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+
     binanceAPI->orderBook(Binance::MarketData::OrderBookRequest{"BTCUSDT"});
     loop.exec();
 
@@ -83,6 +85,8 @@ TEST_F(MarketDataParserTest, RecentTrades)
         FAIL() << "MarketDataParserTest RecentTrades API Error received: " << error.toStdString();
         loop.quit();
     });
+
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
 
     binanceAPI->recentTrades(Binance::MarketData::RecentTradesRequest{"BTCUSDT"});
     loop.exec();
@@ -121,6 +125,8 @@ TEST_F(MarketDataParserTest, HistoricalTrades)
         loop.quit();
     });
 
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+
     binanceAPI->historicalTrades(Binance::MarketData::OldTradesRequest{"BTCUSDT"});
     loop.exec();
 
@@ -157,6 +163,8 @@ TEST_F(MarketDataParserTest, AggregatedTrades)
         FAIL() << "MarketDataParserTest AggregatedTrades API Error received: " << error.toStdString();
         loop.quit();
     });
+
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
 
     binanceAPI->aggregatedTrades(Binance::MarketData::AggregatedTradeRequest{"BTCUSDT"});
     loop.exec();
@@ -196,6 +204,8 @@ TEST_F(MarketDataParserTest, Klines)
         FAIL() << "MarketDataParserTest Klines API Error received: " << error.toStdString();
         loop.quit();
     });
+
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
 
     binanceAPI->klines(Binance::MarketData::KlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
     loop.exec();
@@ -241,6 +251,8 @@ TEST_F(MarketDataParserTest, UIKlines)
         loop.quit();
     });
 
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+
     binanceAPI->uiKlines(Binance::MarketData::UIKlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
     loop.exec();
 
@@ -285,6 +297,8 @@ TEST_F(MarketDataParserTest, CurrentAveragePrice)
         loop.quit();
     });
 
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+
     binanceAPI->currentAveragePrice(Binance::MarketData::CurrentAveragePriceRequest{"BTCUSDT"});
     loop.exec();
 
@@ -315,6 +329,8 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
         FAIL() << "MarketDataParserTest TickerPrice24hrFull API Error received: " << error.toStdString();
         loop.quit();
     });
+
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
 
     binanceAPI->tickerPrice24hr(Binance::MarketData::Ticker24hrRequest{"BTCUSDT"});
     loop.exec();
@@ -374,6 +390,8 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
         FAIL() << "MarketDataParserTest TickerPrice24hrMini API Error received: " << error.toStdString();
         loop.quit();
     });
+
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
 
     Binance::MarketData::Ticker24hrRequest requestMini{"BTCUSDT"};
     requestMini.type = Binance::ResponseType::MINI;
@@ -437,6 +455,8 @@ TEST_F(MarketDataParserTest, TradingDayFull)
         loop.quit();
     });
 
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+
     binanceAPI->tradingDay(Binance::MarketData::TradingDayRequest{"BTCUSDT"});
     loop.exec();
 
@@ -495,6 +515,8 @@ TEST_F(MarketDataParserTest, TradingDayMini)
         FAIL() << "MarketDataParserTest TradingDayMini API Error received: " << error.toStdString();
         loop.quit();
     });
+
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
 
     Binance::MarketData::TradingDayRequest requestMini{"BTCUSDT"};
     requestMini.type = Binance::ResponseType::MINI;
@@ -558,6 +580,8 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
         loop.quit();
     });
 
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+
     binanceAPI->symbolPriceTicker(Binance::MarketData::SymbolPriceTickerRequest{"BTCUSDT"});
     loop.exec();
 
@@ -601,6 +625,8 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
         FAIL() << "MarketDataParserTest SymbolOrderBookTicker API Error received: " << error.toStdString();
         loop.quit();
     });
+
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
 
     binanceAPI->symbolOrderBookTicker(Binance::MarketData::SymbolOrderBookTickerRequest{"BTCUSDT"});
     loop.exec();
@@ -654,6 +680,8 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
         FAIL() << "MarketDataParserTest RollingWindowTickerFull API Error received: " << error.toStdString();
         loop.quit();
     });
+
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
 
     Binance::MarketData::TickerRequest symbol{"BTCUSDT"};
     binanceAPI->rollingWindowTicker(symbol);
@@ -714,6 +742,8 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
         FAIL() << "MarketDataParserTest RollingWindowTickerMini API Error received: " << error.toStdString();
         loop.quit();
     });
+
+    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
 
     Binance::MarketData::TickerRequest symbol{"BTCUSDT"};
     symbol.type = Binance::ResponseType::MINI;
