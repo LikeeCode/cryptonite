@@ -10,8 +10,8 @@
 namespace
 {
     // Handles the "single object or array of objects" response pattern shared by
-    // several Binance endpoints.  parseSingle must accept a QJsonDocument and
-    // return std::optional<T>.
+    // several Binance endpoints.  parseSingle must accept a const QJsonObject&
+    // and return std::optional<T>.
     template<typename T, typename ParseFn>
     std::optional<QList<T>> parseObjectOrArray(const QJsonDocument &jsonDoc, ParseFn parseSingle)
     {
@@ -19,7 +19,7 @@ namespace
 
         if (jsonDoc.isObject())
         {
-            auto maybe = parseSingle(jsonDoc);
+            auto maybe = parseSingle(jsonDoc.object());
             if (!maybe.has_value())
                 return {};
             list.append(*maybe);
@@ -33,7 +33,7 @@ namespace
             {
                 if (!item.isObject())
                     return {}; // invalid format
-                auto maybe = parseSingle(QJsonDocument(item.toObject()));
+                auto maybe = parseSingle(item.toObject());
                 if (maybe.has_value())
                     list.append(*maybe);
             }
@@ -397,10 +397,9 @@ namespace Binance
         return parseObjectOrArray<MarketData::Ticker24hrFull>(jsonDoc, parseSingleTicker24hrFull);
     }
 
-    std::optional<MarketData::Ticker24hrFull> MarketDataParser::parseSingleTicker24hrFull(const QJsonDocument &jsonDoc)
+    std::optional<MarketData::Ticker24hrFull> MarketDataParser::parseSingleTicker24hrFull(const QJsonObject &json)
     {
         MarketData::Ticker24hrFull ticker24hrFull{};
-        QJsonObject json = jsonDoc.object();
 
         // symbol
         if (!json.contains("symbol") || !json["symbol"].isString())
@@ -557,16 +556,9 @@ namespace Binance
         return parseObjectOrArray<MarketData::Ticker24hrMini>(jsonDoc, parseSingleTicker24hrMini);
     }
 
-    std::optional<MarketData::Ticker24hrMini> MarketDataParser::parseSingleTicker24hrMini(const QJsonDocument &jsonDoc)
+    std::optional<MarketData::Ticker24hrMini> MarketDataParser::parseSingleTicker24hrMini(const QJsonObject &json)
     {
         MarketData::Ticker24hrMini ticker24hrMini{};
-
-        // json object
-        if (!jsonDoc.isObject())
-        {
-            return {}; // invalid format
-        }
-        QJsonObject json = jsonDoc.object();
 
         // symbol
         if (!json.contains("symbol") || !json["symbol"].isString())
@@ -660,16 +652,9 @@ namespace Binance
         return parseObjectOrArray<MarketData::TradingDayFull>(jsonDoc, parseSingleTradingDayFull);
     }
 
-    std::optional<MarketData::TradingDayFull> MarketDataParser::parseSingleTradingDayFull(const QJsonDocument &jsonDoc)
+    std::optional<MarketData::TradingDayFull> MarketDataParser::parseSingleTradingDayFull(const QJsonObject &json)
     {
         MarketData::TradingDayFull tradingDayFull{};
-
-        // json object
-        if (!jsonDoc.isObject())
-        {
-            return {}; // invalid format
-        }
-        QJsonObject json = jsonDoc.object();
 
         // symbol
         if (!json.contains("symbol") || !json["symbol"].isString())
@@ -784,16 +769,9 @@ namespace Binance
         return parseObjectOrArray<MarketData::TradingDayMini>(jsonDoc, parseSingleTradingDayMini);
     }
 
-    std::optional<MarketData::TradingDayMini> MarketDataParser::parseSingleTradingDayMini(const QJsonDocument &jsonDoc)
+    std::optional<MarketData::TradingDayMini> MarketDataParser::parseSingleTradingDayMini(const QJsonObject &json)
     {
         MarketData::TradingDayMini tradingDayMini{};
-    
-        // json object
-        if (!jsonDoc.isObject())
-        {
-            return {}; // invalid format
-        }
-        QJsonObject json = jsonDoc.object();
 
         // symbol
         if (!json.contains("symbol") || !json["symbol"].isString())
@@ -887,17 +865,10 @@ namespace Binance
         return parseObjectOrArray<MarketData::SymbolPriceTicker>(jsonDoc, parseSingleSymbolPriceTicker);
     }
 
-    std::optional<MarketData::SymbolPriceTicker> MarketDataParser::parseSingleSymbolPriceTicker(const QJsonDocument &jsonDoc)
+    std::optional<MarketData::SymbolPriceTicker> MarketDataParser::parseSingleSymbolPriceTicker(const QJsonObject &json)
     {
         MarketData::SymbolPriceTicker symbolPriceTicker{};
 
-        // json object
-        if (!jsonDoc.isObject())
-        {
-            return {}; // invalid format
-        }
-        QJsonObject json = jsonDoc.object();
-        
         // symbol
         if (!json.contains("symbol") || !json["symbol"].isString())
         {
@@ -920,16 +891,9 @@ namespace Binance
         return parseObjectOrArray<MarketData::SymbolOrderBookTicker>(jsonDoc, parseSingleSymbolOrderBookTicker);
     }
 
-    std::optional<MarketData::SymbolOrderBookTicker> MarketDataParser::parseSingleSymbolOrderBookTicker(const QJsonDocument &jsonDoc)
+    std::optional<MarketData::SymbolOrderBookTicker> MarketDataParser::parseSingleSymbolOrderBookTicker(const QJsonObject &json)
     {
         MarketData::SymbolOrderBookTicker symbolOrderBookTicker{};
-
-        // json object
-        if (!jsonDoc.isObject())
-        {
-            return {}; // invalid format
-        }
-        QJsonObject json = jsonDoc.object();
 
         // symbol
         if (!json.contains("symbol") || !json["symbol"].isString())
@@ -974,16 +938,9 @@ namespace Binance
         return parseObjectOrArray<MarketData::TickerFull>(jsonDoc, parseSingleRollingWindowTickerFull);
     }
 
-    std::optional<MarketData::TickerFull> MarketDataParser::parseSingleRollingWindowTickerFull(const QJsonDocument &jsonDoc)
+    std::optional<MarketData::TickerFull> MarketDataParser::parseSingleRollingWindowTickerFull(const QJsonObject &json)
     {
         MarketData::TickerFull tickerFull{};
-
-        // json object
-        if (!jsonDoc.isObject())
-        {
-            return {}; // invalid format
-        }
-        QJsonObject json = jsonDoc.object();
 
         // symbol
         if (!json.contains("symbol") || !json["symbol"].isString())
@@ -1098,16 +1055,9 @@ namespace Binance
         return parseObjectOrArray<MarketData::TickerMini>(jsonDoc, parseSingleRollingWindowTickerMini);
     }
 
-    std::optional<MarketData::TickerMini> MarketDataParser::parseSingleRollingWindowTickerMini(const QJsonDocument &jsonDoc)
+    std::optional<MarketData::TickerMini> MarketDataParser::parseSingleRollingWindowTickerMini(const QJsonObject &json)
     {
         MarketData::TickerMini tickerMini{};
-
-        // json object
-        if (!jsonDoc.isObject())
-        {
-            return {}; // invalid format
-        }
-        QJsonObject json = jsonDoc.object();
 
         // symbol
         if (!json.contains("symbol") || !json["symbol"].isString())
