@@ -13,7 +13,7 @@ public:
     enum SymbolRoles
     {
         SymbolRole = Qt::UserRole + 1,
-        StatustRole,
+        StatusRole,
         BaseAssetRole,
         QuoteAssetRole,
         FiltersRole
