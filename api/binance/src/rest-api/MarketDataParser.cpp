@@ -12,6 +12,13 @@ namespace
     // Handles the "single object or array of objects" response pattern shared by
     // several Binance endpoints.  parseSingle must accept a const QJsonObject&
     // and return std::optional<T>.
+    //
+    // Behaviour:
+    //  - Object  : returns a one-element list, or std::nullopt if parseSingle fails.
+    //  - Array   : returns the parsed list (possibly empty for an empty array).
+    //              Returns std::nullopt if any element is not an object or if
+    //              parseSingle fails for any element.
+    //  - Other   : returns std::nullopt (invalid format).
     template<typename T, typename ParseFn>
     std::optional<QList<T>> parseObjectOrArray(const QJsonDocument &jsonDoc, ParseFn parseSingle)
     {
@@ -27,15 +34,14 @@ namespace
         else if (jsonDoc.isArray())
         {
             const QJsonArray array = jsonDoc.array();
-            if (array.isEmpty())
-                return {}; // empty array is invalid
             for (const auto &item : array)
             {
                 if (!item.isObject())
-                    return {}; // invalid format
+                    return {}; // invalid format - non-object element
                 auto maybe = parseSingle(item.toObject());
-                if (maybe.has_value())
-                    list.append(*maybe);
+                if (!maybe.has_value())
+                    return {}; // malformed element - fail the entire parse
+                list.append(*maybe);
             }
         }
         else
@@ -43,7 +49,7 @@ namespace
             return {}; // invalid format
         }
 
-        return list.isEmpty() ? std::optional<QList<T>>{} : list;
+        return list;
     }
 } // anonymous namespace
 
