@@ -191,7 +191,7 @@ namespace Binance::MarketData
         double volume{};
         qint64 closeTime{};
         double quoteAssetVolume{};
-        int numberOfTrades{};
+        qint64 numberOfTrades{};
         double takerBuyBaseAssetVolume{};
         double takerBuyQuoteAssetVolume{};
         double ignore{};
@@ -243,7 +243,7 @@ namespace Binance::MarketData
         double volume{};
         qint64 closeTime{};
         double quoteAssetVolume{};
-        int numberOfTrades{};
+        qint64 numberOfTrades{};
         double takerBuyBaseAssetVolume{};
         double takerBuyQuoteAssetVolume{};
         double ignore{};
@@ -325,9 +325,9 @@ namespace Binance::MarketData
         double quoteVolume{};
         qint64 openTime{};
         qint64 closeTime{};
-        int firstId{};   // First tradeId
-        int lastId{};    // Last tradeId
-        int count{};     // Trade count
+        qint64 firstId{};   // First tradeId
+        qint64 lastId{};    // Last tradeId
+        qint64 count{};     // Trade count
     };
 
     struct Ticker24hrMini
@@ -341,9 +341,9 @@ namespace Binance::MarketData
         double quoteVolume{};
         qint64 openTime{};
         qint64 closeTime{};
-        int firstId{};   // First tradeId
-        int lastId{};    // Last tradeId
-        int count{};     // Trade count
+        qint64 firstId{};   // First tradeId
+        qint64 lastId{};    // Last tradeId
+        qint64 count{};     // Trade count
     };
 
     struct TradingDayRequest
@@ -400,9 +400,9 @@ namespace Binance::MarketData
         double quoteVolume{};
         qint64 openTime{};
         qint64 closeTime{};
-        int firstId{};   // First tradeId
-        int lastId{};    // Last tradeId
-        int count{};     // Trade count
+        qint64 firstId{};   // First tradeId
+        qint64 lastId{};    // Last tradeId
+        qint64 count{};     // Trade count
     };
 
     struct TradingDayMini
@@ -416,9 +416,9 @@ namespace Binance::MarketData
         double quoteVolume{};
         qint64 openTime{};
         qint64 closeTime{};
-        int firstId{};   // First tradeId
-        int lastId{};    // Last tradeId
-        int count{};     // Trade count
+        qint64 firstId{};   // First tradeId
+        qint64 lastId{};    // Last tradeId
+        qint64 count{};     // Trade count
     };
 
     struct SymbolPriceTickerRequest
@@ -546,9 +546,9 @@ namespace Binance::MarketData
         double quoteVolume{};
         qint64 openTime{};
         qint64 closeTime{};
-        int firstId{};
-        int lastId{};
-        int count{};
+        qint64 firstId{};
+        qint64 lastId{};
+        qint64 count{};
     };
 
     struct TickerMini
@@ -562,8 +562,8 @@ namespace Binance::MarketData
         double quoteVolume{};
         qint64 openTime{};
         qint64 closeTime{};
-        int firstId{};
-        int lastId{};
-        int count{};
+        qint64 firstId{};
+        qint64 lastId{};
+        qint64 count{};
     };
 } // namespace Binance::MarketData
