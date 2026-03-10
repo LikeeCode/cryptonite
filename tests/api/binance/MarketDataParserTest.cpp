@@ -42,22 +42,27 @@ TEST_F(MarketDataParserTest, OrderBook)
     QJsonDocument response;
     std::optional<Binance::MarketData::OrderBook> orderBook{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::orderBookResponse, [&](const QJsonDocument &data)
     {
         response = data;
         orderBook = Binance::MarketDataParser::parseOrderBook(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest OrderBook API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->orderBook(Binance::MarketData::OrderBookRequest{"BTCUSDT"});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -77,22 +82,27 @@ TEST_F(MarketDataParserTest, RecentTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Trade>> trades{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::recentTradesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         trades = Binance::MarketDataParser::parseTrades(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest RecentTrades API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->recentTrades(Binance::MarketData::RecentTradesRequest{"BTCUSDT"});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -118,22 +128,27 @@ TEST_F(MarketDataParserTest, HistoricalTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Trade>> trades{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::historicalTradesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         trades = Binance::MarketDataParser::parseTrades(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest HistoricalTrades API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->historicalTrades(Binance::MarketData::OldTradesRequest{"BTCUSDT"});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -159,22 +174,27 @@ TEST_F(MarketDataParserTest, AggregatedTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::AggregatedTrade>> aggTrades{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::aggTradesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         aggTrades = Binance::MarketDataParser::parseAggregatedTrades(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest AggregatedTrades API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->aggregatedTrades(Binance::MarketData::AggregatedTradeRequest{"BTCUSDT"});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -202,22 +222,27 @@ TEST_F(MarketDataParserTest, Klines)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Kline>> klines{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::klinesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         klines = Binance::MarketDataParser::parseKlines(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest Klines API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->klines(Binance::MarketData::KlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -250,22 +275,27 @@ TEST_F(MarketDataParserTest, UIKlines)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::UIKline>> uiKlines{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::uiKlinesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         uiKlines = Binance::MarketDataParser::parseUIKlines(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest UIKlines API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->uiKlines(Binance::MarketData::UIKlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -298,22 +328,27 @@ TEST_F(MarketDataParserTest, CurrentAveragePrice)
     QJsonDocument response;
     std::optional<Binance::MarketData::CurrentAveragePrice> avgPrice{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::currentAveragePriceResponse, [&](const QJsonDocument &data)
     {
         response = data;
         avgPrice = Binance::MarketDataParser::parseCurrentAveragePrice(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest CurrentAveragePrice API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->currentAveragePrice(Binance::MarketData::CurrentAveragePriceRequest{"BTCUSDT"});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -333,22 +368,27 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Ticker24hrFull>> ticker24hrFull{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseFull, [&](const QJsonDocument &data)
     {
         response = data;
         ticker24hrFull = Binance::MarketDataParser::parseTicker24hrFull(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest TickerPrice24hrFull API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->tickerPrice24hr(Binance::MarketData::Ticker24hrRequest{"BTCUSDT"});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -366,7 +406,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     EXPECT_GE(ticker24hrFull->first().count, 0);
 
     timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
+    timer.start(10000);
     Binance::MarketData::Ticker24hrRequest requestFullMultiple{};
     requestFullMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     binanceAPI->tickerPrice24hr(requestFullMultiple);
@@ -404,22 +444,27 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Ticker24hrMini>> ticker24hrMini{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseMini, [&](const QJsonDocument &data)
     {
         response = data;
         ticker24hrMini = Binance::MarketDataParser::parseTicker24hrMini(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest TickerPrice24hrMini API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     Binance::MarketData::Ticker24hrRequest requestMini{"BTCUSDT"};
     requestMini.type = Binance::ResponseType::MINI;
     binanceAPI->tickerPrice24hr(requestMini);
@@ -439,7 +484,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     EXPECT_GE(ticker24hrMini->first().count, 0);
 
     timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
+    timer.start(10000);
     Binance::MarketData::Ticker24hrRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     requestMiniMultiple.type = Binance::ResponseType::MINI;
@@ -478,22 +523,27 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TradingDayFull>> tradingDayFull{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseFull, [&](const QJsonDocument &data)
     {
         response = data;
         tradingDayFull = Binance::MarketDataParser::parseTradingDayFull(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest TradingDayFull API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->tradingDay(Binance::MarketData::TradingDayRequest{"BTCUSDT"});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -511,7 +561,7 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     EXPECT_GE(tradingDayFull->first().count, 0);
 
     timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
+    timer.start(10000);
     Binance::MarketData::TradingDayRequest requestFullMultiple{};
     requestFullMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     binanceAPI->tradingDay(requestFullMultiple);
@@ -549,22 +599,27 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TradingDayMini>> tradingDayMini{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseMini, [&](const QJsonDocument &data)
     {
         response = data;
         tradingDayMini = Binance::MarketDataParser::parseTradingDayMini(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest TradingDayMini API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     Binance::MarketData::TradingDayRequest requestMini{"BTCUSDT"};
     requestMini.type = Binance::ResponseType::MINI;
     binanceAPI->tradingDay(requestMini);
@@ -584,7 +639,7 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     EXPECT_GE(tradingDayMini->first().count, 0);
 
     timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
+    timer.start(10000);
     Binance::MarketData::TradingDayRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     requestMiniMultiple.type = Binance::ResponseType::MINI;
@@ -623,22 +678,27 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::SymbolPriceTicker>> symbolPriceTicker{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolPriceTickerResponse, [&](const QJsonDocument &data)
     {
         response = data;
         symbolPriceTicker = Binance::MarketDataParser::parseSymbolPriceTicker(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest SymbolPriceTicker API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->symbolPriceTicker(Binance::MarketData::SymbolPriceTickerRequest{"BTCUSDT"});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -651,7 +711,7 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     EXPECT_GT(symbolPriceTicker->first().price, 0);
 
     timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
+    timer.start(10000);
     Binance::MarketData::SymbolPriceTickerRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     binanceAPI->symbolPriceTicker(requestMiniMultiple);
@@ -679,22 +739,27 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::SymbolOrderBookTicker>> symbolOrderBookTicker{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolOrderBookTickerResponse, [&](const QJsonDocument &data)
     {
         response = data;
         symbolOrderBookTicker = Binance::MarketDataParser::parseSymbolOrderBookTicker(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest SymbolOrderBookTicker API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     binanceAPI->symbolOrderBookTicker(Binance::MarketData::SymbolOrderBookTickerRequest{"BTCUSDT"});
     loop.exec();
     ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
@@ -710,7 +775,7 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     EXPECT_GE(symbolOrderBookTicker->first().askQty, 0);
 
     timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
+    timer.start(10000);
     Binance::MarketData::SymbolOrderBookTickerRequest requestMultiple{};
     requestMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     binanceAPI->symbolOrderBookTicker(requestMultiple);
@@ -744,22 +809,27 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TickerFull>> tickerFull{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseFull, [&](const QJsonDocument &data)
     {
         response = data;
         tickerFull = Binance::MarketDataParser::parseRollingWindowTickerFull(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest RollingWindowTickerFull API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     Binance::MarketData::TickerRequest symbol{"BTCUSDT"};
     binanceAPI->rollingWindowTicker(symbol);
     loop.exec();
@@ -778,7 +848,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
     EXPECT_GE(tickerFull->first().count, 0);
 
     timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
+    timer.start(10000);
     Binance::MarketData::TickerRequest requestFullMultiple{};
     requestFullMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     binanceAPI->rollingWindowTicker(requestFullMultiple);
@@ -816,22 +886,27 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TickerMini>> tickerMini{};
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    bool timedOut = false;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { timedOut = true; loop.quit(); });
+
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseMini, [&](const QJsonDocument &data)
     {
         response = data;
         tickerMini = Binance::MarketDataParser::parseRollingWindowTickerMini(data);
+        timer.stop();
         loop.quit();
     });
 
     QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
     {
+        timer.stop();
         FAIL() << "MarketDataParserTest RollingWindowTickerMini API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    bool timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
-
+    timer.start(10000);
     Binance::MarketData::TickerRequest symbol{"BTCUSDT"};
     symbol.type = Binance::ResponseType::MINI;
     binanceAPI->rollingWindowTicker(symbol);
@@ -851,7 +926,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     EXPECT_GE(tickerMini->first().count, 0);
 
     timedOut = false;
-    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
+    timer.start(10000);
     Binance::MarketData::TickerRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     requestMiniMultiple.type = Binance::ResponseType::MINI;
