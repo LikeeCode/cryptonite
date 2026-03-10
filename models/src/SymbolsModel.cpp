@@ -44,7 +44,7 @@ QVariant SymbolsModel::data(const QModelIndex &index, int role) const
     {
     case SymbolRole:
         return m_symbols[index.row()].symbol;
-    case StatustRole:
+    case StatusRole:
         return Binance::Enum::toString(m_symbols[index.row()].status);
     case BaseAssetRole:
         return m_symbols[index.row()].baseAsset;
@@ -91,7 +91,7 @@ QHash<int, QByteArray> SymbolsModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[SymbolRole] = "symbol";
-    roles[StatustRole] = "status";
+    roles[StatusRole] = "status";
     roles[BaseAssetRole] = "baseAsset";
     roles[QuoteAssetRole] = "quoteAsset";
     roles[FiltersRole] = "filters";
