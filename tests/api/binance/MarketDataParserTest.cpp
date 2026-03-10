@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <algorithm>
+
 #include <QCoreApplication>
 #include <QEventLoop>
 #include <QJsonObject>
@@ -375,20 +377,25 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(ticker24hrFull.has_value());
-    EXPECT_EQ(ticker24hrFull->at(0).symbol, "BTCUSDT");
-    EXPECT_GT(ticker24hrFull->at(0).openTime, 0);
-    EXPECT_GT(ticker24hrFull->at(0).closeTime, 0);
-    EXPECT_GT(ticker24hrFull->at(0).highPrice, 0);
-    EXPECT_GT(ticker24hrFull->at(0).lowPrice, 0);
-    EXPECT_GT(ticker24hrFull->at(0).lastPrice, 0);
-    EXPECT_GE(ticker24hrFull->at(0).count, 0);
-    EXPECT_EQ(ticker24hrFull->at(1).symbol, "ETHUSDT");
-    EXPECT_GT(ticker24hrFull->at(1).openTime, 0);
-    EXPECT_GT(ticker24hrFull->at(1).closeTime, 0);
-    EXPECT_GT(ticker24hrFull->at(1).highPrice, 0);
-    EXPECT_GT(ticker24hrFull->at(1).lowPrice, 0);
-    EXPECT_GT(ticker24hrFull->at(1).lastPrice, 0);
-    EXPECT_GE(ticker24hrFull->at(1).count, 0);
+    ASSERT_GE(ticker24hrFull->size(), 2);
+    auto btcIt = std::find_if(ticker24hrFull->begin(), ticker24hrFull->end(),
+        [](const auto &t) { return t.symbol == "BTCUSDT"; });
+    auto ethIt = std::find_if(ticker24hrFull->begin(), ticker24hrFull->end(),
+        [](const auto &t) { return t.symbol == "ETHUSDT"; });
+    ASSERT_NE(btcIt, ticker24hrFull->end());
+    EXPECT_GT(btcIt->openTime, 0);
+    EXPECT_GT(btcIt->closeTime, 0);
+    EXPECT_GT(btcIt->highPrice, 0);
+    EXPECT_GT(btcIt->lowPrice, 0);
+    EXPECT_GT(btcIt->lastPrice, 0);
+    EXPECT_GE(btcIt->count, 0);
+    ASSERT_NE(ethIt, ticker24hrFull->end());
+    EXPECT_GT(ethIt->openTime, 0);
+    EXPECT_GT(ethIt->closeTime, 0);
+    EXPECT_GT(ethIt->highPrice, 0);
+    EXPECT_GT(ethIt->lowPrice, 0);
+    EXPECT_GT(ethIt->lastPrice, 0);
+    EXPECT_GE(ethIt->count, 0);
 }
 
 TEST_F(MarketDataParserTest, TickerPrice24hrMini)
@@ -444,20 +451,25 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(ticker24hrMini.has_value());
-    EXPECT_EQ(ticker24hrMini->at(0).symbol, "BTCUSDT");
-    EXPECT_GT(ticker24hrMini->at(0).openTime, 0);
-    EXPECT_GT(ticker24hrMini->at(0).closeTime, 0);
-    EXPECT_GT(ticker24hrMini->at(0).highPrice, 0);
-    EXPECT_GT(ticker24hrMini->at(0).lowPrice, 0);
-    EXPECT_GT(ticker24hrMini->at(0).lastPrice, 0);
-    EXPECT_GE(ticker24hrMini->at(0).count, 0);
-    EXPECT_EQ(ticker24hrMini->at(1).symbol, "ETHUSDT");
-    EXPECT_GT(ticker24hrMini->at(1).openTime, 0);
-    EXPECT_GT(ticker24hrMini->at(1).closeTime, 0);
-    EXPECT_GT(ticker24hrMini->at(1).highPrice, 0);
-    EXPECT_GT(ticker24hrMini->at(1).lowPrice, 0);
-    EXPECT_GT(ticker24hrMini->at(1).lastPrice, 0);
-    EXPECT_GE(ticker24hrMini->at(1).count, 0);
+    ASSERT_GE(ticker24hrMini->size(), 2);
+    auto btcIt = std::find_if(ticker24hrMini->begin(), ticker24hrMini->end(),
+        [](const auto &t) { return t.symbol == "BTCUSDT"; });
+    auto ethIt = std::find_if(ticker24hrMini->begin(), ticker24hrMini->end(),
+        [](const auto &t) { return t.symbol == "ETHUSDT"; });
+    ASSERT_NE(btcIt, ticker24hrMini->end());
+    EXPECT_GT(btcIt->openTime, 0);
+    EXPECT_GT(btcIt->closeTime, 0);
+    EXPECT_GT(btcIt->highPrice, 0);
+    EXPECT_GT(btcIt->lowPrice, 0);
+    EXPECT_GT(btcIt->lastPrice, 0);
+    EXPECT_GE(btcIt->count, 0);
+    ASSERT_NE(ethIt, ticker24hrMini->end());
+    EXPECT_GT(ethIt->openTime, 0);
+    EXPECT_GT(ethIt->closeTime, 0);
+    EXPECT_GT(ethIt->highPrice, 0);
+    EXPECT_GT(ethIt->lowPrice, 0);
+    EXPECT_GT(ethIt->lastPrice, 0);
+    EXPECT_GE(ethIt->count, 0);
 }
 
 TEST_F(MarketDataParserTest, TradingDayFull)
@@ -510,20 +522,25 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(tradingDayFull.has_value());
-    EXPECT_EQ(tradingDayFull->at(0).symbol, "BTCUSDT");
-    EXPECT_GT(tradingDayFull->at(0).openTime, 0);
-    EXPECT_GT(tradingDayFull->at(0).closeTime, 0);
-    EXPECT_GT(tradingDayFull->at(0).highPrice, 0);
-    EXPECT_GT(tradingDayFull->at(0).lowPrice, 0);
-    EXPECT_GT(tradingDayFull->at(0).lastPrice, 0);
-    EXPECT_GE(tradingDayFull->at(0).count, 0);
-    EXPECT_EQ(tradingDayFull->at(1).symbol, "ETHUSDT");
-    EXPECT_GT(tradingDayFull->at(1).openTime, 0);
-    EXPECT_GT(tradingDayFull->at(1).closeTime, 0);
-    EXPECT_GT(tradingDayFull->at(1).highPrice, 0);
-    EXPECT_GT(tradingDayFull->at(1).lowPrice, 0);
-    EXPECT_GT(tradingDayFull->at(1).lastPrice, 0);
-    EXPECT_GE(tradingDayFull->at(1).count, 0);
+    ASSERT_GE(tradingDayFull->size(), 2);
+    auto btcIt = std::find_if(tradingDayFull->begin(), tradingDayFull->end(),
+        [](const auto &t) { return t.symbol == "BTCUSDT"; });
+    auto ethIt = std::find_if(tradingDayFull->begin(), tradingDayFull->end(),
+        [](const auto &t) { return t.symbol == "ETHUSDT"; });
+    ASSERT_NE(btcIt, tradingDayFull->end());
+    EXPECT_GT(btcIt->openTime, 0);
+    EXPECT_GT(btcIt->closeTime, 0);
+    EXPECT_GT(btcIt->highPrice, 0);
+    EXPECT_GT(btcIt->lowPrice, 0);
+    EXPECT_GT(btcIt->lastPrice, 0);
+    EXPECT_GE(btcIt->count, 0);
+    ASSERT_NE(ethIt, tradingDayFull->end());
+    EXPECT_GT(ethIt->openTime, 0);
+    EXPECT_GT(ethIt->closeTime, 0);
+    EXPECT_GT(ethIt->highPrice, 0);
+    EXPECT_GT(ethIt->lowPrice, 0);
+    EXPECT_GT(ethIt->lastPrice, 0);
+    EXPECT_GE(ethIt->count, 0);
 }
 
 TEST_F(MarketDataParserTest, TradingDayMini)
@@ -579,20 +596,25 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(tradingDayMini.has_value());
-    EXPECT_EQ(tradingDayMini->at(0).symbol, "BTCUSDT");
-    EXPECT_GT(tradingDayMini->at(0).openTime, 0);
-    EXPECT_GT(tradingDayMini->at(0).closeTime, 0);
-    EXPECT_GT(tradingDayMini->at(0).highPrice, 0);
-    EXPECT_GT(tradingDayMini->at(0).lowPrice, 0);
-    EXPECT_GT(tradingDayMini->at(0).lastPrice, 0);
-    EXPECT_GE(tradingDayMini->at(0).count, 0);
-    EXPECT_EQ(tradingDayMini->at(1).symbol, "ETHUSDT");
-    EXPECT_GT(tradingDayMini->at(1).openTime, 0);
-    EXPECT_GT(tradingDayMini->at(1).closeTime, 0);
-    EXPECT_GT(tradingDayMini->at(1).highPrice, 0);
-    EXPECT_GT(tradingDayMini->at(1).lowPrice, 0);
-    EXPECT_GT(tradingDayMini->at(1).lastPrice, 0);
-    EXPECT_GE(tradingDayMini->at(1).count, 0);
+    ASSERT_GE(tradingDayMini->size(), 2);
+    auto btcIt = std::find_if(tradingDayMini->begin(), tradingDayMini->end(),
+        [](const auto &t) { return t.symbol == "BTCUSDT"; });
+    auto ethIt = std::find_if(tradingDayMini->begin(), tradingDayMini->end(),
+        [](const auto &t) { return t.symbol == "ETHUSDT"; });
+    ASSERT_NE(btcIt, tradingDayMini->end());
+    EXPECT_GT(btcIt->openTime, 0);
+    EXPECT_GT(btcIt->closeTime, 0);
+    EXPECT_GT(btcIt->highPrice, 0);
+    EXPECT_GT(btcIt->lowPrice, 0);
+    EXPECT_GT(btcIt->lastPrice, 0);
+    EXPECT_GE(btcIt->count, 0);
+    ASSERT_NE(ethIt, tradingDayMini->end());
+    EXPECT_GT(ethIt->openTime, 0);
+    EXPECT_GT(ethIt->closeTime, 0);
+    EXPECT_GT(ethIt->highPrice, 0);
+    EXPECT_GT(ethIt->lowPrice, 0);
+    EXPECT_GT(ethIt->lastPrice, 0);
+    EXPECT_GE(ethIt->count, 0);
 }
 
 TEST_F(MarketDataParserTest, SymbolPriceTicker)
@@ -640,10 +662,15 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(symbolPriceTicker.has_value());
-    EXPECT_EQ(symbolPriceTicker->at(0).symbol, "BTCUSDT");
-    EXPECT_GT(symbolPriceTicker->at(0).price, 0);
-    EXPECT_EQ(symbolPriceTicker->at(1).symbol, "ETHUSDT");
-    EXPECT_GT(symbolPriceTicker->at(1).price, 0);
+    ASSERT_GE(symbolPriceTicker->size(), 2);
+    auto btcIt = std::find_if(symbolPriceTicker->begin(), symbolPriceTicker->end(),
+        [](const auto &t) { return t.symbol == "BTCUSDT"; });
+    auto ethIt = std::find_if(symbolPriceTicker->begin(), symbolPriceTicker->end(),
+        [](const auto &t) { return t.symbol == "ETHUSDT"; });
+    ASSERT_NE(btcIt, symbolPriceTicker->end());
+    EXPECT_GT(btcIt->price, 0);
+    ASSERT_NE(ethIt, symbolPriceTicker->end());
+    EXPECT_GT(ethIt->price, 0);
 }
 
 TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
@@ -694,16 +721,21 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(symbolOrderBookTicker.has_value());
-    EXPECT_EQ(symbolOrderBookTicker->at(0).symbol, "BTCUSDT");
-    EXPECT_GT(symbolOrderBookTicker->at(0).bidPrice, 0);
-    EXPECT_GE(symbolOrderBookTicker->at(0).bidQty, 0);
-    EXPECT_GT(symbolOrderBookTicker->at(0).askPrice, 0);
-    EXPECT_GE(symbolOrderBookTicker->at(0).askQty, 0);
-    EXPECT_EQ(symbolOrderBookTicker->at(1).symbol, "ETHUSDT");
-    EXPECT_GT(symbolOrderBookTicker->at(1).bidPrice, 0);
-    EXPECT_GE(symbolOrderBookTicker->at(1).bidQty, 0);
-    EXPECT_GT(symbolOrderBookTicker->at(1).askPrice, 0);
-    EXPECT_GE(symbolOrderBookTicker->at(1).askQty, 0);
+    ASSERT_GE(symbolOrderBookTicker->size(), 2);
+    auto btcIt = std::find_if(symbolOrderBookTicker->begin(), symbolOrderBookTicker->end(),
+        [](const auto &t) { return t.symbol == "BTCUSDT"; });
+    auto ethIt = std::find_if(symbolOrderBookTicker->begin(), symbolOrderBookTicker->end(),
+        [](const auto &t) { return t.symbol == "ETHUSDT"; });
+    ASSERT_NE(btcIt, symbolOrderBookTicker->end());
+    EXPECT_GT(btcIt->bidPrice, 0);
+    EXPECT_GE(btcIt->bidQty, 0);
+    EXPECT_GT(btcIt->askPrice, 0);
+    EXPECT_GE(btcIt->askQty, 0);
+    ASSERT_NE(ethIt, symbolOrderBookTicker->end());
+    EXPECT_GT(ethIt->bidPrice, 0);
+    EXPECT_GE(ethIt->bidQty, 0);
+    EXPECT_GT(ethIt->askPrice, 0);
+    EXPECT_GE(ethIt->askQty, 0);
 }
 
 TEST_F(MarketDataParserTest, RollingWindowTickerFull)
@@ -757,20 +789,25 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(tickerFull.has_value());
-    EXPECT_EQ(tickerFull->at(0).symbol, "BTCUSDT");
-    EXPECT_GT(tickerFull->at(0).openTime, 0);
-    EXPECT_GT(tickerFull->at(0).closeTime, 0);
-    EXPECT_GT(tickerFull->at(0).highPrice, 0);
-    EXPECT_GT(tickerFull->at(0).lowPrice, 0);
-    EXPECT_GT(tickerFull->at(0).lastPrice, 0);
-    EXPECT_GE(tickerFull->at(0).count, 0);
-    EXPECT_EQ(tickerFull->at(1).symbol, "ETHUSDT");
-    EXPECT_GT(tickerFull->at(1).openTime, 0);
-    EXPECT_GT(tickerFull->at(1).closeTime, 0);
-    EXPECT_GT(tickerFull->at(1).highPrice, 0);
-    EXPECT_GT(tickerFull->at(1).lowPrice, 0);
-    EXPECT_GT(tickerFull->at(1).lastPrice, 0);
-    EXPECT_GE(tickerFull->at(1).count, 0);
+    ASSERT_GE(tickerFull->size(), 2);
+    auto btcIt = std::find_if(tickerFull->begin(), tickerFull->end(),
+        [](const auto &t) { return t.symbol == "BTCUSDT"; });
+    auto ethIt = std::find_if(tickerFull->begin(), tickerFull->end(),
+        [](const auto &t) { return t.symbol == "ETHUSDT"; });
+    ASSERT_NE(btcIt, tickerFull->end());
+    EXPECT_GT(btcIt->openTime, 0);
+    EXPECT_GT(btcIt->closeTime, 0);
+    EXPECT_GT(btcIt->highPrice, 0);
+    EXPECT_GT(btcIt->lowPrice, 0);
+    EXPECT_GT(btcIt->lastPrice, 0);
+    EXPECT_GE(btcIt->count, 0);
+    ASSERT_NE(ethIt, tickerFull->end());
+    EXPECT_GT(ethIt->openTime, 0);
+    EXPECT_GT(ethIt->closeTime, 0);
+    EXPECT_GT(ethIt->highPrice, 0);
+    EXPECT_GT(ethIt->lowPrice, 0);
+    EXPECT_GT(ethIt->lastPrice, 0);
+    EXPECT_GE(ethIt->count, 0);
 }
 
 TEST_F(MarketDataParserTest, RollingWindowTickerMini)
@@ -826,18 +863,23 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     ASSERT_TRUE(response.isArray());
 
     ASSERT_TRUE(tickerMini.has_value());
-    EXPECT_EQ(tickerMini->at(0).symbol, "BTCUSDT");
-    EXPECT_GT(tickerMini->at(0).openTime, 0);
-    EXPECT_GT(tickerMini->at(0).closeTime, 0);
-    EXPECT_GT(tickerMini->at(0).highPrice, 0);
-    EXPECT_GT(tickerMini->at(0).lowPrice, 0);
-    EXPECT_GT(tickerMini->at(0).lastPrice, 0);
-    EXPECT_GE(tickerMini->at(0).count, 0);
-    EXPECT_EQ(tickerMini->at(1).symbol, "ETHUSDT");
-    EXPECT_GT(tickerMini->at(1).openTime, 0);
-    EXPECT_GT(tickerMini->at(1).closeTime, 0);
-    EXPECT_GT(tickerMini->at(1).highPrice, 0);
-    EXPECT_GT(tickerMini->at(1).lowPrice, 0);
-    EXPECT_GT(tickerMini->at(1).lastPrice, 0);
-    EXPECT_GE(tickerMini->at(1).count, 0);
+    ASSERT_GE(tickerMini->size(), 2);
+    auto btcIt = std::find_if(tickerMini->begin(), tickerMini->end(),
+        [](const auto &t) { return t.symbol == "BTCUSDT"; });
+    auto ethIt = std::find_if(tickerMini->begin(), tickerMini->end(),
+        [](const auto &t) { return t.symbol == "ETHUSDT"; });
+    ASSERT_NE(btcIt, tickerMini->end());
+    EXPECT_GT(btcIt->openTime, 0);
+    EXPECT_GT(btcIt->closeTime, 0);
+    EXPECT_GT(btcIt->highPrice, 0);
+    EXPECT_GT(btcIt->lowPrice, 0);
+    EXPECT_GT(btcIt->lastPrice, 0);
+    EXPECT_GE(btcIt->count, 0);
+    ASSERT_NE(ethIt, tickerMini->end());
+    EXPECT_GT(ethIt->openTime, 0);
+    EXPECT_GT(ethIt->closeTime, 0);
+    EXPECT_GT(ethIt->highPrice, 0);
+    EXPECT_GT(ethIt->lowPrice, 0);
+    EXPECT_GT(ethIt->lastPrice, 0);
+    EXPECT_GE(ethIt->count, 0);
 }
