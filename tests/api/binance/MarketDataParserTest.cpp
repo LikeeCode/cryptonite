@@ -53,10 +53,12 @@ TEST_F(MarketDataParserTest, OrderBook)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->orderBook(Binance::MarketData::OrderBookRequest{"BTCUSDT"});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
@@ -86,10 +88,12 @@ TEST_F(MarketDataParserTest, RecentTrades)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->recentTrades(Binance::MarketData::RecentTradesRequest{"BTCUSDT"});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -125,10 +129,12 @@ TEST_F(MarketDataParserTest, HistoricalTrades)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->historicalTrades(Binance::MarketData::OldTradesRequest{"BTCUSDT"});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -164,10 +170,12 @@ TEST_F(MarketDataParserTest, AggregatedTrades)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->aggregatedTrades(Binance::MarketData::AggregatedTradeRequest{"BTCUSDT"});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -205,10 +213,12 @@ TEST_F(MarketDataParserTest, Klines)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->klines(Binance::MarketData::KlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -251,10 +261,12 @@ TEST_F(MarketDataParserTest, UIKlines)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->uiKlines(Binance::MarketData::UIKlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -297,10 +309,12 @@ TEST_F(MarketDataParserTest, CurrentAveragePrice)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->currentAveragePrice(Binance::MarketData::CurrentAveragePriceRequest{"BTCUSDT"});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
@@ -330,10 +344,12 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->tickerPrice24hr(Binance::MarketData::Ticker24hrRequest{"BTCUSDT"});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
@@ -347,10 +363,13 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     EXPECT_GT(ticker24hrFull->first().lastPrice, 0);
     EXPECT_GE(ticker24hrFull->first().count, 0);
 
+    timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
     Binance::MarketData::Ticker24hrRequest requestFullMultiple{};
     requestFullMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     binanceAPI->tickerPrice24hr(requestFullMultiple);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -391,12 +410,14 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     Binance::MarketData::Ticker24hrRequest requestMini{"BTCUSDT"};
     requestMini.type = Binance::ResponseType::MINI;
     binanceAPI->tickerPrice24hr(requestMini);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
@@ -410,11 +431,14 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     EXPECT_GT(ticker24hrMini->first().lastPrice, 0);
     EXPECT_GE(ticker24hrMini->first().count, 0);
 
+    timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
     Binance::MarketData::Ticker24hrRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     requestMiniMultiple.type = Binance::ResponseType::MINI;
     binanceAPI->tickerPrice24hr(requestMiniMultiple);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -455,10 +479,12 @@ TEST_F(MarketDataParserTest, TradingDayFull)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->tradingDay(Binance::MarketData::TradingDayRequest{"BTCUSDT"});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
@@ -472,10 +498,13 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     EXPECT_GT(tradingDayFull->first().lastPrice, 0);
     EXPECT_GE(tradingDayFull->first().count, 0);
 
+    timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
     Binance::MarketData::TradingDayRequest requestFullMultiple{};
     requestFullMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     binanceAPI->tradingDay(requestFullMultiple);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -516,12 +545,14 @@ TEST_F(MarketDataParserTest, TradingDayMini)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     Binance::MarketData::TradingDayRequest requestMini{"BTCUSDT"};
     requestMini.type = Binance::ResponseType::MINI;
     binanceAPI->tradingDay(requestMini);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
@@ -535,15 +566,18 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     EXPECT_GT(tradingDayMini->first().lastPrice, 0);
     EXPECT_GE(tradingDayMini->first().count, 0);
 
+    timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
     Binance::MarketData::TradingDayRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     requestMiniMultiple.type = Binance::ResponseType::MINI;
     binanceAPI->tradingDay(requestMiniMultiple);
     loop.exec();
-    
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
+
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
-    
+
     ASSERT_TRUE(tradingDayMini.has_value());
     EXPECT_EQ(tradingDayMini->at(0).symbol, "BTCUSDT");
     EXPECT_GT(tradingDayMini->at(0).openTime, 0);
@@ -580,10 +614,12 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->symbolPriceTicker(Binance::MarketData::SymbolPriceTickerRequest{"BTCUSDT"});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
@@ -592,10 +628,13 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     EXPECT_EQ(symbolPriceTicker->first().symbol, "BTCUSDT");
     EXPECT_GT(symbolPriceTicker->first().price, 0);
 
+    timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
     Binance::MarketData::SymbolPriceTickerRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     binanceAPI->symbolPriceTicker(requestMiniMultiple);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -626,10 +665,12 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     binanceAPI->symbolOrderBookTicker(Binance::MarketData::SymbolOrderBookTickerRequest{"BTCUSDT"});
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
@@ -641,10 +682,13 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     EXPECT_GT(symbolOrderBookTicker->first().askPrice, 0);
     EXPECT_GE(symbolOrderBookTicker->first().askQty, 0);
 
+    timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
     Binance::MarketData::SymbolOrderBookTickerRequest requestMultiple{};
     requestMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     binanceAPI->symbolOrderBookTicker(requestMultiple);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -681,11 +725,13 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     Binance::MarketData::TickerRequest symbol{"BTCUSDT"};
     binanceAPI->rollingWindowTicker(symbol);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
@@ -699,10 +745,13 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
     EXPECT_GT(tickerFull->first().lastPrice, 0);
     EXPECT_GE(tickerFull->first().count, 0);
 
+    timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
     Binance::MarketData::TickerRequest requestFullMultiple{};
     requestFullMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     binanceAPI->rollingWindowTicker(requestFullMultiple);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
@@ -743,12 +792,14 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
         loop.quit();
     });
 
-    QTimer::singleShot(10000, &loop, &QEventLoop::quit); // Timeout after 10 seconds
+    bool timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
 
     Binance::MarketData::TickerRequest symbol{"BTCUSDT"};
     symbol.type = Binance::ResponseType::MINI;
     binanceAPI->rollingWindowTicker(symbol);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isObject());
@@ -762,11 +813,14 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     EXPECT_GT(tickerMini->first().lastPrice, 0);
     EXPECT_GE(tickerMini->first().count, 0);
 
+    timedOut = false;
+    QTimer::singleShot(10000, [&]() { timedOut = true; loop.quit(); });
     Binance::MarketData::TickerRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     requestMiniMultiple.type = Binance::ResponseType::MINI;
     binanceAPI->rollingWindowTicker(requestMiniMultiple);
     loop.exec();
+    ASSERT_FALSE(timedOut) << "Test timed out waiting for response";
 
     ASSERT_FALSE(response.isNull());
     ASSERT_TRUE(response.isArray());
