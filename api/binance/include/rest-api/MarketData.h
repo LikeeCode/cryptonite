@@ -285,7 +285,7 @@ namespace Binance::MarketData
             {
                 params.insert("symbol", symbol.value());
             }
-            else if (symbols.has_value())
+            else if (symbols.has_value() && !symbols.value().isEmpty())
             {
                 QJsonArray symbolsArray;
                 for (const auto& s : symbols.value()) symbolsArray.append(s);
@@ -435,7 +435,7 @@ namespace Binance::MarketData
             {
                 params.insert("symbol", symbol.value());
             }
-            else if (symbols.has_value())
+            else if (symbols.has_value() && !symbols.value().isEmpty())
             {
                 QJsonArray symbolsArray;
                 for (const auto& s : symbols.value()) symbolsArray.append(s);
@@ -470,7 +470,7 @@ namespace Binance::MarketData
             {
                 params.insert("symbol", symbol.value());
             }
-            else if (symbols.has_value())
+            else if (symbols.has_value() && !symbols.value().isEmpty())
             {
                 QJsonArray symbolsArray;
                 for (const auto& s : symbols.value()) symbolsArray.append(s);
