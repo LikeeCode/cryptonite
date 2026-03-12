@@ -94,6 +94,11 @@ namespace Binance
     void BinanceAPI::tickerPrice24hr(const Binance::MarketData::Ticker24hrRequest &request)
     {
         QNetworkReply *reply = sendPublicRequest(API::TICKER_24HR, request.toVariantMap());
+        if (!reply)
+        {
+            emit apiError("Failed to create request for " + API::TICKER_24HR);
+            return;
+        }
         const bool isFull = !request.type.has_value() || request.type.value() == ResponseType::FULL;
         reply->setProperty("isFull", isFull);
     }
@@ -101,6 +106,11 @@ namespace Binance
     void BinanceAPI::tradingDay(const Binance::MarketData::TradingDayRequest &request)
     {
         QNetworkReply *reply = sendPublicRequest(API::TRADING_DAY, request.toVariantMap());
+        if (!reply)
+        {
+            emit apiError("Failed to create request for " + API::TRADING_DAY);
+            return;
+        }
         const bool isFull = !request.type.has_value() || request.type.value() == ResponseType::FULL;
         reply->setProperty("isFull", isFull);
     }
@@ -118,6 +128,11 @@ namespace Binance
     void BinanceAPI::rollingWindowTicker(const Binance::MarketData::TickerRequest &request)
     {
         QNetworkReply *reply = sendPublicRequest(API::ROLLING_WINDOW_TICKER, request.toVariantMap());
+        if (!reply)
+        {
+            emit apiError("Failed to create request for " + API::ROLLING_WINDOW_TICKER);
+            return;
+        }
         const bool isFull = !request.type.has_value() || request.type.value() == ResponseType::FULL;
         reply->setProperty("isFull", isFull);
     }
