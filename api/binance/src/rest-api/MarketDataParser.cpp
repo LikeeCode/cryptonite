@@ -13,12 +13,18 @@ namespace
     // several Binance endpoints.  parseSingle must accept a const QJsonObject&
     // and return std::optional<T>.
     //
+    // Chosen strategy: FAIL-FAST.
+    // Any malformed element (wrong JSON type, missing required field) causes the
+    // entire parse to return std::nullopt.  This is the canonical behaviour for
+    // all parsers in this file: partial market data used for pricing or order
+    // decisions is more dangerous than no data at all.
+    //
     // Behaviour:
-    //  - Object  : returns a one-element list, or std::nullopt if parseSingle fails.
-    //  - Array   : returns the parsed list (possibly empty for an empty array).
-    //              Returns std::nullopt if any element is not an object or if
-    //              parseSingle fails for any element.
-    //  - Other   : returns std::nullopt (invalid format).
+    //  - Object : returns a one-element list, or std::nullopt if parseSingle fails.
+    //  - Array  : returns the parsed list (possibly empty for an empty input array).
+    //             Returns std::nullopt if any element is not a JSON object or if
+    //             parseSingle returns std::nullopt for any element.
+    //  - Other  : returns std::nullopt (invalid top-level format).
     template<typename T, typename ParseFn>
     std::optional<QList<T>> parseObjectOrArray(const QJsonDocument &jsonDoc, ParseFn parseSingle)
     {
@@ -83,16 +89,17 @@ namespace Binance
         {
             if (!bidsArray[i].isArray() || bidsArray[i].toArray().size() < 2)
             {
-                continue; // skip malformed entries
+                return {}; // malformed bid entry — fail the entire parse
             }
             QJsonArray bidPair = bidsArray[i].toArray();
             bool priceOk = false, qtyOk = false;
             double price = bidPair[0].toString().toDouble(&priceOk);
             double quantity = bidPair[1].toString().toDouble(&qtyOk);
-            if (priceOk && qtyOk)
+            if (!priceOk || !qtyOk)
             {
-                orderBook.bids.append(qMakePair(price, quantity));
+                return {}; // unparseable bid price or quantity — fail the entire parse
             }
+            orderBook.bids.append(qMakePair(price, quantity));
         }
 
         // asks: array of [price, quantity] pairs
@@ -105,16 +112,17 @@ namespace Binance
         {
             if (!asksArray[i].isArray() || asksArray[i].toArray().size() < 2)
             {
-                continue; // skip malformed entries
+                return {}; // malformed ask entry — fail the entire parse
             }
             QJsonArray askPair = asksArray[i].toArray();
             bool priceOk = false, qtyOk = false;
             double price = askPair[0].toString().toDouble(&priceOk);
             double quantity = askPair[1].toString().toDouble(&qtyOk);
-            if (priceOk && qtyOk)
+            if (!priceOk || !qtyOk)
             {
-                orderBook.asks.append(qMakePair(price, quantity));
+                return {}; // unparseable ask price or quantity — fail the entire parse
             }
+            orderBook.asks.append(qMakePair(price, quantity));
         }
 
         return orderBook;
@@ -135,55 +143,55 @@ namespace Binance
         {
             if (!jsonArray[i].isObject())
             {
-                continue; // skip malformed entries
+                return {}; // non-object element — fail the entire parse
             }
             QJsonObject tradeObj = jsonArray[i].toObject();
             MarketData::Trade trade{};
 
             // id
-            if (!tradeObj.contains("id") && !tradeObj["id"].isDouble())
+            if (!tradeObj.contains("id") || !tradeObj["id"].isDouble())
             {
                 return {}; // id is required
             }
             trade.id = static_cast<qint64>(tradeObj["id"].toDouble());
 
             // price
-            if (!tradeObj.contains("price") && !tradeObj["price"].isString())
+            if (!tradeObj.contains("price") || !tradeObj["price"].isString())
             {
                 return {}; // price is required
             }
             trade.price = tradeObj["price"].toString().toDouble();
 
             // qty
-            if (!tradeObj.contains("qty") && !tradeObj["qty"].isString())
+            if (!tradeObj.contains("qty") || !tradeObj["qty"].isString())
             {
                 return {}; // qty is required
             }
             trade.qty = tradeObj["qty"].toString().toDouble();
 
             // quoteQty
-            if (!tradeObj.contains("quoteQty") && !tradeObj["quoteQty"].isString())
+            if (!tradeObj.contains("quoteQty") || !tradeObj["quoteQty"].isString())
             {
                 return {}; // quoteQty is required
             }
             trade.quoteQty = tradeObj["quoteQty"].toString().toDouble();
 
             // time
-            if (!tradeObj.contains("time") && !tradeObj["time"].isDouble())
+            if (!tradeObj.contains("time") || !tradeObj["time"].isDouble())
             {
                 return {}; // time is required
             }
-            trade.time = tradeObj["time"].toString().toDouble();
+            trade.time = static_cast<qint64>(tradeObj["time"].toDouble());
 
             // isBuyerMaker
-            if (!tradeObj.contains("isBuyerMaker") && !tradeObj["isBuyerMaker"].isBool())
+            if (!tradeObj.contains("isBuyerMaker") || !tradeObj["isBuyerMaker"].isBool())
             {
                 return {}; // isBuyerMaker is required
             }
             trade.isBuyerMaker = tradeObj["isBuyerMaker"].toBool();
 
             // isBestMatch
-            if (!tradeObj.contains("isBestMatch") && !tradeObj["isBestMatch"].isBool())
+            if (!tradeObj.contains("isBestMatch") || !tradeObj["isBestMatch"].isBool())
             {
                 return {}; // isBestMatch is required
             }
@@ -210,62 +218,62 @@ namespace Binance
         {
             if (!jsonArray[i].isObject())
             {
-                continue; // skip malformed entries
+                return {}; // non-object element — fail the entire parse
             }
             QJsonObject tradeObj = jsonArray[i].toObject();
             MarketData::AggregatedTrade trade{};
 
             // aggregate tradeId
-            if (!tradeObj.contains("a") && !tradeObj["a"].isDouble())
+            if (!tradeObj.contains("a") || !tradeObj["a"].isDouble())
             {
                 return {}; // aggregate tradeId is required
             }
             trade.a = static_cast<qint64>(tradeObj["a"].toDouble());
 
             // price
-            if (!tradeObj.contains("p") && !tradeObj["p"].isString())
+            if (!tradeObj.contains("p") || !tradeObj["p"].isString())
             {
                 return {}; // price is required
             }
             trade.p = tradeObj["p"].toString().toDouble();
 
             // quantity
-            if (!tradeObj.contains("q") && !tradeObj["q"].isString())
+            if (!tradeObj.contains("q") || !tradeObj["q"].isString())
             {
                 return {}; // quantity is required
             }
             trade.q = tradeObj["q"].toString().toDouble();
 
             // first tradeId
-            if (!tradeObj.contains("f") && !tradeObj["f"].isDouble())
+            if (!tradeObj.contains("f") || !tradeObj["f"].isDouble())
             {
                 return {}; // first tradeId is required
             }
             trade.f = static_cast<qint64>(tradeObj["f"].toDouble());
 
             // last tradeId
-            if (!tradeObj.contains("l") && !tradeObj["l"].isDouble())
+            if (!tradeObj.contains("l") || !tradeObj["l"].isDouble())
             {
                 return {}; // last tradeId is required
             }
             trade.l = static_cast<qint64>(tradeObj["l"].toDouble());
 
             // timestamp
-            if (!tradeObj.contains("T") && !tradeObj["T"].isDouble())
+            if (!tradeObj.contains("T") || !tradeObj["T"].isDouble())
             {
                 return {}; // timestamp is required
             }
             trade.T = static_cast<qint64>(tradeObj["T"].toDouble());
 
             // was the buyer the maker?
-            if (!tradeObj.contains("m") && !tradeObj["m"].isBool())
+            if (!tradeObj.contains("m") || !tradeObj["m"].isBool())
             {
                 return {}; // was the buyer the maker? is required
             }
             trade.m = tradeObj["m"].toBool();
 
             // was the trade the best price match?
-            if (!tradeObj.contains("M") && !tradeObj["M"].isBool())
+            if (!tradeObj.contains("M") || !tradeObj["M"].isBool())
             {
                 return {}; // was the trade the best price match? is required
             }
@@ -292,12 +300,12 @@ namespace Binance
         {
             if (!jsonArray[i].isArray())
             {
-                continue; // skip malformed entries
+                return {}; // non-array kline element — fail the entire parse
             }
             QJsonArray klineArray = jsonArray[i].toArray();
             if (klineArray.size() < 12)
             {
-                continue; // skip incomplete entries
+                return {}; // incomplete kline entry — fail the entire parse
             }
             MarketData::Kline kline{};
 
@@ -335,12 +343,12 @@ namespace Binance
         {
             if (!jsonArray[i].isArray())
             {
-                continue; // skip malformed entries
+                return {}; // non-array kline element — fail the entire parse
             }
             QJsonArray klineArray = jsonArray[i].toArray();
             if (klineArray.size() < 12)
             {
-                continue; // skip incomplete entries
+                return {}; // incomplete kline entry — fail the entire parse
             }
             MarketData::UIKline uiKline{};
 
