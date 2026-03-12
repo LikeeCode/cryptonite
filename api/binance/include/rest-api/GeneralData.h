@@ -80,14 +80,6 @@ namespace Binance::GeneralData
                 }
                 params.insert("symbols", QString::fromUtf8(QJsonDocument(jsonArray).toJson(QJsonDocument::Compact)));
             }
-            {
-                QJsonArray jsonArray;
-                for (const auto& sym : symbols.value())
-                {
-                    jsonArray.append(sym);
-                }
-                params.insert("symbols", QJsonDocument(jsonArray).toJson(QJsonDocument::Compact));
-            }
             return params;
         }
     };
