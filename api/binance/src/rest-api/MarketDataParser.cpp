@@ -34,7 +34,9 @@ namespace
         {
             auto maybe = parseSingle(jsonDoc.object());
             if (!maybe.has_value())
+            {
                 return {};
+            }
             list.append(*maybe);
         }
         else if (jsonDoc.isArray())
@@ -43,10 +45,15 @@ namespace
             for (const auto &item : array)
             {
                 if (!item.isObject())
+                {
                     return {}; // invalid format - non-object element
+                }
                 auto maybe = parseSingle(item.toObject());
+
                 if (!maybe.has_value())
+                {
                     return {}; // malformed element - fail the entire parse
+                }
                 list.append(*maybe);
             }
         }
