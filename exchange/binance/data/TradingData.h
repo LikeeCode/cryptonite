@@ -6,9 +6,9 @@
 #include <QString>
 #include <QVariant>
 
-#include "../enums/Enums.h"
-#include "../parsers/EnumConverter.h"
-#include "../filters/Filters.h"
+#include "../data/Enums.h"
+#include "../converters/EnumConverter.h"
+#include "../data/Filters.h"
 
 namespace Binance::TradingData
 {
