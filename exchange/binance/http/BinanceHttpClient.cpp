@@ -8,90 +8,90 @@
 #include <QUrlQuery>
 
 #include "../data/APIEndpoints.h"
-#include "BinanceAPI.h"
+#include "BinanceHttpClient.h"
 
 namespace Binance
 {
 
-    BinanceAPI::BinanceAPI(QObject *parent, bool useTestNetwork)
+    BinanceHttpClient::BinanceHttpClient(QObject *parent, bool useTestNetwork)
         : QObject(parent),
         m_useTestNetwork(useTestNetwork), m_networkManager(new QNetworkAccessManager(this))
     {
         m_baseUrl = m_useTestNetwork ? API::BASE_URL_TESTNET : API::BASE_URL;
         getApiKeys();
-        
+
         m_networkManager = std::make_unique<QNetworkAccessManager>(this);
-        connect(m_networkManager.get(), &QNetworkAccessManager::finished, this, &BinanceAPI::onReplyFinished);
+        connect(m_networkManager.get(), &QNetworkAccessManager::finished, this, &BinanceHttpClient::onReplyFinished);
     }
 
-    BinanceAPI::~BinanceAPI()
+    BinanceHttpClient::~BinanceHttpClient()
     {
     }
 
-    void BinanceAPI::setApiKeys(const QString &key, const QString &secret)
+    void BinanceHttpClient::setApiKeys(const QString &key, const QString &secret)
     {
         m_apiKey = key;
         m_apiSecret = secret;
     }
 
-    void BinanceAPI::ping()
+    void BinanceHttpClient::ping()
     {
         sendPublicRequest(API::PING);
     }
 
     // GeneralData
-    void BinanceAPI::time()
+    void BinanceHttpClient::time()
     {
         sendPublicRequest(API::TIME);
     }
 
-    void BinanceAPI::exchangeInfo()
+    void BinanceHttpClient::exchangeInfo()
     {
         sendPublicRequest(API::EXCHANGE_INFO);
     }
-    
-    void BinanceAPI::exchangeInfo(const Binance::GeneralData::ExchangeInfoRequest &request)
+
+    void BinanceHttpClient::exchangeInfo(const Binance::GeneralData::ExchangeInfoRequest &request)
     {
         sendPublicRequest(API::EXCHANGE_INFO, request.toVariantMap());
     }
 
     // MarketData
-    void BinanceAPI::orderBook(const Binance::MarketData::OrderBookRequest &request)
+    void BinanceHttpClient::orderBook(const Binance::MarketData::OrderBookRequest &request)
     {
         sendPublicRequest(API::DEPTH, request.toVariantMap());
     }
 
-    void BinanceAPI::recentTrades(const Binance::MarketData::RecentTradesRequest &request)
+    void BinanceHttpClient::recentTrades(const Binance::MarketData::RecentTradesRequest &request)
     {
         sendPublicRequest(API::TRADES, request.toVariantMap());
     }
 
-    void BinanceAPI::historicalTrades(const Binance::MarketData::OldTradesRequest &request)
+    void BinanceHttpClient::historicalTrades(const Binance::MarketData::OldTradesRequest &request)
     {
         sendPublicRequest(API::HISTORICAL_TRADES, request.toVariantMap());
     }
 
-    void BinanceAPI::aggregatedTrades(const Binance::MarketData::AggregatedTradeRequest &request)
+    void BinanceHttpClient::aggregatedTrades(const Binance::MarketData::AggregatedTradeRequest &request)
     {
         sendPublicRequest(API::AGG_TRADES, request.toVariantMap());
     }
 
-    void BinanceAPI::klines(const Binance::MarketData::KlineRequest &request)
+    void BinanceHttpClient::klines(const Binance::MarketData::KlineRequest &request)
     {
         sendPublicRequest(API::KLINES, request.toVariantMap());
     }
-    
-    void BinanceAPI::uiKlines(const Binance::MarketData::UIKlineRequest &request)
+
+    void BinanceHttpClient::uiKlines(const Binance::MarketData::UIKlineRequest &request)
     {
         sendPublicRequest(API::UI_KLINES, request.toVariantMap());
     }
 
-    void BinanceAPI::currentAveragePrice(const Binance::MarketData::CurrentAveragePriceRequest &request)
+    void BinanceHttpClient::currentAveragePrice(const Binance::MarketData::CurrentAveragePriceRequest &request)
     {
         sendPublicRequest(API::AVG_PRICE, request.toVariantMap());
     }
 
-    void BinanceAPI::tickerPrice24hr(const Binance::MarketData::Ticker24hrRequest &request)
+    void BinanceHttpClient::tickerPrice24hr(const Binance::MarketData::Ticker24hrRequest &request)
     {
         QNetworkReply *reply = sendPublicRequest(API::TICKER_24HR, request.toVariantMap());
         if (!reply)
@@ -103,7 +103,7 @@ namespace Binance
         reply->setProperty("isFull", isFull);
     }
 
-    void BinanceAPI::tradingDay(const Binance::MarketData::TradingDayRequest &request)
+    void BinanceHttpClient::tradingDay(const Binance::MarketData::TradingDayRequest &request)
     {
         QNetworkReply *reply = sendPublicRequest(API::TRADING_DAY, request.toVariantMap());
         if (!reply)
@@ -115,17 +115,17 @@ namespace Binance
         reply->setProperty("isFull", isFull);
     }
 
-    void BinanceAPI::symbolPriceTicker(const Binance::MarketData::SymbolPriceTickerRequest &request)
+    void BinanceHttpClient::symbolPriceTicker(const Binance::MarketData::SymbolPriceTickerRequest &request)
     {
         sendPublicRequest(API::PRICE_TICKER, request.toVariantMap());
     }
 
-    void BinanceAPI::symbolOrderBookTicker(const Binance::MarketData::SymbolOrderBookTickerRequest &request)
+    void BinanceHttpClient::symbolOrderBookTicker(const Binance::MarketData::SymbolOrderBookTickerRequest &request)
     {
         sendPublicRequest(API::BOOK_TICKER, request.toVariantMap());
     }
 
-    void BinanceAPI::rollingWindowTicker(const Binance::MarketData::TickerRequest &request)
+    void BinanceHttpClient::rollingWindowTicker(const Binance::MarketData::TickerRequest &request)
     {
         QNetworkReply *reply = sendPublicRequest(API::ROLLING_WINDOW_TICKER, request.toVariantMap());
         if (!reply)
@@ -137,7 +137,7 @@ namespace Binance
         reply->setProperty("isFull", isFull);
     }
 
-    void BinanceAPI::onReplyFinished(QNetworkReply *reply)
+    void BinanceHttpClient::onReplyFinished(QNetworkReply *reply)
     {
         if (reply->error() != QNetworkReply::NoError)
         {
@@ -149,7 +149,6 @@ namespace Binance
         QByteArray responseData = reply->readAll();
         QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
 
-        // Determine which signal to emit based on the URL
         const QString endpoint = reply->url().path();
 
         // General endpoints
@@ -257,7 +256,7 @@ namespace Binance
         reply->deleteLater();
     }
 
-    void BinanceAPI::getApiKeys()
+    void BinanceHttpClient::getApiKeys()
     {
         QFile file("apiKeys/binanceAPI.txt");
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -265,20 +264,17 @@ namespace Binance
             emit apiKeysFileError();
             return;
         }
-        else
-        {
-            QTextStream in(&file);
-            m_apiKey = in.readLine().trimmed();
-            m_apiSecret = in.readLine().trimmed();
-            file.close();
-        }
+
+        QTextStream in(&file);
+        m_apiKey = in.readLine().trimmed();
+        m_apiSecret = in.readLine().trimmed();
+        file.close();
     }
 
-    QNetworkReply* BinanceAPI::sendPublicRequest(const QString &endpoint, const QVariantMap &params, RequestType type)
+    QNetworkReply* BinanceHttpClient::sendPublicRequest(const QString &endpoint, const QVariantMap &params, RequestType type)
     {
         QUrl url(m_baseUrl + endpoint);
 
-        // If there are parameters, add them to the URL as a query string
         if (!params.isEmpty())
         {
             QUrlQuery query;
@@ -311,44 +307,35 @@ namespace Binance
         return reply;
     }
 
-    QNetworkReply* BinanceAPI::sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type)
+    QNetworkReply* BinanceHttpClient::sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type)
     {
-        // Create a query string from the parameters. This is what gets signed.
         QUrlQuery query;
         for (auto it = params.constBegin(); it != params.constEnd(); ++it)
         {
             query.addQueryItem(it.key(), it.value().toString());
         }
-        // The signature is based on the query string (e.g., "symbol=BTCUSDT&timestamp=12345")
         QString paramsString = query.toString(QUrl::FullyEncoded);
 
-        // 1. Create the signature
         QMessageAuthenticationCode code(QCryptographicHash::Sha256);
         code.setKey(m_apiSecret.toUtf8());
         code.addData(paramsString.toUtf8());
         QString signature = code.result().toHex();
 
-        // 2. Add the signature to our query
         query.addQueryItem("signature", signature);
 
-        // 3. Build the final URL
         QUrl url(m_baseUrl + endpoint);
         url.setQuery(query);
 
-        // 4. Create the request and add the API key to the header
         QNetworkRequest request(url);
         request.setRawHeader(QByteArray(API::API_HEADER.toUtf8()), QByteArray(m_apiKey.toUtf8()));
         QNetworkReply *reply = nullptr;
 
-        // 5. Send the request
         switch (type)
         {
         case RequestType::Get:
             reply = m_networkManager->get(request);
             break;
         case RequestType::Post:
-            // Note: For POST, params would typically be in the body, not the URL.
-            // This implementation assumes params are always in the query string.
             reply = m_networkManager->post(request, QByteArray());
             break;
         case RequestType::Put:

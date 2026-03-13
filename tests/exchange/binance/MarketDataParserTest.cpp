@@ -7,7 +7,7 @@
 #include <QJsonObject>
 #include <QTimer>
 
-#include "../../../exchange/binance/http/BinanceAPI.h"
+#include "../../../exchange/binance/http/BinanceHttpClient.h"
 #include "../../../exchange/binance/parsers/MarketDataParser.h"
 
 int main(int argc, char *argv[])
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 class MarketDataParserTest : public ::testing::Test
 {
 protected:
-    std::unique_ptr<Binance::BinanceAPI> binanceAPI;
+    std::unique_ptr<Binance::BinanceHttpClient> binanceAPI;
     QEventLoop m_loop;
     QTimer     m_timer;
     bool       m_timedOut = false;
@@ -41,9 +41,9 @@ protected:
 
     void SetUp() override
     {
-        binanceAPI = std::make_unique<Binance::BinanceAPI>(nullptr, true);
+        binanceAPI = std::make_unique<Binance::BinanceHttpClient>(nullptr, true);
         // binanceAPI is recreated each test so this connection is always fresh.
-        QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError,
+        QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError,
             [this](const QString &error)
             {
                 m_timer.stop();
@@ -85,7 +85,7 @@ TEST_F(MarketDataParserTest, OrderBook)
     QJsonDocument response;
     std::optional<Binance::MarketData::OrderBook> orderBook{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::orderBookResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::orderBookResponse, [&](const QJsonDocument &data)
     {
         response = data;
         orderBook = Binance::MarketDataParser::parseOrderBook(data);
@@ -110,7 +110,7 @@ TEST_F(MarketDataParserTest, RecentTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Trade>> trades{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::recentTradesResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::recentTradesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         trades = Binance::MarketDataParser::parseTrades(data);
@@ -141,7 +141,7 @@ TEST_F(MarketDataParserTest, HistoricalTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Trade>> trades{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::historicalTradesResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::historicalTradesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         trades = Binance::MarketDataParser::parseTrades(data);
@@ -172,7 +172,7 @@ TEST_F(MarketDataParserTest, AggregatedTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::AggregatedTrade>> aggTrades{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::aggTradesResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::aggTradesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         aggTrades = Binance::MarketDataParser::parseAggregatedTrades(data);
@@ -205,7 +205,7 @@ TEST_F(MarketDataParserTest, Klines)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Kline>> klines{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::klinesResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::klinesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         klines = Binance::MarketDataParser::parseKlines(data);
@@ -243,7 +243,7 @@ TEST_F(MarketDataParserTest, UIKlines)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::UIKline>> uiKlines{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::uiKlinesResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::uiKlinesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         uiKlines = Binance::MarketDataParser::parseUIKlines(data);
@@ -281,7 +281,7 @@ TEST_F(MarketDataParserTest, CurrentAveragePrice)
     QJsonDocument response;
     std::optional<Binance::MarketData::CurrentAveragePrice> avgPrice{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::currentAveragePriceResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::currentAveragePriceResponse, [&](const QJsonDocument &data)
     {
         response = data;
         avgPrice = Binance::MarketDataParser::parseCurrentAveragePrice(data);
@@ -306,7 +306,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Ticker24hrFull>> ticker24hrFull{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseFull, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::tickerPrice24hrResponseFull, [&](const QJsonDocument &data)
     {
         response = data;
         ticker24hrFull = Binance::MarketDataParser::parseTicker24hrFull(data);
@@ -365,7 +365,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Ticker24hrMini>> ticker24hrMini{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tickerPrice24hrResponseMini, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::tickerPrice24hrResponseMini, [&](const QJsonDocument &data)
     {
         response = data;
         ticker24hrMini = Binance::MarketDataParser::parseTicker24hrMini(data);
@@ -427,7 +427,7 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TradingDayFull>> tradingDayFull{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseFull, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::tradingDayResponseFull, [&](const QJsonDocument &data)
     {
         response = data;
         tradingDayFull = Binance::MarketDataParser::parseTradingDayFull(data);
@@ -486,7 +486,7 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TradingDayMini>> tradingDayMini{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::tradingDayResponseMini, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::tradingDayResponseMini, [&](const QJsonDocument &data)
     {
         response = data;
         tradingDayMini = Binance::MarketDataParser::parseTradingDayMini(data);
@@ -548,7 +548,7 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::SymbolPriceTicker>> symbolPriceTicker{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolPriceTickerResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::symbolPriceTickerResponse, [&](const QJsonDocument &data)
     {
         response = data;
         symbolPriceTicker = Binance::MarketDataParser::parseSymbolPriceTicker(data);
@@ -592,7 +592,7 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::SymbolOrderBookTicker>> symbolOrderBookTicker{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::symbolOrderBookTickerResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::symbolOrderBookTickerResponse, [&](const QJsonDocument &data)
     {
         response = data;
         symbolOrderBookTicker = Binance::MarketDataParser::parseSymbolOrderBookTicker(data);
@@ -645,7 +645,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TickerFull>> tickerFull{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseFull, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::rollingWindowTickerResponseFull, [&](const QJsonDocument &data)
     {
         response = data;
         tickerFull = Binance::MarketDataParser::parseRollingWindowTickerFull(data);
@@ -705,7 +705,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TickerMini>> tickerMini{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::rollingWindowTickerResponseMini, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::rollingWindowTickerResponseMini, [&](const QJsonDocument &data)
     {
         response = data;
         tickerMini = Binance::MarketDataParser::parseRollingWindowTickerMini(data);

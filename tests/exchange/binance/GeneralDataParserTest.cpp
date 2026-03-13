@@ -5,7 +5,7 @@
 #include <QJsonObject>
 #include <QTimer>
 
-#include "../../../exchange/binance/http/BinanceAPI.h"
+#include "../../../exchange/binance/http/BinanceHttpClient.h"
 #include "../../../exchange/binance/parsers/GeneralDataParser.h"
 
 int main(int argc, char *argv[])
@@ -19,12 +19,12 @@ int main(int argc, char *argv[])
 class GeneralDataParserTest : public ::testing::Test
 {
 protected:
-    std::unique_ptr<Binance::BinanceAPI> binanceAPI;
+    std::unique_ptr<Binance::BinanceHttpClient> binanceAPI;
 
     // This runs before each test
     void SetUp() override
     {
-        binanceAPI = std::make_unique<Binance::BinanceAPI>(nullptr, true);
+        binanceAPI = std::make_unique<Binance::BinanceHttpClient>(nullptr, true);
     }
 
     // This runs after each test
@@ -40,14 +40,14 @@ TEST_F(GeneralDataParserTest, Ping)
     QJsonDocument response;
     std::optional<Binance::GeneralData::Ping> ping{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::pingResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::pingResponse, [&](const QJsonDocument &data)
     {
         response = data;
         ping = Binance::GeneralDataParser::parsePing(data);
         loop.quit();
     });
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
     {
         FAIL() << "GeneralDataParserTest Ping API Error received: " << error.toStdString();
         loop.quit();
@@ -68,14 +68,14 @@ TEST_F(GeneralDataParserTest, ServerTime)
     QJsonDocument response;
     std::optional<Binance::GeneralData::ServerTime> serverTime{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::timeResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::timeResponse, [&](const QJsonDocument &data)
     {
         response = data;
         serverTime = Binance::GeneralDataParser::parseServerTime(data);
         loop.quit();
     });
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
     {
         FAIL() << "GeneralDataParserTest ServerTime API Error received: " << error.toStdString();
         loop.quit();
@@ -97,14 +97,14 @@ TEST_F(GeneralDataParserTest, ExchangeInfo)
     QJsonDocument response;
     std::optional<Binance::GeneralData::ExchangeInfo> exchangeInfo{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::exchangeInfoResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::exchangeInfoResponse, [&](const QJsonDocument &data)
     {
         response = data;
         exchangeInfo = Binance::GeneralDataParser::parseExchangeInfo(data);
         loop.quit();
     });
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
     {
         FAIL() << "GeneralDataParserTest ExchangeInfo API Error received: " << error.toStdString();
         loop.quit();
@@ -130,14 +130,14 @@ TEST_F(GeneralDataParserTest, ExchangeInfoSymbol)
     QJsonDocument response;
     std::optional<Binance::GeneralData::ExchangeInfo> exchangeInfo{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::exchangeInfoResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::exchangeInfoResponse, [&](const QJsonDocument &data)
     {
         response = data;
         exchangeInfo = Binance::GeneralDataParser::parseExchangeInfo(data);
         loop.quit();
     });
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
     {
         FAIL() << "GeneralDataParserTest ExchangeInfoWithParams API Error received: " << error.toStdString();
         loop.quit();
@@ -165,14 +165,14 @@ TEST_F(GeneralDataParserTest, ExchangeInfoSymbols)
     QJsonDocument response;
     std::optional<Binance::GeneralData::ExchangeInfo> exchangeInfo{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::exchangeInfoResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::exchangeInfoResponse, [&](const QJsonDocument &data)
     {
         response = data;
         exchangeInfo = Binance::GeneralDataParser::parseExchangeInfo(data);
         loop.quit();
     });
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError, [&](const QString &error)
+    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
     {
         FAIL() << "GeneralDataParserTest ExchangeInfoWithParams API Error received: " << error.toStdString();
         loop.quit();

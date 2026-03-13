@@ -13,12 +13,12 @@
 
 namespace Binance
 {
-    class BinanceAPI : public QObject
+    class BinanceHttpClient : public QObject
     {
         Q_OBJECT
     public:
-        explicit BinanceAPI(QObject *parent = nullptr, bool useTestNetwork = true);
-        ~BinanceAPI();
+        explicit BinanceHttpClient(QObject *parent = nullptr, bool useTestNetwork = true);
+        ~BinanceHttpClient();
 
         void setApiKeys(const QString &key, const QString &secret);
 
@@ -26,27 +26,27 @@ namespace Binance
         void ping();
         void time();
         void exchangeInfo();
-        void exchangeInfo(const Binance::GeneralData::ExchangeInfoRequest &request);
+        void exchangeInfo(const GeneralData::ExchangeInfoRequest &request);
 
         // Market Data endpoints
-        void orderBook(const Binance::MarketData::OrderBookRequest &request);
-        void recentTrades(const Binance::MarketData::RecentTradesRequest &request);
-        void historicalTrades(const Binance::MarketData::OldTradesRequest &request);
-        void aggregatedTrades(const Binance::MarketData::AggregatedTradeRequest &request);
-        void klines(const Binance::MarketData::KlineRequest &request);
-        void uiKlines(const Binance::MarketData::UIKlineRequest &request);
-        void currentAveragePrice(const Binance::MarketData::CurrentAveragePriceRequest &request);
-        void tickerPrice24hr(const Binance::MarketData::Ticker24hrRequest &request);
-        void tradingDay(const Binance::MarketData::TradingDayRequest &request);
-        void symbolPriceTicker(const Binance::MarketData::SymbolPriceTickerRequest &request);
-        void symbolOrderBookTicker(const Binance::MarketData::SymbolOrderBookTickerRequest &request);
-        void rollingWindowTicker(const Binance::MarketData::TickerRequest &request);
+        void orderBook(const MarketData::OrderBookRequest &request);
+        void recentTrades(const MarketData::RecentTradesRequest &request);
+        void historicalTrades(const MarketData::OldTradesRequest &request);
+        void aggregatedTrades(const MarketData::AggregatedTradeRequest &request);
+        void klines(const MarketData::KlineRequest &request);
+        void uiKlines(const MarketData::UIKlineRequest &request);
+        void currentAveragePrice(const MarketData::CurrentAveragePriceRequest &request);
+        void tickerPrice24hr(const MarketData::Ticker24hrRequest &request);
+        void tradingDay(const MarketData::TradingDayRequest &request);
+        void symbolPriceTicker(const MarketData::SymbolPriceTickerRequest &request);
+        void symbolOrderBookTicker(const MarketData::SymbolOrderBookTickerRequest &request);
+        void rollingWindowTicker(const MarketData::TickerRequest &request);
 
     private:
         void getApiKeys();
         QNetworkReply* sendPublicRequest(const QString &endpoint, const QVariantMap &params = {}, RequestType type = RequestType::Get);
         QNetworkReply* sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type);
-        
+
         bool m_useTestNetwork;
         QString m_baseUrl;
         QString m_apiKey;
@@ -60,15 +60,16 @@ namespace Binance
         void apiKeysFileError();
         void apiError(const QString &error);
 
+        // General signals — raw JSON, no parsing
         void pingResponse(const QJsonDocument &data);
         void timeResponse(const QJsonDocument &data);
         void exchangeInfoResponse(const QJsonDocument &data);
 
+        // Market data signals — raw JSON, no parsing
         void orderBookResponse(const QJsonDocument &data);
         void recentTradesResponse(const QJsonDocument &data);
         void historicalTradesResponse(const QJsonDocument &data);
         void aggTradesResponse(const QJsonDocument &data);
-
         void klinesResponse(const QJsonDocument &data);
         void uiKlinesResponse(const QJsonDocument &data);
         void currentAveragePriceResponse(const QJsonDocument &data);

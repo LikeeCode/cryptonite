@@ -6,14 +6,14 @@ add_library(BinanceAPI
     data/GeneralData.h
     data/MarketData.h
     data/TradingData.h
-    http/BinanceAPI.h
+
+    http/BinanceHttpClient.h
     converters/EnumConverter.h
     converters/ErrorConverter.h
     converters/FilterConverter.h
     parsers/GeneralDataParser.h
     parsers/MarketDataParser.h
-    
-    http/BinanceAPI.cpp
+    http/BinanceHttpClient.cpp
     converters/EnumConverter.cpp
     converters/ErrorConverter.cpp
     converters/FilterConverter.cpp
