@@ -2,7 +2,7 @@
 
 #include <QAbstractItemModel>
 
-#include "parsers/EnumParser.h"
+#include "parsers/EnumConverter.h"
 #include "data/GeneralData.h"
 
 class SymbolsModel : public QAbstractItemModel
