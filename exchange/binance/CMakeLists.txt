@@ -1,33 +1,32 @@
 add_library(BinanceAPI
-    include/enums/Converter.h
-    include/enums/Enums.h
-    include/errors/Converter.h
-    include/errors/Errors.h
-    include/filters/Converter.h
-    include/filters/Filters.h
-    include/rest-api/APIEndpoints.h
-    include/rest-api/BinanceAPI.h
-    include/rest-api/GeneralData.h
-    include/rest-api/GeneralDataParser.h
-    include/rest-api/MarketData.h
-    include/rest-api/MarketDataParser.h
-    include/rest-api/TradingData.h
+    data/APIEndpoints.h
+    data/GeneralData.h
+    data/MarketData.h
+    data/TradingData.h
+    enums/Enums.h
+    errors/Errors.h
+    filters/Filters.h
+    http/BinanceAPI.h
+    parsers/EnumConverter.h
+    parsers/ErrorConverter.h
+    parsers/FilterConverter.h
+    parsers/GeneralDataParser.h
+    parsers/MarketDataParser.h
     
-    src/enums/Converter.cpp
-    src/errors/Converter.cpp
-    src/filters/Converter.cpp
-    src/rest-api/BinanceAPI.cpp
-    src/rest-api/GeneralDataParser.cpp
-    src/rest-api/MarketDataParser.cpp
+    http/BinanceAPI.cpp
+    parsers/EnumConverter.cpp
+    parsers/ErrorConverter.cpp
+    parsers/FilterConverter.cpp
+    parsers/GeneralDataParser.cpp
+    parsers/MarketDataParser.cpp
 )
 
-target_include_directories(BinanceAPI PUBLIC include/)
+target_include_directories(BinanceAPI PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Find Qt6 modules
 find_package(Qt6 COMPONENTS Core REQUIRED)
 
 target_link_libraries(BinanceAPI PRIVATE
-    APICommon
     Qt6::Core
     Qt6::Network
 )

@@ -17,8 +17,8 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt6 6.8.3 REQUIRED COMPONENTS Core Gui Qml Quick Network)
 
 # Include all subdirectories
-add_subdirectory(api)
-add_subdirectory(models)
+add_subdirectory(exchange)
+add_subdirectory(presentation)
 
 # Set a common output directory for all executables
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/$<CONFIG>")

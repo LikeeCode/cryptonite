@@ -1,1 +1,1 @@
-add_subdirectory(api/binance)
+add_subdirectory(exchange/binance)

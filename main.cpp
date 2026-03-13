@@ -1,8 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include "rest-api/BinanceAPI.h"
-#include "rest-api/GeneralDataParser.h"
+#include "http/BinanceAPI.h"
+#include "parsers/GeneralDataParser.h"
 
 int main(int argc, char *argv[])
 {
