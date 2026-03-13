@@ -26,15 +26,23 @@ protected:
     QTimer     m_timer;
     bool       m_timedOut = false;
 
-    void SetUp() override
+    MarketDataParserTest()
     {
-        binanceAPI = std::make_unique<Binance::BinanceAPI>(nullptr, true);
+        // Connected once in the constructor so it is never duplicated across
+        // repeated SetUp() calls — m_timer is a fixture member that persists
+        // for the lifetime of the fixture object.
         m_timer.setSingleShot(true);
         QObject::connect(&m_timer, &QTimer::timeout, [this]()
         {
             m_timedOut = true;
             m_loop.quit();
         });
+    }
+
+    void SetUp() override
+    {
+        binanceAPI = std::make_unique<Binance::BinanceAPI>(nullptr, true);
+        // binanceAPI is recreated each test so this connection is always fresh.
         QObject::connect(binanceAPI.get(), &Binance::BinanceAPI::apiError,
             [this](const QString &error)
             {
