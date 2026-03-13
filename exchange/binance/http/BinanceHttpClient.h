@@ -22,13 +22,13 @@ namespace Binance
 
         void setApiKeys(const QString &key, const QString &secret);
 
-        // General endpoints
+        // General data endpoints
         void ping();
         void time();
         void exchangeInfo();
         void exchangeInfo(const GeneralData::ExchangeInfoRequest &request);
 
-        // Market Data endpoints
+        // Market data endpoints
         void orderBook(const MarketData::OrderBookRequest &request);
         void recentTrades(const MarketData::RecentTradesRequest &request);
         void historicalTrades(const MarketData::OldTradesRequest &request);
