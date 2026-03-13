@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 class MarketDataParserTest : public ::testing::Test
 {
 protected:
-    std::unique_ptr<Binance::BinanceHttpClient> binanceAPI;
+    std::unique_ptr<Binance::BinanceHttpClient> binanceHttpClient;
     QEventLoop m_loop;
     QTimer     m_timer;
     bool       m_timedOut = false;
@@ -41,9 +41,9 @@ protected:
 
     void SetUp() override
     {
-        binanceAPI = std::make_unique<Binance::BinanceHttpClient>(nullptr, true);
-        // binanceAPI is recreated each test so this connection is always fresh.
-        QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError,
+        binanceHttpClient = std::make_unique<Binance::BinanceHttpClient>(nullptr, true);
+        // binanceHttpClient is recreated each test so this connection is always fresh.
+        QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::apiError,
             [this](const QString &error)
             {
                 m_timer.stop();
@@ -54,7 +54,7 @@ protected:
 
     void TearDown() override
     {
-        binanceAPI.reset();
+        binanceHttpClient.reset();
     }
 
     // Resets the timeout flag and starts the timer. Call once per async operation.
@@ -85,7 +85,7 @@ TEST_F(MarketDataParserTest, OrderBook)
     QJsonDocument response;
     std::optional<Binance::MarketData::OrderBook> orderBook{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::orderBookResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::orderBookResponse, [&](const QJsonDocument &data)
     {
         response = data;
         orderBook = Binance::MarketDataParser::parseOrderBook(data);
@@ -93,7 +93,7 @@ TEST_F(MarketDataParserTest, OrderBook)
     });
 
     startWait();
-    binanceAPI->orderBook(Binance::MarketData::OrderBookRequest{"BTCUSDT"});
+    binanceHttpClient->orderBook(Binance::MarketData::OrderBookRequest{"BTCUSDT"});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -110,7 +110,7 @@ TEST_F(MarketDataParserTest, RecentTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Trade>> trades{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::recentTradesResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::recentTradesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         trades = Binance::MarketDataParser::parseTrades(data);
@@ -118,7 +118,7 @@ TEST_F(MarketDataParserTest, RecentTrades)
     });
 
     startWait();
-    binanceAPI->recentTrades(Binance::MarketData::RecentTradesRequest{"BTCUSDT"});
+    binanceHttpClient->recentTrades(Binance::MarketData::RecentTradesRequest{"BTCUSDT"});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -141,7 +141,7 @@ TEST_F(MarketDataParserTest, HistoricalTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Trade>> trades{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::historicalTradesResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::historicalTradesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         trades = Binance::MarketDataParser::parseTrades(data);
@@ -149,7 +149,7 @@ TEST_F(MarketDataParserTest, HistoricalTrades)
     });
 
     startWait();
-    binanceAPI->historicalTrades(Binance::MarketData::OldTradesRequest{"BTCUSDT"});
+    binanceHttpClient->historicalTrades(Binance::MarketData::OldTradesRequest{"BTCUSDT"});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -172,7 +172,7 @@ TEST_F(MarketDataParserTest, AggregatedTrades)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::AggregatedTrade>> aggTrades{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::aggTradesResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::aggTradesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         aggTrades = Binance::MarketDataParser::parseAggregatedTrades(data);
@@ -180,7 +180,7 @@ TEST_F(MarketDataParserTest, AggregatedTrades)
     });
 
     startWait();
-    binanceAPI->aggregatedTrades(Binance::MarketData::AggregatedTradeRequest{"BTCUSDT"});
+    binanceHttpClient->aggregatedTrades(Binance::MarketData::AggregatedTradeRequest{"BTCUSDT"});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -205,7 +205,7 @@ TEST_F(MarketDataParserTest, Klines)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Kline>> klines{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::klinesResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::klinesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         klines = Binance::MarketDataParser::parseKlines(data);
@@ -213,7 +213,7 @@ TEST_F(MarketDataParserTest, Klines)
     });
 
     startWait();
-    binanceAPI->klines(Binance::MarketData::KlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
+    binanceHttpClient->klines(Binance::MarketData::KlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -243,7 +243,7 @@ TEST_F(MarketDataParserTest, UIKlines)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::UIKline>> uiKlines{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::uiKlinesResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::uiKlinesResponse, [&](const QJsonDocument &data)
     {
         response = data;
         uiKlines = Binance::MarketDataParser::parseUIKlines(data);
@@ -251,7 +251,7 @@ TEST_F(MarketDataParserTest, UIKlines)
     });
 
     startWait();
-    binanceAPI->uiKlines(Binance::MarketData::UIKlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
+    binanceHttpClient->uiKlines(Binance::MarketData::UIKlineRequest{"BTCUSDT", Binance::Interval::FIVE_MINUTES});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -281,7 +281,7 @@ TEST_F(MarketDataParserTest, CurrentAveragePrice)
     QJsonDocument response;
     std::optional<Binance::MarketData::CurrentAveragePrice> avgPrice{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::currentAveragePriceResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::currentAveragePriceResponse, [&](const QJsonDocument &data)
     {
         response = data;
         avgPrice = Binance::MarketDataParser::parseCurrentAveragePrice(data);
@@ -289,7 +289,7 @@ TEST_F(MarketDataParserTest, CurrentAveragePrice)
     });
 
     startWait();
-    binanceAPI->currentAveragePrice(Binance::MarketData::CurrentAveragePriceRequest{"BTCUSDT"});
+    binanceHttpClient->currentAveragePrice(Binance::MarketData::CurrentAveragePriceRequest{"BTCUSDT"});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -306,7 +306,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Ticker24hrFull>> ticker24hrFull{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::tickerPrice24hrResponseFull, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::tickerPrice24hrResponseFull, [&](const QJsonDocument &data)
     {
         response = data;
         ticker24hrFull = Binance::MarketDataParser::parseTicker24hrFull(data);
@@ -314,7 +314,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     });
 
     startWait();
-    binanceAPI->tickerPrice24hr(Binance::MarketData::Ticker24hrRequest{"BTCUSDT"});
+    binanceHttpClient->tickerPrice24hr(Binance::MarketData::Ticker24hrRequest{"BTCUSDT"});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -332,7 +332,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrFull)
     startWait();
     Binance::MarketData::Ticker24hrRequest requestFullMultiple{};
     requestFullMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
-    binanceAPI->tickerPrice24hr(requestFullMultiple);
+    binanceHttpClient->tickerPrice24hr(requestFullMultiple);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -365,7 +365,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::Ticker24hrMini>> ticker24hrMini{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::tickerPrice24hrResponseMini, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::tickerPrice24hrResponseMini, [&](const QJsonDocument &data)
     {
         response = data;
         ticker24hrMini = Binance::MarketDataParser::parseTicker24hrMini(data);
@@ -375,7 +375,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     startWait();
     Binance::MarketData::Ticker24hrRequest requestMini{"BTCUSDT"};
     requestMini.type = Binance::ResponseType::MINI;
-    binanceAPI->tickerPrice24hr(requestMini);
+    binanceHttpClient->tickerPrice24hr(requestMini);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -394,7 +394,7 @@ TEST_F(MarketDataParserTest, TickerPrice24hrMini)
     Binance::MarketData::Ticker24hrRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     requestMiniMultiple.type = Binance::ResponseType::MINI;
-    binanceAPI->tickerPrice24hr(requestMiniMultiple);
+    binanceHttpClient->tickerPrice24hr(requestMiniMultiple);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -427,7 +427,7 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TradingDayFull>> tradingDayFull{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::tradingDayResponseFull, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::tradingDayResponseFull, [&](const QJsonDocument &data)
     {
         response = data;
         tradingDayFull = Binance::MarketDataParser::parseTradingDayFull(data);
@@ -435,7 +435,7 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     });
 
     startWait();
-    binanceAPI->tradingDay(Binance::MarketData::TradingDayRequest{"BTCUSDT"});
+    binanceHttpClient->tradingDay(Binance::MarketData::TradingDayRequest{"BTCUSDT"});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -453,7 +453,7 @@ TEST_F(MarketDataParserTest, TradingDayFull)
     startWait();
     Binance::MarketData::TradingDayRequest requestFullMultiple{};
     requestFullMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
-    binanceAPI->tradingDay(requestFullMultiple);
+    binanceHttpClient->tradingDay(requestFullMultiple);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -486,7 +486,7 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TradingDayMini>> tradingDayMini{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::tradingDayResponseMini, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::tradingDayResponseMini, [&](const QJsonDocument &data)
     {
         response = data;
         tradingDayMini = Binance::MarketDataParser::parseTradingDayMini(data);
@@ -496,7 +496,7 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     startWait();
     Binance::MarketData::TradingDayRequest requestMini{"BTCUSDT"};
     requestMini.type = Binance::ResponseType::MINI;
-    binanceAPI->tradingDay(requestMini);
+    binanceHttpClient->tradingDay(requestMini);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -515,7 +515,7 @@ TEST_F(MarketDataParserTest, TradingDayMini)
     Binance::MarketData::TradingDayRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     requestMiniMultiple.type = Binance::ResponseType::MINI;
-    binanceAPI->tradingDay(requestMiniMultiple);
+    binanceHttpClient->tradingDay(requestMiniMultiple);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -548,7 +548,7 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::SymbolPriceTicker>> symbolPriceTicker{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::symbolPriceTickerResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::symbolPriceTickerResponse, [&](const QJsonDocument &data)
     {
         response = data;
         symbolPriceTicker = Binance::MarketDataParser::parseSymbolPriceTicker(data);
@@ -556,7 +556,7 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     });
 
     startWait();
-    binanceAPI->symbolPriceTicker(Binance::MarketData::SymbolPriceTickerRequest{"BTCUSDT"});
+    binanceHttpClient->symbolPriceTicker(Binance::MarketData::SymbolPriceTickerRequest{"BTCUSDT"});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -569,7 +569,7 @@ TEST_F(MarketDataParserTest, SymbolPriceTicker)
     startWait();
     Binance::MarketData::SymbolPriceTickerRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
-    binanceAPI->symbolPriceTicker(requestMiniMultiple);
+    binanceHttpClient->symbolPriceTicker(requestMiniMultiple);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -592,7 +592,7 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::SymbolOrderBookTicker>> symbolOrderBookTicker{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::symbolOrderBookTickerResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::symbolOrderBookTickerResponse, [&](const QJsonDocument &data)
     {
         response = data;
         symbolOrderBookTicker = Binance::MarketDataParser::parseSymbolOrderBookTicker(data);
@@ -600,7 +600,7 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     });
 
     startWait();
-    binanceAPI->symbolOrderBookTicker(Binance::MarketData::SymbolOrderBookTickerRequest{"BTCUSDT"});
+    binanceHttpClient->symbolOrderBookTicker(Binance::MarketData::SymbolOrderBookTickerRequest{"BTCUSDT"});
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -616,7 +616,7 @@ TEST_F(MarketDataParserTest, SymbolOrderBookTicker)
     startWait();
     Binance::MarketData::SymbolOrderBookTickerRequest requestMultiple{};
     requestMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
-    binanceAPI->symbolOrderBookTicker(requestMultiple);
+    binanceHttpClient->symbolOrderBookTicker(requestMultiple);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -645,7 +645,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TickerFull>> tickerFull{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::rollingWindowTickerResponseFull, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::rollingWindowTickerResponseFull, [&](const QJsonDocument &data)
     {
         response = data;
         tickerFull = Binance::MarketDataParser::parseRollingWindowTickerFull(data);
@@ -654,7 +654,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
 
     startWait();
     Binance::MarketData::TickerRequest symbol{"BTCUSDT"};
-    binanceAPI->rollingWindowTicker(symbol);
+    binanceHttpClient->rollingWindowTicker(symbol);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -672,7 +672,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerFull)
     startWait();
     Binance::MarketData::TickerRequest requestFullMultiple{};
     requestFullMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
-    binanceAPI->rollingWindowTicker(requestFullMultiple);
+    binanceHttpClient->rollingWindowTicker(requestFullMultiple);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -705,7 +705,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     QJsonDocument response;
     std::optional<QList<Binance::MarketData::TickerMini>> tickerMini{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::rollingWindowTickerResponseMini, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::rollingWindowTickerResponseMini, [&](const QJsonDocument &data)
     {
         response = data;
         tickerMini = Binance::MarketDataParser::parseRollingWindowTickerMini(data);
@@ -715,7 +715,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     startWait();
     Binance::MarketData::TickerRequest symbol{"BTCUSDT"};
     symbol.type = Binance::ResponseType::MINI;
-    binanceAPI->rollingWindowTicker(symbol);
+    binanceHttpClient->rollingWindowTicker(symbol);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());
@@ -734,7 +734,7 @@ TEST_F(MarketDataParserTest, RollingWindowTickerMini)
     Binance::MarketData::TickerRequest requestMiniMultiple{};
     requestMiniMultiple.symbols = QList<QString>{"BTCUSDT", "ETHUSDT"};
     requestMiniMultiple.type = Binance::ResponseType::MINI;
-    binanceAPI->rollingWindowTicker(requestMiniMultiple);
+    binanceHttpClient->rollingWindowTicker(requestMiniMultiple);
     ASSERT_TRUE(waitForResponse());
 
     ASSERT_FALSE(response.isNull());

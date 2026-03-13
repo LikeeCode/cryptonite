@@ -19,18 +19,18 @@ int main(int argc, char *argv[])
 class GeneralDataParserTest : public ::testing::Test
 {
 protected:
-    std::unique_ptr<Binance::BinanceHttpClient> binanceAPI;
+    std::unique_ptr<Binance::BinanceHttpClient> binanceHttpClient;
 
     // This runs before each test
     void SetUp() override
     {
-        binanceAPI = std::make_unique<Binance::BinanceHttpClient>(nullptr, true);
+        binanceHttpClient = std::make_unique<Binance::BinanceHttpClient>(nullptr, true);
     }
 
     // This runs after each test
     void TearDown() override
     {
-        binanceAPI.reset();
+        binanceHttpClient.reset();
     }
 };
 
@@ -40,20 +40,20 @@ TEST_F(GeneralDataParserTest, Ping)
     QJsonDocument response;
     std::optional<Binance::GeneralData::Ping> ping{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::pingResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::pingResponse, [&](const QJsonDocument &data)
     {
         response = data;
         ping = Binance::GeneralDataParser::parsePing(data);
         loop.quit();
     });
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
     {
         FAIL() << "GeneralDataParserTest Ping API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    binanceAPI->ping();
+    binanceHttpClient->ping();
     loop.exec();
 
     ASSERT_FALSE(response.isNull());
@@ -68,20 +68,20 @@ TEST_F(GeneralDataParserTest, ServerTime)
     QJsonDocument response;
     std::optional<Binance::GeneralData::ServerTime> serverTime{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::timeResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::timeResponse, [&](const QJsonDocument &data)
     {
         response = data;
         serverTime = Binance::GeneralDataParser::parseServerTime(data);
         loop.quit();
     });
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
     {
         FAIL() << "GeneralDataParserTest ServerTime API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    binanceAPI->time();
+    binanceHttpClient->time();
     loop.exec();
 
     ASSERT_FALSE(response.isNull());
@@ -97,20 +97,20 @@ TEST_F(GeneralDataParserTest, ExchangeInfo)
     QJsonDocument response;
     std::optional<Binance::GeneralData::ExchangeInfo> exchangeInfo{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::exchangeInfoResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::exchangeInfoResponse, [&](const QJsonDocument &data)
     {
         response = data;
         exchangeInfo = Binance::GeneralDataParser::parseExchangeInfo(data);
         loop.quit();
     });
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
     {
         FAIL() << "GeneralDataParserTest ExchangeInfo API Error received: " << error.toStdString();
         loop.quit();
     });
 
-    binanceAPI->exchangeInfo();
+    binanceHttpClient->exchangeInfo();
     QTimer::singleShot(15000, &loop, &QEventLoop::quit); // 15-second timeout
     loop.exec();
 
@@ -130,14 +130,14 @@ TEST_F(GeneralDataParserTest, ExchangeInfoSymbol)
     QJsonDocument response;
     std::optional<Binance::GeneralData::ExchangeInfo> exchangeInfo{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::exchangeInfoResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::exchangeInfoResponse, [&](const QJsonDocument &data)
     {
         response = data;
         exchangeInfo = Binance::GeneralDataParser::parseExchangeInfo(data);
         loop.quit();
     });
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
     {
         FAIL() << "GeneralDataParserTest ExchangeInfoWithParams API Error received: " << error.toStdString();
         loop.quit();
@@ -146,7 +146,7 @@ TEST_F(GeneralDataParserTest, ExchangeInfoSymbol)
     Binance::GeneralData::ExchangeInfoRequest request;
     request.symbol = "BTCUSDT";
 
-    binanceAPI->exchangeInfo(request);
+    binanceHttpClient->exchangeInfo(request);
     QTimer::singleShot(15000, &loop, &QEventLoop::quit); // 15-second timeout
     loop.exec();
 
@@ -165,14 +165,14 @@ TEST_F(GeneralDataParserTest, ExchangeInfoSymbols)
     QJsonDocument response;
     std::optional<Binance::GeneralData::ExchangeInfo> exchangeInfo{};
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::exchangeInfoResponse, [&](const QJsonDocument &data)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::exchangeInfoResponse, [&](const QJsonDocument &data)
     {
         response = data;
         exchangeInfo = Binance::GeneralDataParser::parseExchangeInfo(data);
         loop.quit();
     });
 
-    QObject::connect(binanceAPI.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
+    QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::apiError, [&](const QString &error)
     {
         FAIL() << "GeneralDataParserTest ExchangeInfoWithParams API Error received: " << error.toStdString();
         loop.quit();
@@ -181,7 +181,7 @@ TEST_F(GeneralDataParserTest, ExchangeInfoSymbols)
     Binance::GeneralData::ExchangeInfoRequest request;
     request.symbols = {"BTCUSDT", "BNBBTC"};
 
-    binanceAPI->exchangeInfo(request);
+    binanceHttpClient->exchangeInfo(request);
     QTimer::singleShot(15000, &loop, &QEventLoop::quit); // 15-second timeout
     loop.exec();
 
