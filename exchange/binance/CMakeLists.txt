@@ -13,12 +13,15 @@ add_library(BinanceAPI
     converters/FilterConverter.h
     parsers/GeneralDataParser.h
     parsers/MarketDataParser.h
+    repositories/BinanceGeneralDataRepository.h
+
     http/BinanceHttpClient.cpp
     converters/EnumConverter.cpp
     converters/ErrorConverter.cpp
     converters/FilterConverter.cpp
     parsers/GeneralDataParser.cpp
     parsers/MarketDataParser.cpp
+    repositories/BinanceGeneralDataRepository.cpp
 )
 
 target_include_directories(BinanceAPI PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
