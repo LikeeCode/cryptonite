@@ -11,6 +11,20 @@
             "cwd": "${command:cmake.launchTargetDirectory}",
             "console": "internalConsole",
             "visualizerFile": "${workspaceFolder}/.vscode/qt.natvis"
-        }
+        },
+        {
+            "name": "Debug Selected Test",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/Debug/${fileBasenameNoExtension}.exe",
+            "args": [
+                "--gtest_filter=*${selectedText}*",
+                "--gtest_also_run_disabled_tests"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build/tests/api/binance",
+            "console": "internalConsole",
+            "visualizerFile": "${workspaceFolder}/.vscode/qt.natvis"
+        },
     ]
 }
