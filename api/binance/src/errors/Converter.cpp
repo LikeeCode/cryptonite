@@ -6,7 +6,8 @@
 
 namespace Binance::Error
 {
-    QString toString(Code code){
+    QString toString(Code code)
+    {
         static const QHash<Code, QString> map = {
             {Code::NONE, "NONE"},
             {Code::UNKNOWN, "UNKNOWN"},

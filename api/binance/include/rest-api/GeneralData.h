@@ -30,7 +30,8 @@ namespace Binance::GeneralData
         int limit{};
     };
 
-    struct Symbol{
+    struct Symbol
+    {
         QString symbol;
         SymbolStatus status{};
         QString baseAsset;
@@ -63,16 +64,21 @@ namespace Binance::GeneralData
         std::optional<QString> symbol{};
         std::optional<QList<QString>> symbols{};
 
-        QVariantMap toVariantMap() const {
+        QVariantMap toVariantMap() const
+        {
             QVariantMap params;
-            if (symbol.has_value()) {
+            if (symbol.has_value())
+            {
                 params.insert("symbol", symbol.value());
-            } else if (symbols.has_value()) {
+            }
+            else if (symbols.has_value() && !symbols.value().isEmpty())
+            {
                 QJsonArray jsonArray;
-                for (const auto& sym : symbols.value()) {
+                for (const auto& sym : symbols.value())
+                {
                     jsonArray.append(sym);
                 }
-                params.insert("symbols", QJsonDocument(jsonArray).toJson(QJsonDocument::Compact));
+                params.insert("symbols", QString::fromUtf8(QJsonDocument(jsonArray).toJson(QJsonDocument::Compact)));
             }
             return params;
         }
@@ -87,4 +93,4 @@ namespace Binance::GeneralData
         QList<Symbol> symbols;
         QList<Symbol> sors;
     };
-}
+} // namespace Binance::GeneralData

@@ -10,8 +10,10 @@
 #include "enums/Converter.h"
 #include "filters/Filters.h"
 
-namespace Binance::TradingData{
-    struct OrderRequest{
+namespace Binance::TradingData
+{
+    struct OrderRequest
+    {
         std::optional<QString> symbol;
         std::optional<OrderSide> side{};
         std::optional<OrderType> type{};
@@ -34,7 +36,8 @@ namespace Binance::TradingData{
         std::optional<qint64> timestamp{};
     };
 
-    QVariantMap toVariantMap(const OrderRequest &request) {
+    QVariantMap toVariantMap(const OrderRequest &request)
+    {
         QVariantMap params;
 
         if (request.symbol.has_value()) params["symbol"] = request.symbol.value();
@@ -61,7 +64,8 @@ namespace Binance::TradingData{
         return params;
     }
 
-    struct OrderACK{
+    struct OrderACK
+    {
         QString symbol;
         qint64 orderId{};
         int orderListId{};
@@ -69,7 +73,8 @@ namespace Binance::TradingData{
         qint64 transactTime{};
     };
 
-    struct OrderResult{
+    struct OrderResult
+    {
         QString symbol;
         qint64 orderId{};
         int orderListId{};
@@ -86,7 +91,8 @@ namespace Binance::TradingData{
         SelfTradePreventionMode selfTradePreventionMode{};
     };
 
-    struct OrderFill{
+    struct OrderFill
+    {
         double price{};
         double qty{};
         double commission{};
@@ -94,7 +100,8 @@ namespace Binance::TradingData{
         qint64 tradeId{};
     };
 
-    struct OrderFull{
+    struct OrderFull
+    {
         QString symbol;
         qint64 orderId{};
         int orderListId{};
@@ -127,4 +134,4 @@ namespace Binance::TradingData{
         std::optional<int> pegOffsetValue{};
         std::optional<double> peggedPrice{};
     };
-}
+} // namespace Binance::TradingData

@@ -84,7 +84,7 @@ namespace Binance
                 {
                     return {}; // rateLimitType is required
                 }
-                if(!Enum::toRateLimitType(rateLimitObj["rateLimitType"].toString()).has_value())
+                if (!Enum::toRateLimitType(rateLimitObj["rateLimitType"].toString()).has_value())
                 {
                     return {}; // invalid rateLimitType
                 }
@@ -114,7 +114,8 @@ namespace Binance
                 exchangeInfo.rateLimits.append(rateLimit);
             }
         }
-        else{
+        else
+        {
             return {}; // rateLimits are required
         }
 
@@ -149,7 +150,7 @@ namespace Binance
                 {
                     return {}; // status is required
                 }
-                if(!Enum::toSymbolStatus(symbolObj["status"].toString()).has_value())
+                if (!Enum::toSymbolStatus(symbolObj["status"].toString()).has_value())
                 {
                     return {}; // invalid status
                 }
@@ -218,7 +219,7 @@ namespace Binance
                     {
                         return {}; // invalid format
                     }
-                    if(!Enum::toOrderType(orderTypesArray[i].toString()).has_value())
+                    if (!Enum::toOrderType(orderTypesArray[i].toString()).has_value())
                     {
                         return {}; // invalid orderType
                     }

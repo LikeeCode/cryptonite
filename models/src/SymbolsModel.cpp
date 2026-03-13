@@ -40,11 +40,11 @@ QVariant SymbolsModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    switch(role)
+    switch (role)
     {
     case SymbolRole:
         return m_symbols[index.row()].symbol;
-    case StatustRole:
+    case StatusRole:
         return Binance::Enum::toString(m_symbols[index.row()].status);
     case BaseAssetRole:
         return m_symbols[index.row()].baseAsset;
@@ -68,7 +68,7 @@ QVariant SymbolsModel::data(const QModelIndex &index, int role) const
 
 QVariant SymbolsModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if(section >= 0 && section < headerNames.size())
+    if (section >= 0 && section < headerNames.size())
     {
         if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
         {
@@ -91,7 +91,7 @@ QHash<int, QByteArray> SymbolsModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[SymbolRole] = "symbol";
-    roles[StatustRole] = "status";
+    roles[StatusRole] = "status";
     roles[BaseAssetRole] = "baseAsset";
     roles[QuoteAssetRole] = "quoteAsset";
     roles[FiltersRole] = "filters";

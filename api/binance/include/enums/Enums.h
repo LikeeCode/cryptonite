@@ -5,7 +5,8 @@ namespace Binance
 
     // See: https://github.com/binance/binance-spot-api-docs/blob/master/testnet/enums.md
 
-    enum class SymbolStatus {
+    enum class SymbolStatus
+    {
         TRADING,
         END_OF_DAY,
         HALT,
@@ -57,7 +58,8 @@ namespace Binance
         SOR
     };
 
-    enum class OrderType {
+    enum class OrderType
+    {
         LIMIT,
         MARKET,
         STOP_LOSS,
@@ -80,12 +82,14 @@ namespace Binance
         SOR
     };
 
-    enum class OrderSide {
+    enum class OrderSide
+    {
         BUY,
         SELL
     };
 
-    enum class TimeInForce {
+    enum class TimeInForce
+    {
         GTC, // Good Til Canceled
         IOC, // Immediate Or Cancel
         FOK  // Fill or Kill
@@ -114,7 +118,8 @@ namespace Binance
         DECREMENT
     };
 
-    enum class Interval{
+    enum class Interval
+    {
         ONE_SECOND,
         ONE_MINUTE,
         THREE_MINUTES,
@@ -133,17 +138,20 @@ namespace Binance
         ONE_MONTH
     };
 
-    enum class ResponseType{
+    enum class ResponseType
+    {
         FULL,
         MINI
     };
 
-    enum class PegPriceType{
+    enum class PegPriceType
+    {
         PRIMARY_PEG,
         MARKET_PEG
     };
 
-    enum class PegOffsetType{
+    enum class PegOffsetType
+    {
         PRICE_LEVEL
     };
 

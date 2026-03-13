@@ -40,7 +40,7 @@ namespace Binance::Enum
         static const QHash<QString, AccountAndSymbolPermissions> map = {
             {"SPOT", AccountAndSymbolPermissions::SPOT},
             {"MARGIN", AccountAndSymbolPermissions::MARGIN}};
-        return map.value(permission);
+        return map.value(permission, {});
     }
 
     QString toString(OrderStatus status)
@@ -184,6 +184,23 @@ namespace Binance::Enum
         return map.value(type, {});
     }
 
+    QString toString(ResponseType type)
+    {
+        static const QHash<ResponseType, QString> map = {
+            {ResponseType::FULL, "FULL"},
+            {ResponseType::MINI, "MINI"}};
+
+        return map.value(type);
+    }
+
+    std::optional<ResponseType> toResponseType(const QString &type)
+    {
+        static const QHash<QString, ResponseType> map = {
+            {"FULL", ResponseType::FULL},
+            {"MINI", ResponseType::MINI}};
+        return map.value(type, {});
+    }
+
     QString toString(WorkingFloor floor)
     {
         static const QHash<WorkingFloor, QString> map = {
@@ -292,7 +309,8 @@ namespace Binance::Enum
         return map.value(mode, {});
     }
 
-    QString toString(Interval interval){
+    QString toString(Interval interval)
+    {
         static const QHash<Interval, QString> map = {
             {Interval::ONE_SECOND, "1s"},
             {Interval::ONE_MINUTE, "1m"},
@@ -313,7 +331,8 @@ namespace Binance::Enum
         return map.value(interval);
     }
 
-    std::optional<Interval> toInterval(const QString &interval){
+    std::optional<Interval> toInterval(const QString &interval)
+    {
         static const QHash<QString, Interval> map = {
             {"1s", Interval::ONE_SECOND},
             {"1m", Interval::ONE_MINUTE},

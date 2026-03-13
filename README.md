@@ -37,8 +37,16 @@ Install the following tools in order:
 3. **Qt 6.8.3 LTS** — [qt.io/download](https://www.qt.io/download)
    > [!IMPORTANT]
    > During installation, select the **MSVC 2022 64-bit** component under Qt 6.8.3.
-4. **Visual Studio 2022 Community** — [release history](https://learn.microsoft.com/en-us/visualstudio/releases/2022/release-history)
-   - In the Visual Studio Installer, ensure the **"Desktop development with C++"** workload is installed.
+4. **MSVC 2022 Build Toolchain** — required to compile and link against the `msvc2022_64` Qt binaries.
+   You have two options (either is sufficient — you do not need both):
+   - **Visual Studio Build Tools 2022** *(recommended if you only use VSCode)* — [download](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)
+     Includes the compiler, linker, Windows SDK, and the `cppvsdbg` debugger used by VSCode. Lighter than the full IDE.
+   - **Visual Studio 2022 Community** *(optional, includes the Build Tools)* — [release history](https://learn.microsoft.com/en-us/visualstudio/releases/2022/release-history)
+
+   > [!NOTE]
+   > Whichever you install, run the **Visual Studio Installer** and ensure the
+   > **"Desktop development with C++"** workload is checked.
+
 5. **VSCode** with the following extensions:
    - [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
    - [C/C++ Extension Pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack)

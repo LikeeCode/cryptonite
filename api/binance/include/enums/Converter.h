@@ -40,6 +40,10 @@ namespace Binance::Enum
     QString toString(OrderType type);
     std::optional<OrderType> toOrderType(const QString &type);
 
+    // ResponseType
+    QString toString(ResponseType type);
+    std::optional<ResponseType> toResponseType(const QString &type);
+
     // OrderResponseType
     QString toString(OrderResponseType type);
     std::optional<OrderResponseType> toOrderResponseType(const QString &type);
