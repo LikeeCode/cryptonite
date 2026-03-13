@@ -17,7 +17,7 @@ namespace Binance
     {
         Q_OBJECT
     public:
-        explicit BinanceHttpClient(QObject *parent = nullptr, bool useTestNetwork = true);
+        explicit BinanceHttpClient(QObject *parent = nullptr, const QString& apiKey = "", const QString& apiSecret = "", bool useTestNetwork = true);
         ~BinanceHttpClient();
 
         void setApiKeys(const QString &key, const QString &secret);

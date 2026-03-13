@@ -1,3 +1,14 @@
+# Api helper
+add_library(ApiHelper
+    ApiHelper.h
+)
+
+find_package(Qt6 COMPONENTS Core REQUIRED)
+
+target_link_libraries(ApiHelper PRIVATE
+    Qt6::Core
+)
+
 # Binance API GeneralDataParserTest
 add_executable(GeneralDataParserTest
     GeneralDataParserTest.cpp

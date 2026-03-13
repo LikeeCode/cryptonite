@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QTimer>
 
+#include "ApiHelper.h"
 #include "../../../exchange/binance/http/BinanceHttpClient.h"
 #include "../../../exchange/binance/parsers/GeneralDataParser.h"
 
@@ -24,7 +25,13 @@ protected:
     // This runs before each test
     void SetUp() override
     {
-        binanceHttpClient = std::make_unique<Binance::BinanceHttpClient>(nullptr, true);
+         auto apiKeys = ApiHelper::getApiKeys(); // Ensure API keys file exists before creating client
+        if (apiKeys.first.isEmpty() || apiKeys.second.isEmpty())
+        {
+            // FAIL() << "API keys not found";
+        }
+
+        binanceHttpClient = std::make_unique<Binance::BinanceHttpClient>(nullptr, apiKeys.first, apiKeys.second, true);
     }
 
     // This runs after each test

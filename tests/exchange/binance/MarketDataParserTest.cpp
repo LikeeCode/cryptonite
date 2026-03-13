@@ -7,6 +7,7 @@
 #include <QJsonObject>
 #include <QTimer>
 
+#include "ApiHelper.h"
 #include "../../../exchange/binance/http/BinanceHttpClient.h"
 #include "../../../exchange/binance/parsers/MarketDataParser.h"
 
@@ -41,7 +42,13 @@ protected:
 
     void SetUp() override
     {
-        binanceHttpClient = std::make_unique<Binance::BinanceHttpClient>(nullptr, true);
+        auto apiKeys = ApiHelper::getApiKeys(); // Ensure API keys file exists before creating client
+        if (apiKeys.first.isEmpty() || apiKeys.second.isEmpty())
+        {
+            // FAIL() << "API keys not found";
+        }
+
+        binanceHttpClient = std::make_unique<Binance::BinanceHttpClient>(nullptr, apiKeys.first, apiKeys.second, true);
         // binanceHttpClient is recreated each test so this connection is always fresh.
         QObject::connect(binanceHttpClient.get(), &Binance::BinanceHttpClient::apiError,
             [this](const QString &error)

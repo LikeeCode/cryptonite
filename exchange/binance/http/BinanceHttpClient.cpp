@@ -13,9 +13,8 @@
 namespace Binance
 {
 
-    BinanceHttpClient::BinanceHttpClient(QObject *parent, bool useTestNetwork)
-        : QObject(parent),
-        m_useTestNetwork(useTestNetwork), m_networkManager(new QNetworkAccessManager(this))
+    BinanceHttpClient::BinanceHttpClient(QObject *parent, const QString& apiKey, const QString& apiSecret, bool useTestNetwork)
+        : QObject(parent), m_apiKey(apiKey), m_apiSecret(apiSecret), m_useTestNetwork(useTestNetwork), m_networkManager(new QNetworkAccessManager(this))
     {
         m_baseUrl = m_useTestNetwork ? API::BASE_URL_TESTNET : API::BASE_URL;
         getApiKeys();
