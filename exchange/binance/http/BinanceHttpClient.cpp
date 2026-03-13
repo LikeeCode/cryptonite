@@ -17,7 +17,6 @@ namespace Binance
         : QObject(parent), m_apiKey(apiKey), m_apiSecret(apiSecret), m_useTestNetwork(useTestNetwork), m_networkManager(new QNetworkAccessManager(this))
     {
         m_baseUrl = m_useTestNetwork ? API::BASE_URL_TESTNET : API::BASE_URL;
-        getApiKeys();
 
         m_networkManager = std::make_unique<QNetworkAccessManager>(this);
         connect(m_networkManager.get(), &QNetworkAccessManager::finished, this, &BinanceHttpClient::onReplyFinished);
@@ -25,12 +24,6 @@ namespace Binance
 
     BinanceHttpClient::~BinanceHttpClient()
     {
-    }
-
-    void BinanceHttpClient::setApiKeys(const QString &key, const QString &secret)
-    {
-        m_apiKey = key;
-        m_apiSecret = secret;
     }
 
     void BinanceHttpClient::ping()
@@ -253,21 +246,6 @@ namespace Binance
         }
 
         reply->deleteLater();
-    }
-
-    void BinanceHttpClient::getApiKeys()
-    {
-        QFile file("apiKeys/binanceAPI.txt");
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            emit apiKeysFileError();
-            return;
-        }
-
-        QTextStream in(&file);
-        m_apiKey = in.readLine().trimmed();
-        m_apiSecret = in.readLine().trimmed();
-        file.close();
     }
 
     QNetworkReply* BinanceHttpClient::sendPublicRequest(const QString &endpoint, const QVariantMap &params, RequestType type)

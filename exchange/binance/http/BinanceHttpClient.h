@@ -20,8 +20,6 @@ namespace Binance
         explicit BinanceHttpClient(QObject *parent = nullptr, const QString& apiKey = "", const QString& apiSecret = "", bool useTestNetwork = true);
         ~BinanceHttpClient();
 
-        void setApiKeys(const QString &key, const QString &secret);
-
         // General data endpoints
         void ping();
         void time();
@@ -43,7 +41,6 @@ namespace Binance
         void rollingWindowTicker(const MarketData::TickerRequest &request);
 
     private:
-        void getApiKeys();
         QNetworkReply* sendPublicRequest(const QString &endpoint, const QVariantMap &params = {}, RequestType type = RequestType::Get);
         QNetworkReply* sendSignedRequest(const QString &endpoint, const QVariantMap &params, RequestType type);
 
@@ -57,7 +54,6 @@ namespace Binance
         void onReplyFinished(QNetworkReply *reply);
 
     signals:
-        void apiKeysFileError();
         void apiError(const QString &error);
 
         // General signals — raw JSON, no parsing
