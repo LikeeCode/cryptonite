@@ -3,7 +3,7 @@
 #include <QJsonValue>
 #include <QVariant>
 
-#include "../parsers/EnumConverter.h"
+#include "../parsers/EnumParser.h"
 #include "../parsers/FilterConverter.h"
 #include "../parsers/MarketDataParser.h"
 

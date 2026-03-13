@@ -7,14 +7,14 @@ add_library(BinanceAPI
     errors/Errors.h
     filters/Filters.h
     http/BinanceAPI.h
-    parsers/EnumConverter.h
+    parsers/EnumParser.h
     parsers/ErrorConverter.h
     parsers/FilterConverter.h
     parsers/GeneralDataParser.h
     parsers/MarketDataParser.h
     
     http/BinanceAPI.cpp
-    parsers/EnumConverter.cpp
+    parsers/EnumParser.cpp
     parsers/ErrorConverter.cpp
     parsers/FilterConverter.cpp
     parsers/GeneralDataParser.cpp

@@ -9,7 +9,7 @@
 #include <QVariant>
 
 #include "../enums/Enums.h"
-#include "../parsers/EnumConverter.h"
+#include "../parsers/EnumParser.h"
 #include "../filters/Filters.h"
 
 namespace Binance::MarketData
