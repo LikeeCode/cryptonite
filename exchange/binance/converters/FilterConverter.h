@@ -4,7 +4,7 @@
 
 #include <QString>
 
-#include "../filters/Filters.h"
+#include "../data/Filters.h"
 
 namespace Binance::Filter
 {

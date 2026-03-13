@@ -1,11 +1,11 @@
 add_library(BinanceAPI
     data/APIEndpoints.h
+    data/Enums.h
+    data/Errors.h
+    data/Filters.h
     data/GeneralData.h
     data/MarketData.h
     data/TradingData.h
-    enums/Enums.h
-    errors/Errors.h
-    filters/Filters.h
     http/BinanceAPI.h
     converters/EnumConverter.h
     converters/ErrorConverter.h

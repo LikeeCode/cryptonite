@@ -4,7 +4,7 @@
 
 #include <QString>
 
-#include "../errors/Errors.h"
+#include "../data/Errors.h"
 
 namespace Binance::Error
 {

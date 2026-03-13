@@ -9,7 +9,7 @@
 #include "../data/APIEndpoints.h"
 #include "../data/GeneralData.h"
 #include "../data/MarketData.h"
-#include "../enums/Enums.h"
+#include "../data/Enums.h"
 
 namespace Binance
 {
